@@ -103,52 +103,56 @@
 }
 
 /* ====================================
-   3. STYLING SIDEBAR
+   3. STYLING SIDEBAR (Koreksi Hover)
    ==================================== */
 
 .app-sidebar {
-    /* Ini adalah kolom 1 dari .dashboard-layout */
-    position: fixed;
-    top: 0; 
-    left: 0;
-    width: 250px; /* Sesuai dengan grid-template-columns Anda */
-    height: 100vh; /* Tinggi penuh viewport */
-    z-index: 50;
+    /* ... (Properties fixed, top, left, width, height, z-index tetap) ... */
+    
     background: var(--sidebar-bg);
     color: white;
-    padding: 30px 20px;
-    position: fixed;
+    padding: 0; /* Hapus padding HORIZONTAL di sini agar LI bisa 100% lebar */
+    /* Hapus duplikat position: fixed; */
 }
 
+/* --- KONTEN SIDEBAR (GREETING) --- */
 .app-sidebar .greeting {
     font-size: 22px;
     font-weight: 600;
     margin-bottom: 40px;
-    padding-left: 10px;
+    /* Pindahkan padding yang sebelumnya ada di .app-sidebar ke sini */
+    padding: 30px 20px 0 20px; 
 }
 
+/* --- SIDE MENU --- */
 .side-menu {
     list-style: none;
     padding: 0;
     margin: 0;
     display: flex;
     flex-direction: column;
-    gap: 5px;
+    /* gap: 0; */
 }
 
 .side-menu li {
-    display: flex;
+    display: flex; /* Gunakan flex agar ikon dan teks sejajar */
     align-items: center;
-    padding: 12px 10px;
+    
+    /* Pindahkan padding horizontal ke sini agar ada ruang di dalam item */
+    padding: 12px 20px; 
+    
+    margin: 0;
     font-size: 16px;
     font-weight: 500;
     color: #b0c4de; 
     cursor: pointer;
-    border-radius: 6px;
-    transition: background-color 0.2s, color 0.2s;
+    border-radius: 0; /* Hapus border-radius jika ingin kotak penuh */
+    transition: color 0.2s;
+    box-sizing: border-box;
 }
 
 .side-menu li:hover {
+    /* BACKGROUND INI AKAN MEMENUHI SELURUH LEBAR 250PX SIDEBAR */
     background-color: rgba(255, 255, 255, 0.1);
     color: white;
 }
