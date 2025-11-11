@@ -24,8 +24,7 @@ a:hover {
 
 body {
   margin: 0;
-  display: flex;
-  place-items: center;
+  /* Do not center the entire app globally — let the app layout control placement */
   min-width: 320px;
   min-height: 100vh;
 }
