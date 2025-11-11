@@ -1,9 +1,12 @@
 import React from 'react'
+import dicodingLogo from '../../assets/dicoding.png'
 
 export default function Header() {
   return (
     <header className="app-header">
-      <div className="brand">dicoding</div>
+      <div className="brand">
+        <img src={dicodingLogo} alt="Dicoding Logo" className="logo" />
+      </div>
       <nav className="top-nav">
         <a>Home</a>
         <a>Academy</a>
