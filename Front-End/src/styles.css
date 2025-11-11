@@ -1,0 +1,160 @@
+:root {
+  font-family: system-ui, Avenir, Helvetica, Arial, sans-serif;
+  line-height: 1.5;
+  font-weight: 400;
+
+  color-scheme: light dark;
+  color: rgba(255, 255, 255, 0.87);
+  background-color: #242424;
+
+  font-synthesis: none;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+a {
+  font-weight: 500;
+  color: #646cff;
+  text-decoration: inherit;
+}
+a:hover {
+  color: #535bf2;
+}
+
+body {
+  margin: 0;
+  /* Do not center the entire app globally — let the app layout control placement */
+  min-width: 320px;
+  min-height: 100vh;
+}
+
+h1 {
+  font-size: 3.2em;
+  line-height: 1.1;
+}
+
+button {
+  border-radius: 8px;
+  border: 1px solid transparent;
+  padding: 0.6em 1.2em;
+  font-size: 1em;
+  font-weight: 500;
+  font-family: inherit;
+  background-color: #1a1a1a;
+  cursor: pointer;
+  transition: border-color 0.25s;
+}
+button:hover {
+  border-color: #646cff;
+}
+button:focus,
+button:focus-visible {
+  outline: 4px auto -webkit-focus-ring-color;
+}
+
+@media (prefers-color-scheme: light) {
+  :root {
+    color: #213547;
+    background-color: #ffffff;
+  }
+  a:hover {
+    color: #747bff;
+  }
+  button {
+    background-color: #f9f9f9;
+  }
+}
+
+/* App-specific styles (from previous App.css) */
+#root {
+  /* Make the app root use full available width so the dashboard can be fullscreen */
+  width: 100%;
+  margin: 0;
+  padding: 0;
+}
+
+.logo {
+  height: 6em;
+  padding: 1.5em;
+  will-change: filter;
+  transition: filter 300ms;
+}
+.logo:hover {
+  filter: drop-shadow(0 0 2em #646cffaa);
+}
+.logo.react:hover {
+  filter: drop-shadow(0 0 2em #61dafbaa);
+}
+
+@keyframes logo-spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  a:nth-of-type(2) .logo {
+    animation: logo-spin infinite 20s linear;
+  }
+}
+
+.card {
+  padding: 2em;
+}
+
+.read-the-docs {
+  color: #888;
+}
+
+/* StudentDashboard.css combined below */
+:root{
+  --sidebar-bg: #2f4958;
+  --header-bg: #fff;
+  --card-border: #3b3b6b;
+}
+.dashboard-app{ display:flex; flex-direction:column; min-height:100vh; font-family: system-ui, Avenir, Helvetica, Arial, sans-serif }
+.dashboard-body{ display:flex; align-items:stretch; min-height: calc(100vh - 72px); }
+.app-sidebar{ width:220px; background:var(--sidebar-bg); color:#fff; padding:24px; box-sizing:border-box; position:sticky; top:72px; height: calc(100vh - 72px); }
+.app-sidebar .greeting{ font-size:18px; margin-bottom:12px }
+.side-menu{ list-style:none; padding:0; margin:0 }
+.side-menu li{ padding:10px 0; opacity:0.9 }
+.side-menu li.active{ background:rgba(255,255,255,0.06); padding-left:8px; border-radius:6px }
+
+.dashboard-main{ flex:1; display:flex; flex-direction:column; background:#f6f6f6; padding:24px; min-height: calc(100vh - 72px); }
+.app-header{ width:100%; height:72px; display:flex; align-items:center; justify-content:space-between; padding:0 24px; background:var(--header-bg); border-bottom:4px solid #324a57; box-sizing:border-box }
+.app-header .brand{ font-weight:700; color:#213547 }
+.top-nav a{ margin:0 10px; color:#213547 }
+.user-actions button{ margin-left:8px }
+
+.dashboard-content{ padding:24px }
+.top-row{ display:flex; gap:16px; align-items:flex-start }
+.chart-card{ flex:2 }
+.right-column{ width:360px; display:flex; flex-direction:column; gap:12px }
+.card-container{ background:#fff; border-radius:8px; padding:12px; border:2px solid var(--card-border); }
+.card-title{ margin:0 0 8px 0; font-size:14px; color:#213547 }
+.card-body{ min-height:80px }
+.recommendation{ background:#dbeec8 }
+.gauge-card{ background:#fff3c4 }
+
+.class-list{ display:flex; gap:16px; margin-top:12px }
+.class-card{ width:220px; height:160px; border-radius:10px; padding:12px; box-shadow:0 2px 0 rgba(0,0,0,0.05) }
+
+.history{ background:#ffd0b3 }
+.history-list{ display:flex; flex-direction:column; gap:8px }
+.history-item{ display:flex; gap:8px; align-items:center }
+.history-item .dot{ width:12px; height:12px; background:#3b3b6b; border-radius:50% }
+
+.line-chart{ width:100%; height:160px; }
+
+.gauge{ display:flex; justify-content:center; align-items:center; padding:8px }
+
+@media (max-width:900px){
+  .dashboard-app{ flex-direction:column }
+  .app-sidebar{ width:100%; display:flex; }
+  .top-row{ flex-direction:column }
+  .right-column{ width:100% }
+}

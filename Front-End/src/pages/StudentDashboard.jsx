@@ -1,6 +1,4 @@
 import React from 'react'
-import '../App.css'
-import './StudentDashboard.css'
 import Header from '../components/Layout/Header'
 import Sidebar from '../components/Layout/Sidebar'
 import CardContainer from '../components/Dashboard/Shared/CardContainer'
@@ -13,10 +11,12 @@ import HistorySection from '../components/Dashboard/LearningHistory/HistorySecti
 export default function StudentDashboard() {
   return (
     <div className="dashboard-app">
-      <Sidebar />
-      <div className="dashboard-main">
-        <Header />
-        <main className="dashboard-content">
+      <Header />
+
+      <div className="dashboard-body">
+        <Sidebar />
+
+        <main className="dashboard-main dashboard-content">
           <div className="top-row">
             <CardContainer title="Statistik Siswa" className="chart-card">
               <LineChart />

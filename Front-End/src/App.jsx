@@ -1,6 +1,4 @@
 import React from 'react'
-import './App.css'
-import './index.css'
 import StudentDashboard from './pages/StudentDashboard'
 
 export default function App() {
