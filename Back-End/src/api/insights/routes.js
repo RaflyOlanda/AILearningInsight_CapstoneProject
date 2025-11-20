@@ -1,12 +1,9 @@
-module.exports = (handler) => [
-  { 
-    method: 'GET', 
-    path: '/insights/{userId}', 
-    handler: handler.getInsightByUser 
-  },
-  { 
-    method: 'POST', 
-    path: '/predict', 
-    handler: handler.predictInsight 
+const routes = (handler) => [
+  {
+    method: 'GET',
+    path: '/insights/me',
+    handler: handler.myInsights,
   },
 ];
+
+module.exports = routes;

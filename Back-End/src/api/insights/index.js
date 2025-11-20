@@ -1,10 +1,10 @@
+const InsightsHandler = require('./handler');
 const routes = require('./routes');
-const handler = require('./handler');
 
 module.exports = {
   name: 'insights',
-  version: '1.0.0',
   register: async (server) => {
+    const handler = new InsightsHandler();
     server.route(routes(handler));
   },
 };

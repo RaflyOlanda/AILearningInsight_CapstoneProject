@@ -1,9 +1,10 @@
+const UsersHandler = require('./handler');
 const routes = require('./routes');
-const handler = require('./handler');
 
 module.exports = {
   name: 'users',
   register: async (server) => {
+    const handler = new UsersHandler();
     server.route(routes(handler));
   },
 };
