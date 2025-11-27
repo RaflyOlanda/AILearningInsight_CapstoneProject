@@ -1,7 +1,9 @@
-module.exports = (handler) => [
-  { 
-    method: 'GET', 
-    path: '/users/{id}', 
-    handler: handler.getUserById 
+const routes = (handler) => [
+  {
+    method: 'GET',
+    path: '/users/me',
+    handler: handler.me,
   },
 ];
+
+module.exports = routes;

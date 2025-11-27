@@ -1,10 +1,15 @@
-const { mockUsers } = require('../../utils/mockData');
+const UsersService = require('../../services/UserServices');
 
-module.exports = {
-  getUserById: (request, h) => {
-    const { id } = request.params;
-    const user = mockUsers.find((u) => u.id === id);
-    if (!user) return h.response({ status: 'fail', message: 'User not found' }).code(404);
-    return h.response({ status: 'success', data: user }).code(200);
-  },
-};
+class UsersHandler {
+  constructor() {
+    this._service = new UsersService();
+  }
+
+  async me(request) {
+    const userId = request.auth.credentials.id;
+    const user = await this._service.getUserById(userId);
+    return { status: 'success', data: user };
+  }
+}
+
+module.exports = UsersHandler;

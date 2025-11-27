@@ -1,24 +1,19 @@
-const axios = require('axios');
-const { mockInsights } = require('../../utils/mockData');
+const InsightsService = require('../../services/InsightsServices');
 
-module.exports = {
-  getInsightByUser: (request, h) => {
-    const { userId } = request.params;
-    const insight = mockInsights[userId];
-    if (!insight) return h.response({ status: 'fail', message: 'Insight not found' }).code(404);
-    return h.response({ status: 'success', data: insight }).code(200);
-  },
+class InsightsHandler {
+  constructor() {
+    this._service = new InsightsService();
+  }
 
-  predictInsight: async (request, h) => {
-    const { activities } = request.payload;
-    // simulasi panggil model AI nanti
-    const categories = ['Fast Learner', 'Reflective Learner', 'Consistent Learner'];
-    const random = categories[Math.floor(Math.random() * categories.length)];
-    const confidence = (Math.random() * 0.5 + 0.5).toFixed(2);
+  async myInsights(request) {
+    const userId = request.auth.credentials.id;
+    const data = await this._service.getUserStudyHistory(userId);
 
-    return h.response({
+    return {
       status: 'success',
-      data: { predictedCategory: random, confidence },
-    }).code(200);
-  },
-};
+      data
+    };
+  }
+}
+
+module.exports = InsightsHandler;

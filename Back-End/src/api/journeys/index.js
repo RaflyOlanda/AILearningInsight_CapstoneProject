@@ -1,10 +1,10 @@
+const JourneysHandler = require('./handler');
 const routes = require('./routes');
-const handler = require('./handler');
 
 module.exports = {
-  name: 'activities',
-  version: '1.0.0',
+  name: 'journeys',
   register: async (server) => {
+    const handler = new JourneysHandler();
     server.route(routes(handler));
   },
 };
