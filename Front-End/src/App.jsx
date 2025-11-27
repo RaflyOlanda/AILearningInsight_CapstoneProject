@@ -1,6 +1,12 @@
-import React from 'react'
-import StudentDashboard from './pages/StudentDashboard'
+import React from 'react';
+import DashboardPage from './pages/Dashboard/dashboardpage';
 
-export default function App() {
-  return <StudentDashboard />
+function App() {
+  // Hanya me-render DashboardPage secara langsung.
+  // Catatan: Dalam proyek nyata, ini akan diganti dengan <AppRouter />
+  return (
+    <DashboardPage />
+  );
 }
+
+export default App;

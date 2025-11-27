@@ -1,0 +1,152 @@
+/* src/components/layouts/Navbar.css */
+
+.navbar-container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 5px 24px;
+    background-color: white; 
+    border-bottom: 1px solid #e0e0e0; 
+    height: 64px;
+    box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05); 
+    position: relative;
+    z-index: 10;
+}
+
+.navbar-left-section {
+    display: flex;
+    align-items: center;
+}
+
+/* Container kanan: Penting untuk positioning dropdown */
+.navbar-right-section {
+    display: flex;
+    align-items: center;
+    gap: 1.5rem; /* Jarak antara teks Seeker dan Profile Container */
+    position: relative; 
+}
+
+/* --- STYLING LOGO --- */
+.navbar-logo-image {
+    height: 32px; /* Ukuran gambar yang optimal */
+    width: auto; 
+    margin-right: 30px; 
+}
+
+/* --- STYLING TEXT --- */
+.navbar-seeker-text {
+    font-size: 14px;
+    font-weight: 500;
+    color: #333366; /* Warna font yang Anda minta */
+    padding-right: 10px; 
+    display: none; 
+}
+
+@media (min-width: 640px) { /* sm: breakpoint */
+    .navbar-seeker-text {
+        display: block;
+    }
+}
+
+/* --- PROFILE CONTAINER DAN AVATAR --- */
+.navbar-profile-container {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem; /* Jarak 8px antara ikon profil dan panah */
+    border: none; 
+    border-radius: 8px; 
+    cursor: pointer;
+    transition: background-color 150ms;
+    padding: 4px; 
+}
+
+.navbar-profile-container:hover {
+    background-color: #f5f5f5; 
+}
+
+
+/* Ikon Avatar: KELAS INI SEKARANG HANYA UNTUK IKON ITU SENDIRI */
+.profile-avatar {
+    /* MENGHILANGKAN LINGKARAN LUAR */
+    width: 32px; /* DITINGKATKAN: Ukuran ikon default */
+    height: 32px; /* DITINGKATKAN: Ukuran ikon default */
+    border-radius: 0; /* Tidak ada lingkaran */
+    border: none; /* Hapus border */
+    color: #333366; 
+    /* Menggunakan flexbox untuk memusatkan ikon */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 32px; /* DITINGKATKAN: Mengontrol ukuran visual SVG */
+    margin: 0; 
+    /* Hapus positioning absolute yang tidak diperlukan lagi */
+    position: static; 
+    transform: none;
+}
+
+/* --- ANIMASI PANAH DROPDOWN --- */
+.navbar-dropdown-icon {
+    color: #333366; 
+    font-size: 10px; 
+    transition: transform 0.3s ease; 
+    align-self: center;
+    margin: 0; 
+}
+
+.navbar-dropdown-icon.rotate-180 {
+    transform: rotate(180deg); 
+}
+
+/* --- DROPDOWN MENU --- */
+.dropdown-menu {
+    position: absolute;
+    top: 100%; 
+    right: 0;
+    background-color: white;
+    border: 1px solid #e0e0e0;
+    border-radius: 8px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    min-width: 200px;
+    z-index: 20; 
+    margin-top: 10px; 
+    overflow: hidden; 
+}
+
+.dropdown-item {
+    display: flex;
+    align-items: center;
+    padding: 12px 16px;
+    color: #333;
+    font-size: 14px;
+    cursor: pointer;
+    transition: background-color 0.2s;
+}
+
+.dropdown-item:hover {
+    background-color: #f5f5f5;
+}
+
+.dropdown-divider {
+    height: 1px;
+    background-color: #eee;
+    margin: 8px 0;
+}
+
+/* Styling Ikon di dalam Dropdown Menu */
+.dropdown-icon-trophy {
+    color: #fdd835; 
+    margin-right: 12px;
+    font-size: 18px;
+}
+
+.dropdown-icon-medal {
+    color: #42a5f5; 
+    margin-right: 12px;
+    font-size: 18px;
+}
+
+.dropdown-icon-generic {
+    color: #666; 
+    margin-right: 12px;
+    font-size: 18px;
+}
