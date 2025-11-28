@@ -1,9 +1,9 @@
 import React from 'react';
 import Card from '../../components/ui/card';
 
-const RecommendationCard = () => {
+const OverviewRecommendation = () => {
   return (
-    <Card className="p-6 card-shadow rounded-xl">
+    <Card className="p-5 shadow-soft rounded-xl border border-gray-200">
       <h3 className="font-semibold text-sm text-gray-700 mb-2">Rekomendasi Belajar</h3>
       <p className="text-xs text-gray-600 leading-relaxed">
         Sebagai Fast Learner, kamu cenderung cepat memahami konsep baru dan mudah beradaptasi dengan materi yang berbeda. Untuk memaksimalkan potensi, AI merekomendasikan agar kamu mengambil kelas dengan tingkat
@@ -13,4 +13,4 @@ const RecommendationCard = () => {
   );
 };
 
-export default RecommendationCard;
+export default OverviewRecommendation;

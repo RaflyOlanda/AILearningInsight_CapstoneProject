@@ -1,5 +1,11 @@
+@import "tailwindcss";
+
 body {
     margin: 0;
-    font-family: 'Quicksand', sans-serif !important; 
-    background-color: #f7f7f7; /* Default background untuk Dashboard */
+    font-family: 'Quicksand', sans-serif !important;
+    background-color: #f3f4f6; /* Light gray background like mockup */
 }
+
+/* Generic helpers for cards and separators when needed */
+.card-shadow { box-shadow: 0 1px 2px rgba(0,0,0,0.04), 0 4px 10px rgba(0,0,0,0.04); }
+.divider { height: 1px; background-color: #E5E7EB; }
