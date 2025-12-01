@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 
-const API_BASE_URL = 'http://localhost:5000';
+// Prefer env-configured base URL; fallback to relative (for Vite proxy or same-origin)
+const API_BASE_URL = (import.meta?.env?.VITE_API_BASE_URL || '').trim();
 
 export const useFetch = (url, options = {}) => {
   const [data, setData] = useState(null);
@@ -18,7 +19,9 @@ export const useFetch = (url, options = {}) => {
         setLoading(true);
         setError(null);
 
-        const fullUrl = url.startsWith('http') ? url : `${API_BASE_URL}${url}`;
+        const fullUrl = url.startsWith('http')
+          ? url
+          : `${API_BASE_URL}${url}`;
         
         const fetchOptions = {
           method: options.method || 'GET',

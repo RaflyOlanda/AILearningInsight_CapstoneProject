@@ -18,12 +18,12 @@ const CourseList = () => {
 		}));
 
 	return (
-		<Card className="card-shadow rounded-xl overflow-hidden">
+		<Card className="card-shadow rounded-xl overflow-hidden min-h-[260px] max-h-[260px]">
 			<div className="px-4 py-3 border-b border-gray-200 flex items-center justify-between bg-gray-50">
 				<div className="font-semibold text-sm text-gray-800">Courses</div>
 				<button className="text-[11px] text-blue-600 hover:text-blue-800 font-medium">View All &gt;</button>
 			</div>
-			<div className="p-0 space-y-0 divide-y divide-gray-100">
+			<div className="p-0 space-y-0 divide-y divide-gray-100 overflow-y-auto" style={{ maxHeight: '212px' }}>
 				{loading ? (
 					<div className="text-xs text-gray-500 p-4 text-center">Loading courses...</div>
 				) : courseItems.length > 0 ? (

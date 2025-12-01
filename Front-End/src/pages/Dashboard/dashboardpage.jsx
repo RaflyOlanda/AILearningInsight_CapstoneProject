@@ -19,7 +19,7 @@ const DashboardPage = () => {
       </div>
 
       {/* Main Grid: 12-column layout for precise control */}
-      <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 auto-rows-max">
+      <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 auto-rows-max items-start content-start">
         
         {/* Kolom 1 Kiri: Progress Summary & Courses */}
         <div className="lg:col-span-3 space-y-6">

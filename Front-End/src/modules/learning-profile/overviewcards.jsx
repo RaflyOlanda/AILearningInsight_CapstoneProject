@@ -16,7 +16,8 @@ const OverviewCards = () => {
     userId ? `/dashboard/last-course/${userId}` : null
   );
 
-  const completionPercent = lastCourse?.progress || 0;
+  const completionPercentRaw = Number(lastCourse?.progress) || 0;
+  const completionPercent = Math.max(0, Math.min(100, completionPercentRaw));
   const donutData = [
     { name: 'Completed', value: completionPercent },
     { name: 'Remaining', value: 100 - completionPercent },

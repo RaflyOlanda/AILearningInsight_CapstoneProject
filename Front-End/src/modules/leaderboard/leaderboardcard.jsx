@@ -9,7 +9,7 @@ const LeaderboardCard = () => {
 
   const leaderboardArray = (leaderboard && Array.isArray(leaderboard)) ? leaderboard : [];
   const currentUserEntry = leaderboardArray.find(u => u.user_id === parseInt(userId));
-  const topUsers = leaderboardArray.slice(0, 5);
+  const topUsers = leaderboardArray.slice(0, 10);
 
   const getMedalColor = (rank) => {
     if (rank === 1) return 'bg-yellow-100 text-yellow-700';
@@ -19,12 +19,12 @@ const LeaderboardCard = () => {
   };
 
   return (
-    <Card className="p-0 shadow-soft rounded-xl border border-gray-200 overflow-hidden">
+    <Card className="p-0 shadow-soft rounded-xl border border-gray-200 overflow-hidden h-[260px] w-full">
       <div className="px-4 py-3 border-b border-gray-200 flex items-center justify-between">
         <div className="font-semibold text-sm">Leaderboard</div>
         <button className="text-[11px] text-gray-500 hover:text-gray-700">View All &gt;</button>
       </div>
-      <ul className="divide-y divide-gray-100">
+      <ul className="divide-y divide-gray-100 overflow-y-auto h-[212px]">
         {loading ? (
           <li className="px-4 py-3 text-center text-xs text-gray-500">Loading leaderboard...</li>
         ) : topUsers.length > 0 ? (

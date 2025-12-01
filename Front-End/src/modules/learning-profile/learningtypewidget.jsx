@@ -1,17 +1,14 @@
 import React from 'react';
 import Card from '../../components/ui/card';
-import { PieChart, Pie, Cell, ResponsiveContainer } from 'recharts';
+import { PieChart, Pie, Cell, ResponsiveContainer, Tooltip } from 'recharts';
+import { useUser } from '../../context/usercontext';
+import { useFetch } from '../../hooks/usefetch';
 
-const data = [
-  { name: 'Reflective', value: 40 },
-  { name: 'Active', value: 35 },
-  { name: 'Sensing', value: 25 },
-];
-
-const COLORS = data.map(d => d.color);
+const COLORS = ['#22C55E', '#3B82F6', '#F59E0B'];
+const CATEGORIES = ['fast', 'normal', 'slow'];
 
 // Fungsi untuk me-render label di luar Pie Chart dengan garis penghubung
-const renderCustomizedLabel = ({ cx, cy, midAngle, innerRadius, outerRadius, index }) => {
+const renderCustomizedLabel = ({ cx, cy, midAngle, innerRadius, outerRadius, index, data }) => {
   const RADIAN = Math.PI / 180;
   
   // Titik awal garis (di luar donat)
@@ -54,57 +51,86 @@ const LearnerTypeWidget = () => {
     userId ? `/dashboard/learning-profile/${userId}` : null
   );
 
-  const pieData = profile?.strengths?.map((strength, idx) => ({
-    name: strength,
-    value: 33
-  })) || [
-    { name: 'Strength 1', value: 33 },
-    { name: 'Strength 2', value: 34 },
-    { name: 'Strength 3', value: 33 }
-  ];
+  const strengths = Array.isArray(profile?.strengths) && profile.strengths.length
+    ? profile.strengths.slice(0, 3)
+    : ['Strength 1', 'Strength 2', 'Strength 3'];
+
+  // Pastikan selalu 3 slice agar tampilan konsisten dengan mock
+  // Ambil distribusi dari API bila tersedia; fallback ke 34/33/33
+  const dist = profile?.distribution;
+  const baseValues = [34, 33, 33];
+  const values = dist
+    ? [dist.fast ?? 0, dist.normal ?? 0, dist.slow ?? 0]
+    : baseValues;
+  const sum = values.reduce((a, b) => a + (Number(b) || 0), 0);
+  const normalized = sum > 0 ? values.map((v) => Math.max(0, Math.round((v / sum) * 100))) : baseValues;
+  const pieData = CATEGORIES.map((name, idx) => ({ name, value: normalized[idx] || 0 }));
 
   return (
-    <Card className="p-6 shadow-soft rounded-xl border border-gray-200 min-h-[380px]">
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 h-full">
-        {/* Left: Pie chart with labels like mockup */}
-        <div className="h-72 lg:h-full flex flex-col justify-center">
-          <ResponsiveContainer width="100%" height="100%">
-            <PieChart>
-              <Pie
-                data={data}
-                innerRadius={52}
-                outerRadius={100}
-                paddingAngle={2}
-                dataKey="value"
-              >
-                {data.map((entry, index) => (
-                  <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
-                ))}
-              </Pie>
-            </PieChart>
-          </ResponsiveContainer>
+    <Card className="p-5 shadow-soft rounded-xl border border-gray-200 min-h-[340px]">
+      <div className="flex flex-col gap-4 h-full">
+        {/* Top: Pie chart centered */}
+        <div className="w-full flex flex-col items-center">
+          <div className="w-full h-48 md:h-52">
+            <ResponsiveContainer width="100%" height="100%">
+              <PieChart>
+                <Pie
+                  data={pieData}
+                  innerRadius={52}
+                  outerRadius={96}
+                  paddingAngle={2}
+                  dataKey="value"
+                  labelLine={false}
+                  label={false}
+                >
+                  {pieData.map((entry, index) => (
+                    <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
+                  ))}
+                </Pie>
+                <Tooltip />
+              </PieChart>
+            </ResponsiveContainer>
+          </div>
+          {/* Legend kategori agar pengguna paham arti setiap warna */}
+          <div className="mt-1.5 flex items-center justify-center gap-4 text-[12px] text-gray-600">
+            {CATEGORIES.map((label, idx) => (
+              <div key={label} className="flex items-center gap-1.5">
+                <span className="inline-block w-2.5 h-2.5 rounded-full" style={{ backgroundColor: COLORS[idx] }}></span>
+                <span className="capitalize">{label}</span>
+              </div>
+            ))}
+          </div>
           <p className="text-[10px] text-gray-400 text-center mt-1">visualisasi pie chart berdasarkan kuantifikasi model ai machine learning</p>
+          
         </div>
 
-        {/* Right: Title and description */}
+        {/* Bottom: Title, description and lists */}
         <div>
-          <h2 className="text-[18px] font-semibold text-gray-800 mb-1.5">Kamu adalah tipe Fast Learner, Khalil!</h2>
-          <p className="text-[13px] leading-snug text-gray-600 mb-2.5">Seorang fast learner memiliki 3 kelebihan dan 3 kekurangan yang wajib kamu ketahui yaitu</p>
+          <h2 className="text-[18px] font-semibold text-gray-800 mb-1.5">
+            {loading
+              ? 'Memuat profil belajar...'
+              : `Kamu adalah tipe ${profile?.learner_type || 'Learner'}, ${profile?.display_name || ''}!`}
+          </h2>
+          <p className="text-[13px] leading-snug text-gray-600 mb-3">
+            {loading
+              ? 'Menyiapkan insight personal...'
+              : (profile?.description || 'Insight personal berdasarkan aktivitas belajarmu.')}
+          </p>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-3.5">
             <div>
               <h3 className="font-semibold text-gray-700 mb-1">Kelebihan</h3>
               <ol className="text-[13px] leading-snug text-gray-600 list-decimal ml-4 space-y-1">
-                <li>Cepat memahami konsep baru</li>
-                <li>Mudah beradaptasi dengan perubahan</li>
-                <li>Efisien dalam belajar dan memecahkan masalah</li>
+                {(profile?.strengths || ['Cepat memahami konsep baru','Mudah beradaptasi dengan perubahan','Efisien dalam belajar dan memecahkan masalah']).map((s, i) => (
+                  <li key={i}>{s}</li>
+                ))}
               </ol>
             </div>
             <div>
               <h3 className="font-semibold text-gray-700 mb-1">Kekurangan</h3>
               <ol className="text-[13px] leading-snug text-gray-600 list-decimal ml-4 space-y-1">
-                <li>Cenderung mengabaikan detail kecil</li>
-                <li>Cepat bosan jika materi terlalu lambat</li>
-                <li>Retensi jangka panjang bisa lebih lemah</li>
+                {(profile?.weaknesses || ['Cenderung mengabaikan detail kecil','Cepat bosan jika materi terlalu lambat','Retensi jangka panjang bisa lebih lemah']).map((w, i) => (
+                  <li key={i}>{w}</li>
+                ))}
               </ol>
             </div>
           </div>

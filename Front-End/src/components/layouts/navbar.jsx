@@ -5,10 +5,16 @@ import { FaRegUserCircle, FaChevronDown, FaTrophy, FaMedal } from 'react-icons/f
 import DicodingLogo from '../../assets/images/dicoding.png'; 
 // Import file CSS yang berisi semua styling
 import './navbar.css'; 
+import { useUser } from '../../context/usercontext';
+import { useFetch } from '../../hooks/usefetch';
 
 const Navbar = () => {
   const [isOpen, setIsOpen] = useState(false); // State untuk mengelola tampilan dropdown
   const dropdownRef = useRef(null); // Ref untuk mendeteksi klik di luar dropdown
+  const { userId } = useUser();
+  const { data: profile } = useFetch(userId ? `/dashboard/learning-profile/${userId}` : null);
+  const xp = Number(profile?.xp) || 0;
+  const xpFormatted = xp.toLocaleString('id-ID');
 
   // Fungsi untuk menutup dropdown ketika klik di luar
   useEffect(() => {
@@ -56,7 +62,7 @@ const Navbar = () => {
               <FaTrophy className="dropdown-icon-trophy" /> 0 Points
             </div>
             <div className="dropdown-item">
-              <FaMedal className="dropdown-icon-medal" /> 8.624 XP
+              <FaMedal className="dropdown-icon-medal" /> {xpFormatted} XP
             </div>
             <div className="dropdown-divider"></div> {/* Garis pemisah */}
             <div className="dropdown-item">

@@ -47,7 +47,7 @@ const ProgressSummary = () => {
   return (
     <div className="space-y-4">
       {/* 1. KARTU: Last Course Enrolled */}
-      <Card className="p-4 rounded-xl">
+      <Card className="p-4 rounded-xl min-h-[96px]">
         <h3 className="text-gray-600 text-xs font-semibold mb-2 uppercase tracking-wide">Last Course Enrolled</h3>
         {courseLoading ? (
           <div className="w-full bg-gray-100 text-gray-700 text-xs font-semibold py-2 rounded-lg">Loading...</div>
@@ -70,7 +70,7 @@ const ProgressSummary = () => {
       </Card>
 
       {/* 2. KARTU: Study Duration */}
-      <Card className="p-4 rounded-xl">
+      <Card className="p-4 rounded-xl min-h-[96px]">
         <h3 className="text-gray-600 text-xs font-semibold mb-3 uppercase tracking-wide">Study Duration</h3>
         {studyLoading ? (
           <div className="h-8 bg-gray-100 rounded animate-pulse"></div>
@@ -90,7 +90,7 @@ const ProgressSummary = () => {
       </Card>
 
       {/* 3. KARTU: Daily Checkpoint */}
-      <Card className="p-4 rounded-xl">
+      <Card className="p-4 rounded-xl min-h-[96px]">
         <h3 className="text-gray-600 text-xs font-semibold mb-3 uppercase tracking-wide">Daily Checkpoint</h3>
         {checkpointLoading ? (
           <div className="h-6 bg-gray-100 rounded animate-pulse"></div>
