@@ -7,6 +7,7 @@ const auth = require('./api/auth');
 const users = require('./api/users');
 const journeys = require('./api/journeys');
 const insights = require('./api/insights');
+const dashboard = require('./api/dashboard');
 
 const init = async () => {
   const server = Hapi.server({
@@ -40,6 +41,7 @@ const init = async () => {
     users,
     journeys,
     insights,
+    dashboard,
   ]);
 
   await server.start();
