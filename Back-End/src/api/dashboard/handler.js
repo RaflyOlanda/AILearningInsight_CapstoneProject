@@ -12,7 +12,11 @@ module.exports = {
           dj.hours_to_study,
           djc.study_duration,
           djc.last_enrolled_at,
-          ROUND((djc.study_duration::numeric / dj.hours_to_study) * 100, 2) as progress
+          CASE 
+            WHEN dj.hours_to_study > 0 THEN ROUND((djc.study_duration::numeric / dj.hours_to_study) * 100, 2)
+            ELSE 0
+          END as progress,
+          djc.avg_submission_ratings
         FROM developer_journey_completion djc
         JOIN developer_journeys dj ON dj.journey_id = djc.journey_id
         WHERE djc.user_id = $1

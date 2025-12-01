@@ -1,11 +1,12 @@
 import React from 'react';
+import { UserProvider } from './context/usercontext';
 import DashboardPage from './pages/Dashboard/dashboardpage';
 
 function App() {
-  // Hanya me-render DashboardPage secara langsung.
-  // Catatan: Dalam proyek nyata, ini akan diganti dengan <AppRouter />
   return (
-    <DashboardPage />
+    <UserProvider>
+      <DashboardPage />
+    </UserProvider>
   );
 }
 

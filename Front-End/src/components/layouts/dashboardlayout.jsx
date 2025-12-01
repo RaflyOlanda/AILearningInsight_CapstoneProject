@@ -13,7 +13,7 @@ const DashboardLayout = ({ children }) => {
       </header>
 
       {/* Konten Utama */}
-      <main className="flex-grow p-6 md:p-8">
+      <main className="flex-grow px-4 py-6 md:px-8 md:py-8 max-w-7xl mx-auto w-full">
         {children} {/* Diisi oleh DashboardPage */}
       </main>
 

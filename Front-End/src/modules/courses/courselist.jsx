@@ -1,29 +1,41 @@
 import React from 'react';
 import Card from '../../components/ui/card';
 import { FaChevronRight } from 'react-icons/fa';
-
-const courses = [
-	'Memulai Pemrogramman Python',
-	'Belajar Fundamental React',
-	'Web Development',
-	'Memulai Pemrogramman Python',
-	'Memulai Pemrogramman Python',
-];
+import { useFetch } from '../../hooks/usefetch';
+import { useUser } from '../../context/usercontext';
 
 const CourseList = () => {
+	const { userId } = useUser();
+	const { data: courses, loading } = useFetch(
+		userId ? `/dashboard/learning-history/${userId}` : null
+	);
+
+	const courseItems = (courses && Array.isArray(courses) ? courses : [])
+		.slice(0, 5)
+		.map(course => ({
+			name: course.course_title,
+			id: course.journey_id
+		}));
+
 	return (
-		<Card className="card-shadow rounded-xl">
-			<div className="px-3 py-2.5 border-b border-gray-200 flex items-center justify-between">
-				<div className="font-semibold text-sm">Courses</div>
-				<button className="text-[11px] text-gray-500 hover:text-gray-700">View All &gt;</button>
+		<Card className="card-shadow rounded-xl overflow-hidden">
+			<div className="px-4 py-3 border-b border-gray-200 flex items-center justify-between bg-gray-50">
+				<div className="font-semibold text-sm text-gray-800">Courses</div>
+				<button className="text-[11px] text-blue-600 hover:text-blue-800 font-medium">View All &gt;</button>
 			</div>
-			<div className="p-2 space-y-1.5">
-				{courses.map((c, idx) => (
-					<button key={idx} className="w-full flex items-center justify-between bg-gray-100 hover:bg-gray-200 text-gray-700 text-[11px] font-semibold py-1.5 px-2 rounded-lg transition">
-						<span className="truncate text-left">{c}</span>
-						<FaChevronRight size={12} />
-					</button>
-				))}
+			<div className="p-0 space-y-0 divide-y divide-gray-100">
+				{loading ? (
+					<div className="text-xs text-gray-500 p-4 text-center">Loading courses...</div>
+				) : courseItems.length > 0 ? (
+					courseItems.map((c, idx) => (
+						<button key={idx} className="w-full flex items-center justify-between hover:bg-gray-50 text-gray-700 text-[12px] font-medium py-3 px-4 transition bg-white border-0">
+							<span className="truncate text-left" title={c.name}>{c.name}</span>
+							<FaChevronRight size={12} className="text-gray-400 flex-shrink-0 ml-2" />
+						</button>
+					))
+				) : (
+					<div className="text-xs text-gray-500 p-4 text-center">No courses yet</div>
+				)}
 			</div>
 		</Card>
 	);

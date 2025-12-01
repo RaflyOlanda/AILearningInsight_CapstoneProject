@@ -4,7 +4,7 @@ import { FaRegUserCircle, FaChevronDown, FaTrophy, FaMedal } from 'react-icons/f
 // Import gambar logo
 import DicodingLogo from '../../assets/images/dicoding.png'; 
 // Import file CSS yang berisi semua styling
-import './Navbar.css'; 
+import './navbar.css'; 
 
 const Navbar = () => {
   const [isOpen, setIsOpen] = useState(false); // State untuk mengelola tampilan dropdown
