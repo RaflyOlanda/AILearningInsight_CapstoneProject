@@ -86,7 +86,7 @@ module.exports = {
         SELECT 
           u.user_id,
           u.display_name,
-          u.learner_type,
+          u.learner_type_model,
           u.mean_point,
           u.n_kelas_fast,
           u.normal,
@@ -109,27 +109,42 @@ module.exports = {
 
       const user = result.rows[0];
       const learnerTypes = {
+        'Stable': {
+          type: 'Stable Learner',
+          description: 'Kamu belajar dengan ritme konsisten dan fokus pada pemahaman yang mantap.',
+          strengths: ['Konsistensi tinggi', 'Fokus jangka panjang', 'Disiplin dalam progres'],
+          weaknesses: ['Adaptasi lebih lambat', 'Kurang eksploratif']
+        },
+        'Deep': {
+          type: 'Deep Learner',
+          description: 'Kamu mendalami konsep hingga akar, membangun pemahaman yang sangat kuat.',
+          strengths: ['Pemahaman mendalam', 'Kritis dan analitis', 'Retensi kuat'],
+          weaknesses: ['Butuh waktu lebih lama', 'Cenderung perfeksionis']
+        },
+        'Careful': {
+          type: 'Careful Learner',
+          description: 'Kamu teliti, berhati-hati, dan jarang melewatkan detail penting.',
+          strengths: ['Detail oriented', 'Kesalahan minim', 'Rencana belajar rapi'],
+          weaknesses: ['Lambat mengambil keputusan', 'Kurang spontan']
+        },
+        'Sonic': {
+          type: 'Sonic Learner',
+          description: 'Kamu cepat menyerap konsep dan bergerak lincah antar topik.',
+          strengths: ['Cepat beradaptasi', 'Eksekusi kilat', 'Eksplorasi luas'],
+          weaknesses: ['Kurang pendalaman', 'Detail sering terlewat']
+        },
         'Fast': {
           type: 'Fast Learner',
-          description: 'Kamu adalah tipe learner yang cepat menangkap konsep baru.',
-          strengths: ['Pemahaman Cepat', 'Problem Solving', 'Adaptasi Tinggi'],
-          weaknesses: ['Kurang Detail', 'Terburu-buru']
-        },
-        'Normal': {
-          type: 'Balanced Learner',
-          description: 'Kamu memiliki keseimbangan baik dalam belajar dan praktik.',
-          strengths: ['Konsistensi', 'Fleksibilitas'],
-          weaknesses: ['Kurang Fokus']
-        },
-        'Slow': {
-          type: 'Reflective Learner',
-          description: 'Kamu adalah tipe learner yang reflektif dan cermat.',
-          strengths: ['Detail Oriented', 'Pemahaman Mendalam'],
-          weaknesses: ['Lambat', 'Kurang Spontan']
+          description: 'Kamu cepat memahami konsep dan efisien menyelesaikan tugas.',
+          strengths: ['Pemahaman cepat', 'Problem solving tangkas', 'Adaptasi tinggi'],
+          weaknesses: ['Kurang detail', 'Terburu-buru']
         }
       };
 
-      const profile = learnerTypes[user.learner_type] || learnerTypes['Normal'];
+      const modelType = user.learner_type_model && learnerTypes[user.learner_type_model]
+        ? user.learner_type_model
+        : 'Stable';
+      const profile = learnerTypes[modelType];
 
       const fast = Number(user.n_kelas_fast) || 0;
       const normal = Number(user.normal) || 0;
@@ -314,37 +329,22 @@ module.exports = {
   getRecommendations: async (request, h) => {
     try {
       const { userId } = request.params;
-      
       const query = `
-        SELECT 
-          dj.journey_id,
-          dj.journey_name,
-          dj.difficulty,
-          dj.hours_to_study,
-          dj.xp,
-          COUNT(djc.journey_id) as enrolled_count
-        FROM developer_journeys dj
-        LEFT JOIN developer_journey_completion djc 
-          ON dj.journey_id = djc.journey_id AND djc.user_id = $1
-        WHERE djc.journey_id IS NULL
-        GROUP BY dj.journey_id
-        ORDER BY dj.xp DESC
-        LIMIT 5;
+        SELECT rekomendasi
+        FROM users
+        WHERE user_id = $1
       `;
       const result = await pool.query(query, [userId]);
 
-      const recommendations = result.rows.map(row => ({
-        journey_id: row.journey_id,
-        title: row.journey_name,
-        reason: `Sesuai dengan skill level kamu - ${row.difficulty === 1 ? 'Beginner' : row.difficulty === 2 ? 'Intermediate' : 'Advanced'}`,
-        difficulty: row.difficulty,
-        estimated_time: `${row.hours_to_study} hours`,
-        xp_reward: row.xp
-      }));
+      if (result.rows.length === 0) {
+        return h.response({ status: 'fail', message: 'User tidak ditemukan' }).code(404);
+      }
+
+      const rekomendasi = result.rows[0]?.rekomendasi || '';
 
       return h.response({ 
         status: 'success', 
-        data: recommendations 
+        data: { rekomendasi }
       }).code(200);
     } catch (error) {
       return h.response({ 

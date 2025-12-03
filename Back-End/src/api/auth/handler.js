@@ -1,10 +1,10 @@
 const UsersService = require('../../services/UserServices');
 const { generateToken } = require('../../utils/tokenize');
-const { compare } = require('../../utils/bcrypt');
 
 class AuthHandler {
   constructor() {
     this._service = new UsersService();
+    this.login = this.login.bind(this);
   }
 
   async login(request, h) {
@@ -15,7 +15,8 @@ class AuthHandler {
       return h.response({ status: 'fail', message: 'Email tidak ditemukan' }).code(404);
     }
 
-    const isValid = await compare(password, user.password);
+    // Plaintext compare per current DB policy
+    const isValid = String(password) === String(user.password);
     if (!isValid) {
       return h.response({ status: 'fail', message: 'Password salah' }).code(401);
     }
@@ -29,6 +30,7 @@ class AuthHandler {
         token,
         user: {
           id: user.user_id,
+          user_id: user.user_id,
           name: user.name,
           email: user.email,
         }

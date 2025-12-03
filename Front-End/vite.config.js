@@ -6,12 +6,12 @@ export default defineConfig({
   plugins: [react()],
   server: {
     proxy: {
-      // Proxy API calls to the backend during dev so Tailwind/Vite stay in charge of the UI
-      '/dashboard': 'http://localhost:5000',
-      '/auth': 'http://localhost:5000',
-      '/users': 'http://localhost:5000',
-      '/journeys': 'http://localhost:5000',
-      '/insights': 'http://localhost:5000',
+      // Proxy API calls under /api to backend; avoid proxying SPA routes
+      '/api': {
+        target: 'http://localhost:5000',
+        changeOrigin: true,
+        rewrite: (path) => path.replace(/^\/api/, '')
+      },
     },
   },
 })

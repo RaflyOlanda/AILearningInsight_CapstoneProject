@@ -1,11 +1,11 @@
 import React from 'react';
 import { UserProvider } from './context/usercontext';
-import DashboardPage from './pages/Dashboard/dashboardpage';
+import AppRouter from './router/approuter';
 
 function App() {
   return (
     <UserProvider>
-      <DashboardPage />
+      <AppRouter />
     </UserProvider>
   );
 }

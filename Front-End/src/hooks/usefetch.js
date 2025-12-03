@@ -1,12 +1,15 @@
 import { useState, useEffect } from 'react';
 
-// Prefer env-configured base URL; fallback to relative (for Vite proxy or same-origin)
+// Prefer env-configured base URL; fallback to /api (Vite proxy)
 const API_BASE_URL = (import.meta?.env?.VITE_API_BASE_URL || '').trim();
+const API_PREFIX = '/api';
 
 export const useFetch = (url, options = {}) => {
   const [data, setData] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+
+  const token = typeof window !== 'undefined' ? localStorage.getItem('token') || '' : '';
 
   useEffect(() => {
     if (!url) {
@@ -21,12 +24,13 @@ export const useFetch = (url, options = {}) => {
 
         const fullUrl = url.startsWith('http')
           ? url
-          : `${API_BASE_URL}${url}`;
+          : `${API_BASE_URL || API_PREFIX}${url}`;
         
         const fetchOptions = {
           method: options.method || 'GET',
           headers: {
             'Content-Type': 'application/json',
+            ...(token ? { Authorization: `Bearer ${token}` } : {}),
             ...options.headers,
           },
           ...options,
@@ -54,7 +58,7 @@ export const useFetch = (url, options = {}) => {
     };
 
     fetchData();
-  }, [url]);
+  }, [url, token]);
 
   return { data, loading, error };
 };

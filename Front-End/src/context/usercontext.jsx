@@ -7,7 +7,7 @@ export const UserProvider = ({ children }) => {
   const [loading, setLoading] = useState(true);
   const [userId, setUserId] = useState(null);
 
-  // Initialize from localStorage on mount, or use demo userId
+  // Initialize from localStorage on mount
   useEffect(() => {
     try {
       const storedUser = localStorage.getItem('user');
@@ -20,14 +20,9 @@ export const UserProvider = ({ children }) => {
       
       if (storedUserId) {
         setUserId(storedUserId);
-      } else {
-        // Default to a demo user ID for testing (first user in database)
-        setUserId('96989');
       }
     } catch (error) {
       console.error('Error loading user from localStorage:', error);
-      // Fallback to demo user
-      setUserId('96989');
     } finally {
       setLoading(false);
     }
@@ -35,9 +30,10 @@ export const UserProvider = ({ children }) => {
 
   const login = (userData, token) => {
     setUser(userData);
-    setUserId(userData.user_id || userData.id);
+    const uid = String(userData.user_id ?? userData.id ?? '');
+    setUserId(uid || null);
     localStorage.setItem('user', JSON.stringify(userData));
-    localStorage.setItem('userId', userData.user_id || userData.id);
+    if (uid) localStorage.setItem('userId', uid);
     localStorage.setItem('token', token);
   };
 

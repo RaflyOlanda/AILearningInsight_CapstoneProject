@@ -5,16 +5,12 @@ import { useUser } from '../../context/usercontext';
 
 const OverviewRecommendation = () => {
   const { userId } = useUser();
-  const { data: recommendations, loading } = useFetch(
+  const { data, loading } = useFetch(
     userId ? `/dashboard/recommendations/${userId}` : null
   );
 
-  const topRecommendation = (recommendations && Array.isArray(recommendations) && recommendations.length > 0)
-    ? recommendations[0]
-    : null;
-
-  const recommendationText = topRecommendation
-    ? `Kami merekomendasikan kamu untuk belajar "${topRecommendation.title}" pada level ${topRecommendation.difficulty || 'Intermediate'} dengan estimasi waktu ${topRecommendation.estimated_time}. Kursus ini akan memberikan ${topRecommendation.xp_reward} XP.`
+  const recommendationText = (data && typeof data.rekomendasi === 'string' && data.rekomendasi.length > 0)
+    ? data.rekomendasi
     : 'Sesuaikan dengan preferensi belajarmu untuk mendapatkan rekomendasi yang lebih personal.';
 
   return (
