@@ -1,18 +1,93 @@
 import React, { useState, useRef, useEffect } from 'react';
-// Ikon dari react-icons
-import { FaRegUserCircle, FaChevronDown, FaTrophy, FaMedal } from 'react-icons/fa'; 
-// Import gambar logo
-import DicodingLogo from '../../assets/images/dicoding.png'; 
-// Import file CSS yang berisi semua styling
-import './navbar.css'; 
+import { FaRegUserCircle, FaChevronDown, FaTrophy, FaMedal, FaStar, FaTimes } from 'react-icons/fa';
+import StarBorder from '../ui/starborder';
+import DicodingLogo from '../../assets/images/dicoding.png';
+import KnowledgeSeekerBadge from '../../assets/images/Knowledge Seeker (tier 1).png';
+import SkillExplorerBadge from '../../assets/images/Skill Explorer (tier 2).png';
+import CreativePractitionerBadge from '../../assets/images/Creative Practitioner (tier 3).png';
+import InsightSpecialistBadge from '../../assets/images/Insight Specialist (tier 4).png';
+import MasterofLearningBadge from '../../assets/images/Master of Learning (tier 5).png';
 import { useUser } from '../../context/usercontext';
 import { useFetch } from '../../hooks/usefetch';
 import LoginModal from '../ui/loginmodal';
 
+
+const BADGE_DATA = [
+  { id: 'seeker', name: 'Knowledge Seeker', tier: 1, image: KnowledgeSeekerBadge, color: '#f59e0b' }, 
+  { id: 'explorer', name: 'Skill Explorer', tier: 2, image: SkillExplorerBadge, color: '#94a3b8' }, 
+  { id: 'creative', name: 'Creative Practitioner', tier: 3, image: CreativePractitionerBadge, color: '#fbbf24' },
+  { id: 'insight', name: 'Insight Specialist', tier: 4, image: InsightSpecialistBadge, color: '#10b981' }, 
+  { id: 'master', name: 'Master of Learning', tier: 5, image: MasterofLearningBadge, color: '#8b5cf6' }, 
+];
+
+
+// --- KOMPONEN MODAL BADGE BARU ---
+const BadgeSelectorModal = ({ isOpen, onClose, currentBadge, onSelect }) => {
+  if (!isOpen) return null;
+
+  return (
+    // Overlay 
+    <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
+      
+      {/* Modal Content */}
+      <div className="bg-white rounded-xl shadow-2xl w-full max-w-lg overflow-hidden relative">
+        
+        {/* Header Modal */}
+        <div className="p-4 border-b flex justify-between items-center">
+          <h3 className="text-lg font-bold text-gray-800">Pilih Badge Anda</h3>
+          <button onClick={onClose} className="text-gray-500 hover:text-gray-800 transition">
+            <FaTimes size={18} />
+          </button>
+        </div>
+
+        {/* Daftar Badge */}
+        <div className="p-4 space-y-3 max-h-80 overflow-y-auto">
+          {BADGE_DATA.map((badge) => (
+            <div
+              key={badge.id}
+              onClick={() => onSelect(badge)}
+              className={`flex items-center p-3 rounded-lg cursor-pointer transition duration-150 border-2 ${
+                currentBadge.id === badge.id 
+                  ? 'bg-indigo-50 border-indigo-500' 
+                  : 'bg-white hover:bg-gray-50 border-gray-200'
+              }`}
+            >
+              {/* Gambar Badge: w-10 h-10 agar menonjol di modal */}
+              <img src={badge.image} alt={badge.name} className="w-10 h-10 mr-4 object-contain" />
+              
+              <span className="font-semibold text-gray-800 flex-grow">{badge.name}</span>
+              <span className="text-xs text-gray-500 mr-2">Tier {badge.tier}</span>
+              
+              {currentBadge.id === badge.id && (
+                <FaStar className="text-indigo-500" /> 
+              )}
+            </div>
+          ))}
+        </div>
+        
+        {/* Footer Modal */}
+        <div className="p-4 border-t text-right">
+          <button 
+            onClick={onClose}
+            className="px-4 py-2 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 transition"
+          >
+            Tutup
+          </button>
+        </div>
+
+      </div>
+    </div>
+  );
+};
+
+
+// --- KOMPONEN NAVBAR UTAMA ---
 const Navbar = () => {
-  const [isOpen, setIsOpen] = useState(false); // State untuk mengelola tampilan dropdown
-  const [loginOpen, setLoginOpen] = useState(false); // Modal login ketika belum login
-  const dropdownRef = useRef(null); // Ref untuk mendeteksi klik di luar dropdown
+  const [isOpen, setIsOpen] = useState(false); // dropdown profile
+  const [loginOpen, setLoginOpen] = useState(false); // modal login
+  const [badgeOpen, setBadgeOpen] = useState(false); // modal pilih badge
+  const [currentBadge, setCurrentBadge] = useState(BADGE_DATA[0]);
+  const dropdownRef = useRef(null); // klik di luar dropdown
   const { userId, logout } = useUser();
   const token = typeof window !== 'undefined' ? localStorage.getItem('token') : null;
   const { data: profile } = useFetch(userId ? `/dashboard/learning-profile/${userId}` : null);
@@ -20,20 +95,37 @@ const Navbar = () => {
   const xpFormatted = xp.toLocaleString('id-ID');
 
   // Fungsi untuk menutup dropdown ketika klik di luar
+  // Persist selected badge
+  useEffect(() => {
+    try {
+      const raw = localStorage.getItem('selectedBadge');
+      if (raw) {
+        const parsed = JSON.parse(raw);
+        const found = BADGE_DATA.find(b => b.id === parsed.id) || BADGE_DATA[0];
+        setCurrentBadge(found);
+      }
+    } catch {}
+  }, []);
+
+  useEffect(() => {
+    try {
+      if (currentBadge) localStorage.setItem('selectedBadge', JSON.stringify(currentBadge));
+    } catch {}
+  }, [currentBadge]);
+
+  // Close dropdown on outside click
   useEffect(() => {
     function handleClickOutside(event) {
       if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
         setIsOpen(false);
       }
     }
-    document.addEventListener("mousedown", handleClickOutside);
-    return () => {
-      document.removeEventListener("mousedown", handleClickOutside);
-    };
-  }, [dropdownRef]);
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => document.removeEventListener('mousedown', handleClickOutside);
+  }, []);
 
   // Fungsi untuk mengganti status buka/tutup
-  const toggleDropdown = () => setIsOpen(!isOpen); 
+  const toggleDropdown = () => setIsOpen(!isOpen);
 
   const isAuthenticated = Boolean(userId || token);
 
@@ -50,7 +142,7 @@ const Navbar = () => {
       </div>
 
       <div className="navbar-right-section" ref={dropdownRef}>
-        <span className="navbar-seeker-text">Knowledge Seeker</span>
+        <span className="navbar-seeker-text">{currentBadge?.name || 'Knowledge Seeker'}</span>
 
         {!isAuthenticated ? (
           <button className="px-3 py-1.5 rounded-lg bg-gray-900 text-white text-sm" onClick={() => setLoginOpen(true)}>
@@ -74,10 +166,13 @@ const Navbar = () => {
                   <FaMedal className="dropdown-icon-medal" /> {xpFormatted} XP
                 </div>
                 <div className="dropdown-divider"></div>
+                <div className="dropdown-item" onClick={() => setBadgeOpen(true)}>
+                  <FaStar className="dropdown-icon-generic" /> Pilih Badge
+                </div>
                 <div className="dropdown-item" onClick={() => { window.location.href = '/dashboard'; }}>
                   <FaRegUserCircle className="dropdown-icon-generic" /> Dashboard
                 </div>
-                <div className="dropdown-item" onClick={() => { /* placeholder for settings */ }}>
+                <div className="dropdown-item" onClick={() => { /* placeholder */ }}>
                   <FaRegUserCircle className="dropdown-icon-generic" /> Settings
                 </div>
                 <div className="dropdown-divider"></div>
@@ -97,10 +192,18 @@ const Navbar = () => {
         )}
       </div>
 
-      {/* Login Modal (only when not authenticated) */}
+      {/* Login Modal when logged out */}
       {!isAuthenticated && (
         <LoginModal open={loginOpen} onClose={() => setLoginOpen(false)} />
       )}
+
+      {/* Badge selector modal */}
+      <BadgeSelectorModal
+        isOpen={badgeOpen}
+        onClose={() => setBadgeOpen(false)}
+        currentBadge={currentBadge}
+        onSelect={(badge) => { setCurrentBadge(badge); setBadgeOpen(false); }}
+      />
     </nav>
   );
 };
