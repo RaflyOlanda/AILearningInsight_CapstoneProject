@@ -66,6 +66,64 @@ const LearnerTypeWidget = () => {
   const normalized = sum > 0 ? values.map((v) => Math.max(0, Math.round((v / sum) * 100))) : baseValues;
   const pieData = CATEGORIES.map((name, idx) => ({ name, value: normalized[idx] || 0 }));
 
+  // Map untuk menjelaskan arti tiap kategori dan tips singkat
+  const insight = {
+    fast: {
+      title: 'Fast',
+      desc: 'Kamu menyelesaikan materi lebih cepat dari rata-rata pada bagian ini.',
+      tips: [
+        'Pertahankan ritme; ambil materi lanjutan atau proyek mini.',
+        'Tantang diri dengan soal tingkat menengah/lanjutan.',
+      ],
+    },
+    normal: {
+      title: 'Normal',
+      desc: 'Ritme belajar stabil dan konsisten pada bagian ini.',
+      tips: [
+        'Pertahankan konsistensi; coba targetkan peningkatan kecil tiap minggu.',
+        'Gabungkan latihan singkat (quiz) untuk memperkuat konsep.',
+      ],
+    },
+    slow: {
+      title: 'Slow',
+      desc: 'Kamu butuh waktu lebih lama; ini wajar untuk topik yang kompleks.',
+      tips: [
+        'Pisahkan materi sulit menjadi sub-topik kecil dan ulangi.',
+        'Catat konsep yang menghambat dan cari referensi alternatif.',
+      ],
+    },
+  };
+
+  // Tooltip kustom yang menampilkan penjelasan + tips
+  const CustomTooltip = ({ active, payload }) => {
+    if (!active || !payload || !payload.length) return null;
+    const p = payload[0];
+    const key = (p?.name || '').toLowerCase(); // fast | normal | slow
+    const colorFromName = (() => {
+      const idx = CATEGORIES.indexOf(key);
+      return idx >= 0 ? COLORS[idx] : undefined;
+    })();
+    const color = colorFromName || p?.color || p?.fill || '#999';
+    const value = Number(p?.value) || 0;
+    const info = insight[key] || { title: key, desc: '', tips: [] };
+    return (
+      <div className="bg-white rounded-lg border border-gray-200 shadow-lg p-3 max-w-[280px]">
+        <div className="flex items-center gap-2 mb-1">
+          <span className="inline-block w-2.5 h-2.5 rounded-full" style={{ backgroundColor: color }}></span>
+          <div className="text-sm font-semibold text-gray-800">{info.title} • {value}%</div>
+        </div>
+        <p className="text-[12px] text-gray-600 leading-snug mb-2">{info.desc}</p>
+        {info.tips?.length > 0 && (
+          <ul className="list-disc ml-4 space-y-1">
+            {info.tips.map((t, i) => (
+              <li key={i} className="text-[12px] text-gray-600 leading-snug">{t}</li>
+            ))}
+          </ul>
+        )}
+      </div>
+    );
+  };
+
   return (
     <Card className="p-5 shadow-soft rounded-xl border border-gray-200 min-h-[340px]">
       <div className="flex flex-col gap-4 h-full">
@@ -87,7 +145,7 @@ const LearnerTypeWidget = () => {
                     <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
                   ))}
                 </Pie>
-                <Tooltip />
+                <Tooltip content={<CustomTooltip />} />
               </PieChart>
             </ResponsiveContainer>
           </div>
@@ -100,7 +158,6 @@ const LearnerTypeWidget = () => {
               </div>
             ))}
           </div>
-          <p className="text-[10px] text-gray-400 text-center mt-1">visualisasi pie chart berdasarkan kuantifikasi model ai machine learning</p>
           
         </div>
 

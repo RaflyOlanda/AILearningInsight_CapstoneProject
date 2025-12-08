@@ -298,6 +298,41 @@ module.exports = {
     }
   },
 
+  // Get current user's global rank on the leaderboard
+  getCurrentUserRank: async (request, h) => {
+    try {
+      const { userId } = request.params;
+      const query = `
+        WITH ranking AS (
+          SELECT 
+            ROW_NUMBER() OVER (ORDER BY u.total_exp DESC) as rank,
+            u.user_id,
+            u.display_name,
+            u.total_exp
+          FROM users u
+          WHERE u.total_exp IS NOT NULL
+        )
+        SELECT 
+          r.rank,
+          r.user_id,
+          r.display_name as name,
+          r.total_exp as xp,
+          ROUND(r.total_exp / 100) as level
+        FROM ranking r
+        WHERE r.user_id = $1;
+      `;
+      const result = await pool.query(query, [userId]);
+
+      if (result.rows.length === 0) {
+        return h.response({ status: 'fail', message: 'User tidak ditemukan atau belum memiliki peringkat' }).code(404);
+      }
+
+      return h.response({ status: 'success', data: result.rows[0] }).code(200);
+    } catch (error) {
+      return h.response({ status: 'fail', message: error.message }).code(500);
+    }
+  },
+
   getDailyCheckpoint: async (request, h) => {
     try {
       const { userId } = request.params;

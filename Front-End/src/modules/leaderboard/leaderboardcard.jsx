@@ -2,8 +2,10 @@ import React from 'react';
 import Card from '../../components/ui/card';
 import { useFetch } from '../../hooks/usefetch';
 import { useUser } from '../../context/usercontext';
+import { useNavigate } from 'react-router-dom';
 
 const LeaderboardCard = () => {
+  const navigate = useNavigate();
   const { userId, user } = useUser();
   const { data: leaderboard, loading } = useFetch('/dashboard/leaderboard');
 
@@ -19,12 +21,12 @@ const LeaderboardCard = () => {
   };
 
   return (
-    <Card className="p-0 shadow-soft rounded-xl border border-gray-200 overflow-hidden h-[260px] w-full">
-      <div className="px-4 py-3 border-b border-gray-200 flex items-center justify-between">
+    <Card className="p-0 shadow-soft rounded-xl border border-gray-200 overflow-hidden h-full w-full flex flex-col">
+      <div className="px-4 py-3 border-b border-gray-200 flex items-center justify-between flex-shrink-0">
         <div className="font-semibold text-sm">Leaderboard</div>
-        <button className="text-[11px] text-gray-500 hover:text-gray-700">View All &gt;</button>
+        <button onClick={() => navigate('/leaderboard')} className="text-[11px] text-gray-500 hover:text-gray-700">View All &gt;</button>
       </div>
-      <ul className="divide-y divide-gray-100 overflow-y-auto h-[212px]">
+      <ul className="divide-y divide-gray-100 overflow-y-auto flex-1 min-h-0">
         {loading ? (
           <li className="px-4 py-3 text-center text-xs text-gray-500">Loading leaderboard...</li>
         ) : topUsers.length > 0 ? (

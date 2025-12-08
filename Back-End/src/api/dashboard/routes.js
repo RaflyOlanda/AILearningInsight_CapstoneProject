@@ -45,6 +45,12 @@ module.exports = [
   },
   {
     method: 'GET',
+    path: '/dashboard/leaderboard/me/{userId}',
+    handler: handler.getCurrentUserRank,
+    options: { auth: false }
+  },
+  {
+    method: 'GET',
     path: '/dashboard/recommendations/{userId}',
     handler: handler.getRecommendations,
     options: { auth: false }

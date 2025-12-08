@@ -1,0 +1,109 @@
+/* Basic Navbar layout matching earlier look */
+.navbar-container {
+	position: sticky;
+	top: 0;
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	width: 100%;
+	background-color: #ffffff;
+	border-bottom: 1px solid #E5E7EB; /* gray-200 */
+	padding: 10px 16px; /* compact */
+	z-index: 50;
+}
+
+.navbar-left-section {
+	display: flex;
+	align-items: center;
+	gap: 8px;
+}
+
+.navbar-logo-image {
+	height: 28px;
+	width: auto;
+	object-fit: contain;
+}
+
+.navbar-right-section {
+	display: flex;
+	align-items: center;
+	gap: 12px;
+	position: relative;
+}
+
+.navbar-seeker-text {
+	display: none; /* hidden by default to keep minimal header */
+}
+
+@media (min-width: 640px) {
+	.navbar-seeker-text {
+		display: inline-block;
+		font-size: 12px;
+		color: #6B7280; /* gray-500 */
+	}
+}
+
+.navbar-profile-container {
+	display: flex;
+	align-items: center;
+	gap: 6px;
+	padding: 6px 8px;
+	border: 1px solid #E5E7EB;
+	border-radius: 9999px;
+	background-color: #ffffff;
+	cursor: pointer;
+}
+
+.profile-avatar {
+	width: 22px;
+	height: 22px;
+	color: #374151; /* gray-700 */
+}
+
+.navbar-dropdown-icon {
+	color: #6B7280; /* gray-500 */
+	transition: transform 0.2s ease;
+}
+
+.navbar-dropdown-icon.rotate-180 {
+	transform: rotate(180deg);
+}
+
+/* Dropdown */
+.dropdown-menu {
+	position: absolute;
+	right: 0;
+	top: calc(100% + 8px);
+	min-width: 200px;
+	background-color: #ffffff;
+	border: 1px solid #E5E7EB;
+	border-radius: 12px;
+	box-shadow: 0 8px 24px rgba(0,0,0,0.08);
+	padding: 8px;
+	z-index: 60;
+}
+
+.dropdown-item {
+	display: flex;
+	align-items: center;
+	gap: 10px;
+	padding: 8px 10px;
+	border-radius: 8px;
+	font-size: 13px;
+	color: #374151; /* gray-700 */
+}
+
+.dropdown-item:hover {
+	background-color: #F3F4F6; /* gray-100 */
+}
+
+.dropdown-divider {
+	height: 1px;
+	background-color: #E5E7EB;
+	margin: 6px 4px;
+}
+
+.dropdown-icon-trophy { color: #F59E0B; } /* amber-500 */
+.dropdown-icon-medal { color: #10B981; } /* emerald-500 */
+.dropdown-icon-generic { color: #6B7280; } /* gray-500 */
+

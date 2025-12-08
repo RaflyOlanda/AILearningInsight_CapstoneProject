@@ -20,8 +20,17 @@ export default function LoginModal({ open, onClose }) {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ email, password })
       });
-      const data = await res.json();
-      if (!res.ok || data.status !== 'success') throw new Error(data.message || 'Login gagal');
+      const raw = await res.text();
+      let data = null;
+      try { data = raw ? JSON.parse(raw) : null; } catch { data = null; }
+
+      if (!res.ok || (data && data.status !== 'success')) {
+        const msg = (data && (data.message || data.error)) || raw || `Login gagal (HTTP ${res.status})`;
+        throw new Error(msg);
+      }
+
+      // Prefer parsed data; if empty raw, create minimal struct
+      if (!data) data = { data: {} };
       login(data.data.user, data.data.token);
       window.location.href = '/dashboard';
     } catch (err) {

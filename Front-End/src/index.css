@@ -1,9 +1,29 @@
 @import "tailwindcss";
-
 @plugin "tailwindcss-animate";
-@import "tw-animate-css";
 
 @custom-variant dark (&:is(.dark *));
+
+/* Inline fallback for StarBorder animation (replaces missing tw-animate-css) */
+@keyframes star-movement-bottom {
+    0% { transform: translateX(0); }
+    100% { transform: translateX(250%); }
+}
+@keyframes star-movement-top {
+    0% { transform: translateX(0); }
+    100% { transform: translateX(250%); }
+}
+@keyframes star-shine {
+    0% { transform: translateX(-130%); opacity: 0.0; }
+    10% { opacity: 0.55; }
+    50% { opacity: 0.75; }
+    90% { opacity: 0.55; }
+    100% { transform: translateX(130%); opacity: 0.0; }
+}
+.animate-star-movement-bottom { animation: star-movement-bottom linear infinite alternate; }
+.animate-star-movement-top { animation: star-movement-top linear infinite alternate; }
+.animate-star-shine { animation: star-shine 4.5s ease-in-out infinite; }
+@keyframes spin-slow { to { transform: rotate(360deg); } }
+.animate-spin-slow { animation: spin-slow 6s linear infinite; }
 
 body {
     margin: 0;
@@ -149,3 +169,8 @@ button:focus-visible, a:focus-visible, input:focus-visible, textarea:focus-visib
     @apply bg-background text-foreground;
     }
 }
+
+/* Line clamp utilities (no plugin needed) */
+.line-clamp-3 { display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden; }
+.line-clamp-4 { display: -webkit-box; -webkit-line-clamp: 4; -webkit-box-orient: vertical; overflow: hidden; }
+.line-clamp-5 { display: -webkit-box; -webkit-line-clamp: 5; -webkit-box-orient: vertical; overflow: hidden; }

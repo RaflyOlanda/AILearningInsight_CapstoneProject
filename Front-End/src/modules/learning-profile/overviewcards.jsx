@@ -4,10 +4,12 @@ import { PieChart, Pie, Cell } from 'recharts';
 import { FaStar } from 'react-icons/fa';
 import { useFetch } from '../../hooks/usefetch';
 import { useUser } from '../../context/usercontext';
+import { useNavigate } from 'react-router-dom';
 
 const COLORS = ['#22C55E', '#E5E7EB'];
 
 const OverviewCards = () => {
+  const navigate = useNavigate();
   const { userId } = useUser();
   const { data: studyData, loading: studyLoading } = useFetch(
     userId ? `/dashboard/study-duration/${userId}` : null
@@ -75,6 +77,14 @@ const OverviewCards = () => {
             <div className="text-sm">
               <div className="font-semibold">Average Submission Rating</div>
               <div className="text-xs text-gray-500">{avgRating.toFixed(1)} / 5</div>
+              <button
+                type="button"
+                onClick={() => navigate('/submissions')}
+                className="mt-1.5 text-[11px] text-blue-600 hover:text-blue-800 font-medium"
+                title="Tap to detail"
+              >
+                Tap to detail
+              </button>
             </div>
           </>
         )}

@@ -1,5 +1,6 @@
 import React, { useState, useRef, useEffect } from 'react';
-import { FaRegUserCircle, FaChevronDown, FaTrophy, FaMedal, FaStar, FaTimes } from 'react-icons/fa';
+import { FaRegUserCircle, FaChevronDown, FaTrophy, FaMedal, FaStar, FaTimes, FaTachometerAlt, FaCog, FaSignOutAlt } from 'react-icons/fa';
+import './navbar.css';
 import StarBorder from '../ui/starborder';
 import DicodingLogo from '../../assets/images/dicoding.png';
 import KnowledgeSeekerBadge from '../../assets/images/Knowledge Seeker (tier 1).png';
@@ -125,13 +126,22 @@ const Navbar = () => {
   }, []);
 
   // Fungsi untuk mengganti status buka/tutup
-  const toggleDropdown = () => setIsOpen(!isOpen);
+  const toggleDropdown = () => setIsOpen(prev => !prev);
+
+  // Close with Escape key
+  useEffect(() => {
+    function onKey(e) {
+      if (e.key === 'Escape') setIsOpen(false);
+    }
+    document.addEventListener('keydown', onKey);
+    return () => document.removeEventListener('keydown', onKey);
+  }, []);
 
   const isAuthenticated = Boolean(userId || token);
 
   return (
-    <nav className="navbar-container">
-      <div className="navbar-left-section">
+    <nav className="navbar-container flex items-center justify-between w-full bg-white border-b border-gray-200 px-4 py-2 sticky top-0 z-50">
+      <div className="navbar-left-section flex items-center gap-2">
         <img
           src={DicodingLogo}
           alt="Dicoding Logo"
@@ -141,8 +151,7 @@ const Navbar = () => {
         />
       </div>
 
-      <div className="navbar-right-section" ref={dropdownRef}>
-        <span className="navbar-seeker-text">{currentBadge?.name || 'Knowledge Seeker'}</span>
+      <div className="navbar-right-section flex items-center gap-3 relative ml-auto" ref={dropdownRef}>
 
         {!isAuthenticated ? (
           <button className="px-3 py-1.5 rounded-lg bg-gray-900 text-white text-sm" onClick={() => setLoginOpen(true)}>
@@ -150,15 +159,28 @@ const Navbar = () => {
           </button>
         ) : (
           <>
+            {/* Badge toggle only after login */}
+            <StarBorder
+              as="button"
+              className="mr-3 hidden sm:inline-block align-middle"
+              color="#6366F1"
+              speed="8s"
+              thickness={1}
+              onClick={() => setBadgeOpen(true)}
+              title="Pilih badge"
+            >
+              <img src={currentBadge?.image} alt={currentBadge?.name} className="w-5 h-5 object-contain" />
+              <span className="text-sm">{currentBadge?.name || 'Knowledge Seeker'}</span>
+            </StarBorder>
             {/* Profile Container: Diklik untuk toggle dropdown */}
-            <div className="navbar-profile-container" onClick={toggleDropdown}>
+            <div className="navbar-profile-container flex items-center gap-1 px-2 py-1 rounded-full border border-gray-200 bg-white" onClick={toggleDropdown} role="button" aria-haspopup="menu" aria-expanded={isOpen}>
               <FaRegUserCircle className="profile-avatar" />
               <FaChevronDown size={10} className={`navbar-dropdown-icon ${isOpen ? 'rotate-180' : ''}`} />
             </div>
 
             {/* --- Dropdown Menu (Popup) --- */}
             {isOpen && (
-              <div className="dropdown-menu">
+              <div className="dropdown-menu" role="menu">
                 <div className="dropdown-item">
                   <FaTrophy className="dropdown-icon-trophy" /> 0 Points
                 </div>
@@ -166,14 +188,14 @@ const Navbar = () => {
                   <FaMedal className="dropdown-icon-medal" /> {xpFormatted} XP
                 </div>
                 <div className="dropdown-divider"></div>
-                <div className="dropdown-item" onClick={() => setBadgeOpen(true)}>
+                <div className="dropdown-item" role="menuitem" onClick={() => { setBadgeOpen(true); setIsOpen(false); }}>
                   <FaStar className="dropdown-icon-generic" /> Pilih Badge
                 </div>
-                <div className="dropdown-item" onClick={() => { window.location.href = '/dashboard'; }}>
-                  <FaRegUserCircle className="dropdown-icon-generic" /> Dashboard
+                <div className="dropdown-item" role="menuitem" onClick={() => { setIsOpen(false); window.location.href = '/dashboard'; }}>
+                  <FaTachometerAlt className="dropdown-icon-generic" /> Dashboard
                 </div>
-                <div className="dropdown-item" onClick={() => { /* placeholder */ }}>
-                  <FaRegUserCircle className="dropdown-icon-generic" /> Settings
+                <div className="dropdown-item" role="menuitem" onClick={() => { setIsOpen(false); /* open settings placeholder */ }}>
+                  <FaCog className="dropdown-icon-generic" /> Settings
                 </div>
                 <div className="dropdown-divider"></div>
                 <div
@@ -184,7 +206,7 @@ const Navbar = () => {
                     window.location.href = '/';
                   }}
                 >
-                  <FaRegUserCircle className="dropdown-icon-generic" /> Logout
+                  <FaSignOutAlt className="dropdown-icon-generic" /> Logout
                 </div>
               </div>
             )}

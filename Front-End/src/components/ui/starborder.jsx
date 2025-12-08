@@ -1,46 +1,66 @@
 import React from 'react';
 
-const StarBorder = ({ 
-  as: Component = 'button', 
-  className = '', 
-  color = 'cyan', // Warna default indigo yang cocok dengan tema
-  speed = '6s', 
-  thickness = 1, 
-  children, 
+const StarBorder = ({
+  as: Component = 'button',
+  className = '',
+  color = 'rgba(255,255,255,0.9)',
+  speed = '1s',
+  thickness = '4.5px',
+  children,
   ...rest
 }) => {
-  // Warna latar belakang konten diubah menjadi gray-100 agar cocok dengan Navbar Anda
   return (
     <Component
-      className={`relative inline-block overflow-hidden rounded-full ${className}`} // rounded-full agar sesuai tombol badge
+      className={`relative inline-block overflow-hidden rounded-[20px] ${className}`}
       style={{
         padding: `${thickness}px 0`,
-        ...rest.style
+        ...(rest.style || {}),
       }}
       {...rest}
     >
-      {/* Efek Cahaya Bawah */}
+      {/* Floating glow layers (below content pill, subtly visible through translucency) */}
       <div
-        className="absolute w-[300%] h-[50%] opacity-70 bottom-[-11px] right-[-250%] rounded-full animate-star-movement-bottom z-0"
+        className="pointer-events-none absolute w-[240%] h-[85%] opacity-65 bottom-[-22px] left-[-120%] rounded-full animate-star-movement-bottom z-10 mix-blend-screen blur-[8px]"
         style={{
-          background: `radial-gradient(circle, ${color}, transparent 10%)`,
-          animationDuration: speed
+          background: `radial-gradient(circle, ${color}, transparent 12%)`,
+          animationDuration: speed,
         }}
-      ></div>
-      {/* Efek Cahaya Atas */}
+      />
       <div
-        className="absolute w-[300%] h-[50%] opacity-70 top-[-10px] left-[-250%] rounded-full animate-star-movement-top z-0"
+        className="pointer-events-none absolute w-[240%] h-[85%] opacity-65 top-[-22px] left-[-120%] rounded-full animate-star-movement-top z-10 mix-blend-screen blur-[8px]"
         style={{
-          background: `radial-gradient(circle, ${color}, transparent 10%)`,
-          animationDuration: speed
+          background: `radial-gradient(circle, ${color}, transparent 12%)`,
+          animationDuration: speed,
         }}
-      ></div>
-      
-      {/* Konten Badge: Diubah agar transparan/abu-abu sesuai desain Anda */}
-      <div className="relative z-1 bg-gray-100 hover:bg-gray-200 text-gray-800 text-center text-[14px] py-[6px] px-[12px] rounded-full flex items-center gap-2 border border-gray-100">
-        {children}
+      />
+
+      {/* Content pill with translucent gradient so the glow is visible */}
+      <div
+        className="relative z-30 rounded-[20px] border text-white text-center text-[14px] py-[8px] px-[14px] flex items-center gap-2 overflow-hidden"
+        style={{
+          background:
+            'linear-gradient(180deg, rgba(12,17,32,0.65), rgba(6,9,20,0.65))',
+          borderColor: 'rgba(255,255,255,0.12)',
+          boxShadow:
+            '0 0 0 1px rgba(255,255,255,0.04) inset, 0 10px 30px rgba(80,114,255,0.08)',
+        }}
+      >
+        {/* Internal sweep shine so it always shows above the background and below text */}
+        <div className="pointer-events-none absolute inset-0 z-0 overflow-hidden">
+          <div
+            className="absolute top-0 left-0 h-full w-[60%] animate-star-shine"
+            style={{
+              background:
+                'linear-gradient(110deg, rgba(255,255,255,0) 0%, rgba(255,255,255,0.22) 40%, rgba(255,255,255,0.85) 50%, rgba(255,255,255,0.22) 60%, rgba(255,255,255,0) 100%)',
+              filter: 'blur(4px)',
+              animationDuration: speed,
+            }}
+          />
+        </div>
+        <div className="relative z-10 flex items-center gap-2">{children}</div>
       </div>
     </Component>
   );
 };
+
 export default StarBorder;
