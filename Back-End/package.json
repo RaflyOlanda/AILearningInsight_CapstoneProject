@@ -8,17 +8,18 @@
     "start": "node src/server.js",
     "dev": "nodemon src/server.js",
     "db:import": "pwsh -ExecutionPolicy Bypass ./scripts/import-db.ps1",
-    "db:import-users-csv": "node ./scripts/import-users-csv.js"
+    "db:import-users-csv": "node ./scripts/import-users-csv.js",
+    "db:merge-csv": "node ./scripts/merge-csv-to-users.js"
   },
   "dependencies": {
     "@hapi/hapi": "^21.4.4",
-    "@hapi/jwt": "^3.2.1",
     "@hapi/inert": "^7.1.0",
+    "@hapi/jwt": "^3.2.1",
     "axios": "^1.7.2",
     "bcrypt": "^6.0.0",
+    "csv-parse": "^5.6.0",
     "dotenv": "^16.4.5",
-    "pg": "^8.16.3",
-    "csv-parse": "^5.5.6"
+    "pg": "^8.16.3"
   },
   "devDependencies": {
     "nodemon": "^2.0.22"

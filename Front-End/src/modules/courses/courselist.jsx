@@ -20,7 +20,7 @@ const CourseList = () => {
 		}));
 
 	return (
-		<Card className="card-shadow rounded-xl overflow-hidden min-h-[260px] max-h-[260px]">
+		<Card className="card-shadow rounded-xl overflow-hidden min-h-[270px] max-h-[270px]">
 			<div className="px-4 py-3 border-b border-gray-200 flex items-center justify-between bg-gray-50">
 				<div className="font-semibold text-sm text-gray-800">Courses</div>
 				<button onClick={() => navigate('/courses')} className="text-[11px] text-blue-600 hover:text-blue-800 font-medium">View All &gt;</button>

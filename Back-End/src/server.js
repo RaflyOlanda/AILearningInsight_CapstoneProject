@@ -13,20 +13,20 @@ const dashboard = require('./api/dashboard');
 
 const init = async () => {
   const server = Hapi.server({
-    port: 5000,
-    host: 'localhost',
+    port: parseInt(process.env.PORT, 10) || 5000,
+    host: process.env.HOST || 'localhost',
     routes: { cors: true }
   });
 
   await server.register(Jwt);
 
   server.auth.strategy('jwt', 'jwt', {
-    keys: process.env.ACCESS_TOKEN_KEY,
+    keys: process.env.ACCESS_TOKEN_KEY || 'default-secret-key-change-this',
     verify: {
       aud: false,
       iss: false,
       sub: false,
-      maxAgeSec: process.env.TOKEN_AGE,
+      maxAgeSec: parseInt(process.env.TOKEN_AGE) || 14400,
     },
     validate: (artifacts) => ({
       isValid: true,

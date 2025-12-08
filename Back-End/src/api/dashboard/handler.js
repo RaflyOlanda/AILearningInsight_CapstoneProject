@@ -71,10 +71,37 @@ module.exports = {
         }).code(404);
       }
 
-      return h.response({ 
-        status: 'success', 
-        data: result.rows[0] 
-      }).code(200);
+      // Last 7 days simple trend of study hours grouped by date
+      const trendQuery = `
+        SELECT DATE(djc.enrollments_at) AS date,
+               ROUND(SUM(djc.study_duration)::numeric, 2) AS hours
+        FROM developer_journey_completion djc
+        WHERE djc.user_id = $1 AND djc.enrollments_at IS NOT NULL
+        GROUP BY DATE(djc.enrollments_at)
+        ORDER BY DATE(djc.enrollments_at) DESC
+        LIMIT 7;
+      `;
+      const trendRes = await pool.query(trendQuery, [userId]);
+      const data = result.rows[0];
+      data.last_7_days = (trendRes.rows || []).reverse(); // oldest to newest for left-to-right
+
+      // Last 10 recent classes: sum hours per journey ordered by last_enrolled_at
+      const last10Query = `
+        SELECT djc.journey_id,
+               dj.journey_name,
+               DATE(MAX(djc.last_enrolled_at)) AS last_enrolled_date,
+               ROUND(SUM(djc.study_duration)::numeric, 2) AS hours
+        FROM developer_journey_completion djc
+        JOIN developer_journeys dj ON dj.journey_id = djc.journey_id
+        WHERE djc.user_id = $1
+        GROUP BY djc.journey_id, dj.journey_name
+        ORDER BY MAX(djc.last_enrolled_at) DESC
+        LIMIT 10;
+      `;
+      const last10Res = await pool.query(last10Query, [userId]);
+      data.last_10_classes = last10Res.rows || [];
+
+      return h.response({ status: 'success', data }).code(200);
     } catch (error) {
       return h.response({ 
         status: 'fail', 
@@ -90,7 +117,7 @@ module.exports = {
         SELECT 
           u.user_id,
           u.display_name,
-          u.learner_type_model,
+          u.learner_type,
           u.mean_point,
           u.n_kelas_fast,
           u.normal,
@@ -114,7 +141,7 @@ module.exports = {
       const user = result.rows[0];
       const learnerTypes = {
         'Stable': {
-          type: 'Stable Learner',
+          type: 'Consistent Learner',
           description: 'Kamu belajar dengan ritme konsisten dan fokus pada pemahaman yang mantap.',
           strengths: ['Konsistensi tinggi', 'Fokus jangka panjang', 'Disiplin dalam progres'],
           weaknesses: ['Adaptasi lebih lambat', 'Kurang eksploratif']
@@ -126,7 +153,7 @@ module.exports = {
           weaknesses: ['Butuh waktu lebih lama', 'Cenderung perfeksionis']
         },
         'Careful': {
-          type: 'Careful Learner',
+          type: 'Reflective Learner',
           description: 'Kamu teliti, berhati-hati, dan jarang melewatkan detail penting.',
           strengths: ['Detail oriented', 'Kesalahan minim', 'Rencana belajar rapi'],
           weaknesses: ['Lambat mengambil keputusan', 'Kurang spontan']
@@ -145,10 +172,18 @@ module.exports = {
         }
       };
 
-      const modelType = user.learner_type_model && learnerTypes[user.learner_type_model]
-        ? user.learner_type_model
-        : 'Stable';
-      const profile = learnerTypes[modelType];
+      // Prefer direct learner_type if present; else map legacy model names
+      let profile;
+      if (user.learner_type) {
+        // If learner_type already a human-readable type, use it directly
+        profile = Object.values(learnerTypes).find(p => p.type === user.learner_type);
+        if (!profile) {
+          // Fallback: if learner_type stores model keys (e.g., 'Fast', 'Sonic')
+          profile = learnerTypes[user.learner_type] || learnerTypes['Stable'];
+        }
+      } else {
+        profile = learnerTypes['Stable'];
+      }
 
       const fast = Number(user.n_kelas_fast) || 0;
       const normal = Number(user.normal) || 0;
@@ -341,23 +376,40 @@ module.exports = {
   getDailyCheckpoint: async (request, h) => {
     try {
       const { userId } = request.params;
-      const query = `
-        SELECT 
-          DATE(enrollments_at) as date,
-          COUNT(*) as activities,
-          SUM(study_duration) as total_duration
+      // Get the latest enrollment date
+      const latestQuery = `
+        SELECT DATE(MAX(enrollments_at)) AS last_enrolled_date
         FROM developer_journey_completion
-        WHERE user_id = $1 AND enrollments_at IS NOT NULL
-        GROUP BY DATE(enrollments_at)
-        ORDER BY DATE(enrollments_at) DESC
-        LIMIT 30;
+        WHERE user_id = $1 AND enrollments_at IS NOT NULL;
       `;
-      const result = await pool.query(query, [userId]);
+      const latestRes = await pool.query(latestQuery, [userId]);
+      const lastDateStr = latestRes.rows[0]?.last_enrolled_date;
 
-      return h.response({ 
-        status: 'success', 
-        data: result.rows 
-      }).code(200);
+      if (!lastDateStr) {
+        // No enrollments: future-only 7 days (gray)
+        const today = new Date();
+        const days = Array.from({ length: 7 }, (_, i) => {
+          const d = new Date(today);
+          d.setDate(today.getDate() + i);
+          return { date: d.toISOString().slice(0, 10), status: 'future', color: 'gray' };
+        });
+        return h.response({ status: 'success', data: days }).code(200);
+      }
+
+      const lastDate = new Date(lastDateStr);
+      // 7-day period: 3 days before, the day itself, 3 days after
+      const days = Array.from({ length: 7 }, (_, idx) => {
+        const offset = idx - 3; // -3..3
+        const d = new Date(lastDate);
+        d.setDate(lastDate.getDate() + offset);
+        let status = 'future';
+        let color = 'gray';
+        if (offset === 0) { status = 'current'; color = 'green'; }
+        else if (offset < 0) { status = 'past'; color = 'red'; }
+        return { date: d.toISOString().slice(0, 10), status, color };
+      });
+
+      return h.response({ status: 'success', data: days }).code(200);
     } catch (error) {
       return h.response({ 
         status: 'fail', 

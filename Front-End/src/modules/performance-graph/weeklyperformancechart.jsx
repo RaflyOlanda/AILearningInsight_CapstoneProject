@@ -32,6 +32,25 @@ const WeeklyPerformanceChart = () => {
 
   const description = chartData?.description || '';
 
+  const CustomTooltip = ({ active, payload, label }) => {
+    if (active && Array.isArray(payload) && payload.length) {
+      const hours = payload.find(p => p.dataKey === 'Hours')?.value ?? 0;
+      const duration = payload.find(p => p.dataKey === 'Duration')?.value ?? 0;
+      const gap = Number(duration) - Number(hours);
+      return (
+        <div className="rounded-xl bg-white shadow-lg border border-gray-200 px-4 py-3">
+          <div className="text-sm font-semibold text-gray-800 mb-1">{label}</div>
+          <div className="text-[12px]">
+            <div className="text-green-600 font-semibold">Durasi (aktual): <span className="font-bold">{duration} jam</span></div>
+            <div className="text-blue-600 font-semibold">Rekomendasi (jam): <span className="font-bold">{hours} jam</span></div>
+            <div className="text-gray-700 font-semibold mt-1">Selisih (Durasi − Rekomendasi): <span className="font-bold">{gap > 0 ? `+${gap}` : gap} jam</span></div>
+          </div>
+        </div>
+      );
+    }
+    return null;
+  };
+
   return (
     <Card className="p-4 shadow-soft rounded-xl border border-gray-200 min-h-[260px] overflow-hidden">
       <div className="text-sm font-semibold mb-0">Performance Graph</div>
@@ -49,7 +68,7 @@ const WeeklyPerformanceChart = () => {
               <CartesianGrid strokeDasharray="3 3" stroke="#E5E7EB" />
               <XAxis dataKey="name" tick={false} tickLine={false} stroke="#9CA3AF" padding={{ left: 0, right: 14 }} />
               <YAxis tick={{ fontSize: 11 }} stroke="#9CA3AF" tickMargin={6} domain={[0, 'auto']} />
-              <Tooltip />
+              <Tooltip content={<CustomTooltip />} cursor={{ stroke: '#D1D5DB', strokeDasharray: '4 4' }} />
               <Line type="monotone" dataKey="Hours" stroke="#5B9BD5" strokeWidth={2.5} strokeLinecap="round" dot={{ r: 2.5 }} activeDot={{ r: 4 }} />
               <Line type="monotone" dataKey="Duration" stroke="#22C55E" strokeWidth={2.5} strokeLinecap="round" dot={{ r: 2.5 }} activeDot={{ r: 4 }} />
             </LineChart>

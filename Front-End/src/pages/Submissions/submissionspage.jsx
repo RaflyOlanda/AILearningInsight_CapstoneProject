@@ -46,8 +46,8 @@ const SubmissionsPage = () => {
                 {items.map((r) => (
                   <tr key={`${r.journey_id}-${r.date}`} className="hover:bg-gray-50">
                     <td className="px-4 py-2 text-gray-800 truncate" title={r.course_title}>{r.course_title}</td>
-                    <td className="px-4 py-2 text-gray-700">{Number(r.score) || 0}</td>
-                    <td className="px-4 py-2 text-gray-700">{Number(r.duration) || 0}</td>
+                    <td className="px-4 py-2 text-gray-700">{Number(r.score) > 0 ? Number(r.score) : 'no submission'}</td>
+                    <td className="px-4 py-2 text-gray-700">{Number(r.duration) > 0 ? Number(r.duration) : 'less than 1 hour'}</td>
                     <td className="px-4 py-2 text-gray-500">{r.date ? new Date(r.date).toLocaleDateString('id-ID') : '-'}</td>
                     <td className="px-4 py-2 text-gray-700">{Number(r.enrolling_times) || 0}</td>
                   </tr>

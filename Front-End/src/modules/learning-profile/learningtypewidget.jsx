@@ -50,6 +50,7 @@ const LearnerTypeWidget = () => {
   const { data: profile, loading } = useFetch(
     userId ? `/dashboard/learning-profile/${userId}` : null
   );
+  const [open, setOpen] = React.useState(false);
 
   const strengths = Array.isArray(profile?.strengths) && profile.strengths.length
     ? profile.strengths.slice(0, 3)
@@ -124,75 +125,109 @@ const LearnerTypeWidget = () => {
     );
   };
 
-  return (
-    <Card className="p-5 shadow-soft rounded-xl border border-gray-200 min-h-[340px]">
-      <div className="flex flex-col gap-4 h-full">
-        {/* Top: Pie chart centered */}
-        <div className="w-full flex flex-col items-center">
-          <div className="w-full h-48 md:h-52">
-            <ResponsiveContainer width="100%" height="100%">
-              <PieChart>
-                <Pie
-                  data={pieData}
-                  innerRadius={52}
-                  outerRadius={96}
-                  paddingAngle={2}
-                  dataKey="value"
-                  labelLine={false}
-                  label={false}
-                >
-                  {pieData.map((entry, index) => (
-                    <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
-                  ))}
-                </Pie>
-                <Tooltip content={<CustomTooltip />} />
-              </PieChart>
-            </ResponsiveContainer>
-          </div>
-          {/* Legend kategori agar pengguna paham arti setiap warna */}
-          <div className="mt-1.5 flex items-center justify-center gap-4 text-[12px] text-gray-600">
-            {CATEGORIES.map((label, idx) => (
-              <div key={label} className="flex items-center gap-1.5">
-                <span className="inline-block w-2.5 h-2.5 rounded-full" style={{ backgroundColor: COLORS[idx] }}></span>
-                <span className="capitalize">{label}</span>
-              </div>
-            ))}
-          </div>
-          
+  const InnerContent = () => (
+    <div className="flex flex-col gap-4 h-full">
+      {/* Top: Pie chart centered */}
+      <div className="w-full flex flex-col items-center">
+        <div className="w-full h-48 md:h-52">
+          <ResponsiveContainer width="100%" height="100%">
+            <PieChart>
+              <Pie
+                data={pieData}
+                innerRadius={52}
+                outerRadius={96}
+                paddingAngle={2}
+                dataKey="value"
+                labelLine={false}
+                label={false}
+              >
+                {pieData.map((entry, index) => (
+                  <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
+                ))}
+              </Pie>
+              <Tooltip content={<CustomTooltip />} />
+            </PieChart>
+          </ResponsiveContainer>
         </div>
+        {/* Legend kategori agar pengguna paham arti setiap warna */}
+        <div className="mt-1.5 flex items-center justify-center gap-4 text-[12px] text-gray-600">
+          {CATEGORIES.map((label, idx) => (
+            <div key={label} className="flex items-center gap-1.5">
+              <span className="inline-block w-2.5 h-2.5 rounded-full" style={{ backgroundColor: COLORS[idx] }}></span>
+              <span className="capitalize">{label}</span>
+            </div>
+          ))}
+        </div>
+      </div>
 
-        {/* Bottom: Title, description and lists */}
-        <div>
-          <h2 className="text-[18px] font-semibold text-gray-800 mb-1.5">
-            {loading
-              ? 'Memuat profil belajar...'
-              : `Kamu adalah tipe ${profile?.learner_type || 'Learner'}, ${profile?.display_name || ''}!`}
-          </h2>
-          <p className="text-[13px] leading-snug text-gray-600 mb-3">
-            {loading
-              ? 'Menyiapkan insight personal...'
-              : (profile?.description || 'Insight personal berdasarkan aktivitas belajarmu.')}
-          </p>
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-3.5">
-            <div>
-              <h3 className="font-semibold text-gray-700 mb-1">Kelebihan</h3>
-              <ol className="text-[13px] leading-snug text-gray-600 list-decimal ml-4 space-y-1">
-                {(profile?.strengths || ['Cepat memahami konsep baru','Mudah beradaptasi dengan perubahan','Efisien dalam belajar dan memecahkan masalah']).map((s, i) => (
-                  <li key={i}>{s}</li>
-                ))}
-              </ol>
-            </div>
-            <div>
-              <h3 className="font-semibold text-gray-700 mb-1">Kekurangan</h3>
-              <ol className="text-[13px] leading-snug text-gray-600 list-decimal ml-4 space-y-1">
-                {(profile?.weaknesses || ['Cenderung mengabaikan detail kecil','Cepat bosan jika materi terlalu lambat','Retensi jangka panjang bisa lebih lemah']).map((w, i) => (
-                  <li key={i}>{w}</li>
-                ))}
-              </ol>
-            </div>
+      {/* Bottom: Title, description and lists */}
+      <div>
+        <h2 className="text-[18px] font-semibold text-gray-800 mb-1.5">
+          {loading
+            ? 'Memuat profil belajar...'
+            : `Kamu adalah tipe ${profile?.learner_type || 'Learner'}, ${profile?.display_name || ''}!`}
+        </h2>
+        <p className="text-[13px] leading-snug text-gray-600 mb-3">
+          {loading
+            ? 'Menyiapkan insight personal...'
+            : (profile?.description || 'Insight personal berdasarkan aktivitas belajarmu.')}
+        </p>
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-3.5">
+          <div>
+            <h3 className="font-semibold text-gray-700 mb-1">Kelebihan</h3>
+            <ol className="text-[13px] leading-snug text-gray-600 list-decimal ml-4 space-y-1">
+              {(profile?.strengths || ['Cepat memahami konsep baru','Mudah beradaptasi dengan perubahan','Efisien dalam belajar dan memecahkan masalah']).map((s, i) => (
+                <li key={i}>{s}</li>
+              ))}
+            </ol>
+          </div>
+          <div>
+            <h3 className="font-semibold text-gray-700 mb-1">Kekurangan</h3>
+            <ol className="text-[13px] leading-snug text-gray-600 list-decimal ml-4 space-y-1">
+              {(profile?.weaknesses || ['Cenderung mengabaikan detail kecil','Cepat bosan jika materi terlalu lambat','Retensi jangka panjang bisa lebih lemah']).map((w, i) => (
+                <li key={i}>{w}</li>
+              ))}
+            </ol>
           </div>
         </div>
       </div>
+    </div>
+  );
+
+  return (
+    <Card className="p-5 shadow-soft rounded-xl border border-gray-200 min-h-[400px] max-h-[420px] relative overflow-hidden">
+      <InnerContent />
+
+      {/* Fade overlay at bottom to hint overflow */}
+      <div className="pointer-events-none absolute bottom-0 left-0 right-0 h-10 bg-linear-to-t from-white to-transparent"></div>
+
+      {/* View All button */}
+      <button
+        type="button"
+        onClick={() => setOpen(true)}
+        className="absolute bottom-3 right-3 text-[11px] px-2.5 py-1 rounded-md border border-gray-200 bg-white/90 hover:bg-white text-gray-700 shadow-sm"
+      >
+        View All
+      </button>
+
+      {/* Modal */}
+      {open && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center">
+          <div className="absolute inset-0 bg-black/30" onClick={() => setOpen(false)}></div>
+          <div className="relative bg-white rounded-xl shadow-2xl border border-gray-200 w-[90vw] max-w-3xl max-h-[80vh] overflow-auto p-5 z-10">
+            <div className="flex items-center justify-between mb-3">
+              <div className="text-sm font-semibold text-gray-800">Learning Profile</div>
+              <button
+                onClick={() => setOpen(false)}
+                className="text-[12px] px-2 py-1 rounded-md border border-gray-200 hover:bg-gray-50"
+              >
+                Close
+              </button>
+            </div>
+            <InnerContent />
+          </div>
+        </div>
+      )}
     </Card>
   );
 };

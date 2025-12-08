@@ -1,5 +1,5 @@
 import React, { useState, useRef, useEffect } from 'react';
-import { FaRegUserCircle, FaChevronDown, FaTrophy, FaMedal, FaStar, FaTimes, FaTachometerAlt, FaCog, FaSignOutAlt } from 'react-icons/fa';
+import { FaRegUserCircle, FaChevronDown, FaTrophy, FaMedal, FaStar, FaTimes, FaTachometerAlt, FaCog, FaSignOutAlt, FaLock } from 'react-icons/fa';
 import './navbar.css';
 import StarBorder from '../ui/starborder';
 import DicodingLogo from '../../assets/images/dicoding.png';
@@ -10,6 +10,7 @@ import InsightSpecialistBadge from '../../assets/images/Insight Specialist (tier
 import MasterofLearningBadge from '../../assets/images/Master of Learning (tier 5).png';
 import { useUser } from '../../context/usercontext';
 import { useFetch } from '../../hooks/usefetch';
+import { getLevelInfo, getUnlockedTierFromXp, XP_PER_TIER } from '../../lib/levels';
 import LoginModal from '../ui/loginmodal';
 
 
@@ -23,7 +24,7 @@ const BADGE_DATA = [
 
 
 // --- KOMPONEN MODAL BADGE BARU ---
-const BadgeSelectorModal = ({ isOpen, onClose, currentBadge, onSelect }) => {
+const BadgeSelectorModal = ({ isOpen, onClose, currentBadge, onSelect, unlockedTier = 1, levelInfo }) => {
   if (!isOpen) return null;
 
   return (
@@ -43,27 +44,58 @@ const BadgeSelectorModal = ({ isOpen, onClose, currentBadge, onSelect }) => {
 
         {/* Daftar Badge */}
         <div className="p-4 space-y-3 max-h-80 overflow-y-auto">
-          {BADGE_DATA.map((badge) => (
-            <div
-              key={badge.id}
-              onClick={() => onSelect(badge)}
-              className={`flex items-center p-3 rounded-lg cursor-pointer transition duration-150 border-2 ${
-                currentBadge.id === badge.id 
-                  ? 'bg-indigo-50 border-indigo-500' 
-                  : 'bg-white hover:bg-gray-50 border-gray-200'
-              }`}
-            >
-              {/* Gambar Badge: w-10 h-10 agar menonjol di modal */}
-              <img src={badge.image} alt={badge.name} className="w-10 h-10 mr-4 object-contain" />
-              
-              <span className="font-semibold text-gray-800 flex-grow">{badge.name}</span>
-              <span className="text-xs text-gray-500 mr-2">Tier {badge.tier}</span>
-              
-              {currentBadge.id === badge.id && (
-                <FaStar className="text-indigo-500" /> 
-              )}
-            </div>
-          ))}
+          {BADGE_DATA.map((badge) => {
+            const locked = Number(badge.tier) > Number(unlockedTier);
+            const requiredLevel = Number(badge.tier) * 10;
+            const requiredXp = Number(badge.tier) * XP_PER_TIER;
+            const userXp = Number(levelInfo?.xp || 0);
+            const pct = Math.min(100, Math.floor((userXp / requiredXp) * 100));
+            const xpNeeded = Math.max(0, requiredXp - userXp);
+            return (
+              <div
+                key={badge.id}
+                onClick={() => {
+                  if (!locked) onSelect(badge);
+                }}
+                className={`group p-3 rounded-lg transition duration-150 border-2 ${
+                  locked
+                    ? 'bg-gray-50 border-gray-200 cursor-not-allowed'
+                    : currentBadge.id === badge.id
+                      ? 'bg-indigo-50 border-indigo-500 cursor-pointer'
+                      : 'bg-white hover:bg-gray-50 border-gray-200 cursor-pointer'
+                }`}
+                title={locked ? `Terkunci — butuh Level ${requiredLevel} (${requiredXp.toLocaleString('id-ID')} XP)` : ''}
+              >
+                {/* Top row */}
+                <div className="flex items-center">
+                  <img src={badge.image} alt={badge.name} className={`w-10 h-10 mr-4 object-contain ${locked ? 'grayscale' : ''}`} />
+                  <div className="flex flex-col grow min-w-0">
+                    <span className={`font-semibold truncate ${locked ? 'text-gray-500' : 'text-gray-800'}`}>{badge.name}</span>
+                    <span className="text-xs text-gray-500">Tier {badge.tier}</span>
+                  </div>
+                  {!locked && currentBadge.id === badge.id && (
+                    <FaStar className="text-indigo-500" />
+                  )}
+                  {locked && (
+                    <div className="flex items-center gap-1 text-[12px] text-gray-600">
+                      <FaLock />
+                      <span>Level {requiredLevel}</span>
+                    </div>
+                  )}
+                </div>
+
+                {/* Bottom progress for locked */}
+                {locked && (
+                  <div className="mt-2">
+                    <div className="w-full h-1.5 bg-gray-200 rounded-full overflow-hidden">
+                      <div className="h-full bg-gray-400" style={{ width: `${pct}%` }} />
+                    </div>
+                    <div className="mt-1 text-[11px] text-gray-500">Butuh {xpNeeded.toLocaleString('id-ID')} XP lagi</div>
+                  </div>
+                )}
+              </div>
+            );
+          })}
         </div>
         
         {/* Footer Modal */}
@@ -93,6 +125,8 @@ const Navbar = () => {
   const token = typeof window !== 'undefined' ? localStorage.getItem('token') : null;
   const { data: profile } = useFetch(userId ? `/dashboard/learning-profile/${userId}` : null);
   const xp = Number(profile?.xp) || 0;
+  const levelInfo = getLevelInfo(xp);
+  const unlockedTier = getUnlockedTierFromXp(xp);
   const xpFormatted = xp.toLocaleString('id-ID');
 
   // Fungsi untuk menutup dropdown ketika klik di luar
@@ -160,18 +194,29 @@ const Navbar = () => {
         ) : (
           <>
             {/* Badge toggle only after login */}
-            <StarBorder
-              as="button"
-              className="mr-3 hidden sm:inline-block align-middle"
-              color="#6366F1"
-              speed="8s"
-              thickness={1}
-              onClick={() => setBadgeOpen(true)}
-              title="Pilih badge"
-            >
-              <img src={currentBadge?.image} alt={currentBadge?.name} className="w-5 h-5 object-contain" />
-              <span className="text-sm">{currentBadge?.name || 'Knowledge Seeker'}</span>
-            </StarBorder>
+            {(() => {
+              const displayBadge = currentBadge && currentBadge.tier <= unlockedTier ? currentBadge : null;
+              return (
+                <StarBorder
+                  as="button"
+                  className="mr-3 hidden sm:inline-block align-middle"
+                  color="#6366F1"
+                  speed="8s"
+                  thickness={1}
+                  onClick={() => setBadgeOpen(true)}
+                  title="Pilih badge"
+                >
+                  {displayBadge ? (
+                    <>
+                      <img src={displayBadge.image} alt={displayBadge.name} className="w-5 h-5 object-contain" />
+                      <span className="text-sm">{displayBadge.name}</span>
+                    </>
+                  ) : (
+                    <span className="text-sm">Pilih badge</span>
+                  )}
+                </StarBorder>
+              );
+            })()}
             {/* Profile Container: Diklik untuk toggle dropdown */}
             <div className="navbar-profile-container flex items-center gap-1 px-2 py-1 rounded-full border border-gray-200 bg-white" onClick={toggleDropdown} role="button" aria-haspopup="menu" aria-expanded={isOpen}>
               <FaRegUserCircle className="profile-avatar" />
@@ -182,10 +227,19 @@ const Navbar = () => {
             {isOpen && (
               <div className="dropdown-menu" role="menu">
                 <div className="dropdown-item">
-                  <FaTrophy className="dropdown-icon-trophy" /> 0 Points
+                  <FaTrophy className="dropdown-icon-trophy" /> Level {levelInfo.level} / 50
                 </div>
                 <div className="dropdown-item">
                   <FaMedal className="dropdown-icon-medal" /> {xpFormatted} XP
+                </div>
+                <div className="px-4 py-2">
+                  <div className="w-full h-2 bg-gray-200 rounded-full overflow-hidden">
+                    <div
+                      className="h-full bg-indigo-500"
+                      style={{ width: `${Math.round(levelInfo.levelProgress * 100)}%` }}
+                    />
+                  </div>
+                  <div className="mt-1 text-[11px] text-gray-500">Progress level: {Math.round(levelInfo.levelProgress * 100)}%</div>
                 </div>
                 <div className="dropdown-divider"></div>
                 <div className="dropdown-item" role="menuitem" onClick={() => { setBadgeOpen(true); setIsOpen(false); }}>
@@ -225,6 +279,8 @@ const Navbar = () => {
         onClose={() => setBadgeOpen(false)}
         currentBadge={currentBadge}
         onSelect={(badge) => { setCurrentBadge(badge); setBadgeOpen(false); }}
+        unlockedTier={unlockedTier}
+        levelInfo={levelInfo}
       />
     </nav>
   );

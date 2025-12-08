@@ -11,7 +11,7 @@ const LeaderboardCard = () => {
 
   const leaderboardArray = (leaderboard && Array.isArray(leaderboard)) ? leaderboard : [];
   const currentUserEntry = leaderboardArray.find(u => u.user_id === parseInt(userId));
-  const topUsers = leaderboardArray.slice(0, 10);
+  const topUsers = leaderboardArray.slice(0, 5);
 
   const getMedalColor = (rank) => {
     if (rank === 1) return 'bg-yellow-100 text-yellow-700';
@@ -26,7 +26,7 @@ const LeaderboardCard = () => {
         <div className="font-semibold text-sm">Leaderboard</div>
         <button onClick={() => navigate('/leaderboard')} className="text-[11px] text-gray-500 hover:text-gray-700">View All &gt;</button>
       </div>
-      <ul className="divide-y divide-gray-100 overflow-y-auto flex-1 min-h-0">
+      <ul className="divide-y divide-gray-100 overflow-y-auto flex-1 min-h-0 max-h-[260px]">
         {loading ? (
           <li className="px-4 py-3 text-center text-xs text-gray-500">Loading leaderboard...</li>
         ) : topUsers.length > 0 ? (

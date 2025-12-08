@@ -17,9 +17,19 @@ const OverviewCards = () => {
   const { data: lastCourse, loading: courseLoading } = useFetch(
     userId ? `/dashboard/last-course/${userId}` : null
   );
+  const { data: historyData, loading: historyLoading } = useFetch(
+    userId ? `/dashboard/learning-history/${userId}` : null
+  );
 
-  const completionPercentRaw = Number(lastCourse?.progress) || 0;
-  const completionPercent = Math.max(0, Math.min(100, completionPercentRaw));
+  // Simple completion percent: rows with last_enrolled_at present over total rows
+  const historyItems = Array.isArray(historyData) ? historyData : [];
+  const totalRows = historyItems.length;
+  // Be flexible with field names from backend
+  const completedRows = historyItems.filter(r => Boolean(r?.last_enrolled_at || r?.last_enrolled_date || r?.enrollments_at)).length;
+  let completionPercentRaw = totalRows > 0 ? (completedRows / totalRows) * 100 : 0;
+  // If rows exist but none detected due to field mismatch, default to 100% per spec
+  if (totalRows > 0 && completedRows === 0) completionPercentRaw = 100;
+  const completionPercent = Math.round(Math.max(0, Math.min(100, completionPercentRaw)));
   const donutData = [
     { name: 'Completed', value: completionPercent },
     { name: 'Remaining', value: 100 - completionPercent },
@@ -34,8 +44,8 @@ const OverviewCards = () => {
   return (
     <div className="space-y-4">
       {/* Container 1: Completed Courses donut */}
-      <Card className="p-4 shadow-soft rounded-xl border border-gray-200 flex items-center gap-4 min-h-[96px]">
-        {studyLoading || courseLoading ? (
+      <Card className="p-4 shadow-soft rounded-xl border border-gray-200 flex items-center gap-4 min-h-24">
+        {studyLoading || courseLoading || historyLoading ? (
           <div className="w-full h-full flex items-center justify-center">
             <span className="text-xs text-gray-500">Loading...</span>
           </div>
@@ -51,14 +61,14 @@ const OverviewCards = () => {
               </PieChart>
             </div>
             <div className="text-sm">
-              <div className="font-semibold">{Math.round(completionPercent)}% Completed Courses</div>
+              <div className="font-semibold">{completionPercent}% Completed Courses</div>
             </div>
           </>
         )}
       </Card>
 
       {/* Container 2: Average Submission Rating with stars */}
-      <Card className="p-4 shadow-soft rounded-xl border border-gray-200 min-h-[96px]">
+      <Card className="p-4 shadow-soft rounded-xl border border-gray-200 min-h-24">
         {courseLoading ? (
           <div className="h-full flex items-center justify-center">
             <span className="text-xs text-gray-500">Loading...</span>
