@@ -15,7 +15,11 @@ module.exports = {
             WHEN dj.hours_to_study > 0 THEN ROUND((djc.study_duration::numeric / dj.hours_to_study) * 100, 2)
             ELSE 0
           END as progress,
-          djc.avg_submission_ratings
+          (
+            SELECT ROUND(AVG(djc2.avg_submission)::numeric, 2)
+            FROM developer_journey_completion djc2
+            WHERE djc2.user_id = $1 AND djc2.avg_submission IS NOT NULL
+          ) AS avg_submission_ratings
         FROM developer_journey_completion djc
         JOIN developer_journeys dj ON dj.journey_id = djc.journey_id
         WHERE djc.user_id = $1
@@ -246,15 +250,16 @@ module.exports = {
       const query = `
         SELECT 
           dj.journey_id,
-          dj.journey_name as course_title,
-          djc.enrollments_at as date,
-          djc.avg_submission_ratings as score,
-          djc.study_duration as duration,
-          djc.enrolling_times
+          dj.journey_name AS course_title,
+          MAX(djc.enrollments_at) AS date,
+          ROUND(AVG(COALESCE(djc.avg_submission, djc.avg_submission_ratings, 0))::numeric, 2) AS score,
+          SUM(djc.study_duration) AS duration,
+          COUNT(djc.journey_id) AS enrolling_times
         FROM developer_journey_completion djc
         JOIN developer_journeys dj ON dj.journey_id = djc.journey_id
         WHERE djc.user_id = $1
-        ORDER BY djc.enrollments_at DESC;
+        GROUP BY dj.journey_id, dj.journey_name
+        ORDER BY MAX(djc.enrollments_at) DESC NULLS LAST;
       `;
       const result = await pool.query(query, [userId]);
 

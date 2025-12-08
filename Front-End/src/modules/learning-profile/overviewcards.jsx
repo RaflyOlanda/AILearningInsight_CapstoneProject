@@ -51,8 +51,7 @@ const OverviewCards = () => {
               </PieChart>
             </div>
             <div className="text-sm">
-              <div className="font-semibold">{Math.round(completionPercent)}% Completed</div>
-              <div className="text-xs text-gray-500">Total: {studyData?.total_hours || 0}h</div>
+              <div className="font-semibold">{Math.round(completionPercent)}% Completed Courses</div>
             </div>
           </>
         )}
@@ -66,13 +65,27 @@ const OverviewCards = () => {
           </div>
         ) : (
           <>
-            <div className="flex items-center text-yellow-500 mb-2">
-              {[1, 2, 3, 4, 5].map(i => (
-                <FaStar 
-                  key={i} 
-                  className={i <= fullStars ? 'text-yellow-500' : i === fullStars + 1 && hasHalfStar ? 'text-yellow-300' : 'text-gray-300'}
-                />
-              ))}
+            <div className="flex items-center mb-2">
+              {[1, 2, 3, 4, 5].map(i => {
+                if (i <= fullStars) {
+                  return <FaStar key={i} className="text-yellow-500" />;
+                }
+                if (i === fullStars + 1) {
+                  const frac = Math.min(1, Math.max(0, avgRating - fullStars));
+                  return (
+                    <span key={i} className="relative inline-block" style={{ width: '1em', height: '1em' }}>
+                      <FaStar className="text-gray-300 absolute left-0 top-0" />
+                      <span
+                        className="absolute left-0 top-0 overflow-hidden"
+                        style={{ width: `${frac * 100}%`, height: '100%' }}
+                      >
+                        <FaStar className="text-yellow-500" />
+                      </span>
+                    </span>
+                  );
+                }
+                return <FaStar key={i} className="text-gray-300" />;
+              })}
             </div>
             <div className="text-sm">
               <div className="font-semibold">Average Submission Rating</div>
