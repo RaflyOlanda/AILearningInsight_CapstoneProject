@@ -1,4 +1,5 @@
 import React, { useState, useRef, useEffect } from 'react';
+import ReactDOM from 'react-dom';
 import { FaRegUserCircle, FaChevronDown, FaTrophy, FaMedal, FaStar, FaTimes, FaTachometerAlt, FaCog, FaSignOutAlt, FaLock } from 'react-icons/fa';
 import './navbar.css';
 import StarBorder from '../ui/starborder';
@@ -27,17 +28,17 @@ const BADGE_DATA = [
 const BadgeSelectorModal = ({ isOpen, onClose, currentBadge, onSelect, unlockedTier = 1, levelInfo }) => {
   if (!isOpen) return null;
 
-  return (
+  return ReactDOM.createPortal(
     // Overlay 
-    <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
+    <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-1000 p-4" role="dialog" aria-modal="true">
       
       {/* Modal Content */}
-      <div className="bg-white rounded-xl shadow-2xl w-full max-w-lg overflow-hidden relative">
+      <div className="bg-card text-card-foreground border border-border rounded-xl shadow-2xl w-full max-w-lg max-h-[80vh] overflow-auto relative">
         
         {/* Header Modal */}
-        <div className="p-4 border-b flex justify-between items-center">
-          <h3 className="text-lg font-bold text-gray-800">Pilih Badge Anda</h3>
-          <button onClick={onClose} className="text-gray-500 hover:text-gray-800 transition">
+        <div className="p-4 border-b border-border flex justify-between items-center">
+          <h3 className="text-lg font-bold">Pilih Badge Anda</h3>
+          <button onClick={onClose} className="text-muted-foreground hover:text-foreground transition" aria-label="Tutup">
             <FaTimes size={18} />
           </button>
         </div>
@@ -57,12 +58,12 @@ const BadgeSelectorModal = ({ isOpen, onClose, currentBadge, onSelect, unlockedT
                 onClick={() => {
                   if (!locked) onSelect(badge);
                 }}
-                className={`group p-3 rounded-lg transition duration-150 border-2 ${
+                className={`group p-3 rounded-lg transition duration-150 border ${
                   locked
-                    ? 'bg-gray-50 border-gray-200 cursor-not-allowed'
+                    ? 'bg-muted border-border cursor-not-allowed'
                     : currentBadge.id === badge.id
-                      ? 'bg-indigo-50 border-indigo-500 cursor-pointer'
-                      : 'bg-white hover:bg-gray-50 border-gray-200 cursor-pointer'
+                      ? 'bg-accent border-primary cursor-pointer'
+                      : 'bg-card hover:bg-muted border-border cursor-pointer'
                 }`}
                 title={locked ? `Terkunci — butuh Level ${requiredLevel} (${requiredXp.toLocaleString('id-ID')} XP)` : ''}
               >
@@ -70,14 +71,14 @@ const BadgeSelectorModal = ({ isOpen, onClose, currentBadge, onSelect, unlockedT
                 <div className="flex items-center">
                   <img src={badge.image} alt={badge.name} className={`w-10 h-10 mr-4 object-contain ${locked ? 'grayscale' : ''}`} />
                   <div className="flex flex-col grow min-w-0">
-                    <span className={`font-semibold truncate ${locked ? 'text-gray-500' : 'text-gray-800'}`}>{badge.name}</span>
-                    <span className="text-xs text-gray-500">Tier {badge.tier}</span>
+                    <span className={`font-semibold truncate ${locked ? 'text-muted-foreground' : ''}`}>{badge.name}</span>
+                    <span className="text-xs text-muted-foreground">Tier {badge.tier}</span>
                   </div>
                   {!locked && currentBadge.id === badge.id && (
                     <FaStar className="text-indigo-500" />
                   )}
                   {locked && (
-                    <div className="flex items-center gap-1 text-[12px] text-gray-600">
+                    <div className="flex items-center gap-1 text-[12px] text-muted-foreground">
                       <FaLock />
                       <span>Level {requiredLevel}</span>
                     </div>
@@ -87,10 +88,10 @@ const BadgeSelectorModal = ({ isOpen, onClose, currentBadge, onSelect, unlockedT
                 {/* Bottom progress for locked */}
                 {locked && (
                   <div className="mt-2">
-                    <div className="w-full h-1.5 bg-gray-200 rounded-full overflow-hidden">
-                      <div className="h-full bg-gray-400" style={{ width: `${pct}%` }} />
+                    <div className="w-full h-1.5 bg-muted rounded-full overflow-hidden">
+                      <div className="h-full bg-muted-foreground" style={{ width: `${pct}%` }} />
                     </div>
-                    <div className="mt-1 text-[11px] text-gray-500">Butuh {xpNeeded.toLocaleString('id-ID')} XP lagi</div>
+                    <div className="mt-1 text-[11px] text-muted-foreground">Butuh {xpNeeded.toLocaleString('id-ID')} XP lagi</div>
                   </div>
                 )}
               </div>
@@ -99,17 +100,18 @@ const BadgeSelectorModal = ({ isOpen, onClose, currentBadge, onSelect, unlockedT
         </div>
         
         {/* Footer Modal */}
-        <div className="p-4 border-t text-right">
+        <div className="p-4 border-t border-border text-right">
           <button 
             onClick={onClose}
-            className="px-4 py-2 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 transition"
+            className="px-4 py-2 bg-primary text-primary-foreground rounded-lg hover:opacity-90 transition"
           >
             Tutup
           </button>
         </div>
 
       </div>
-    </div>
+    </div>,
+    document.body
   );
 };
 
@@ -174,7 +176,7 @@ const Navbar = () => {
   const isAuthenticated = Boolean(userId || token);
 
   return (
-    <nav className="navbar-container flex items-center justify-between w-full bg-white border-b border-gray-200 px-4 py-2 sticky top-0 z-50">
+    <nav className="navbar-container flex items-center justify-between w-full px-4 py-2 sticky top-0 z-50">
       <div className="navbar-left-section flex items-center gap-2">
         <img
           src={DicodingLogo}
@@ -186,6 +188,7 @@ const Navbar = () => {
       </div>
 
       <div className="navbar-right-section flex items-center gap-3 relative ml-auto" ref={dropdownRef}>
+        
 
         {!isAuthenticated ? (
           <button className="px-3 py-1.5 rounded-lg bg-gray-900 text-white text-sm" onClick={() => setLoginOpen(true)}>
@@ -218,7 +221,7 @@ const Navbar = () => {
               );
             })()}
             {/* Profile Container: Diklik untuk toggle dropdown */}
-            <div className="navbar-profile-container flex items-center gap-1 px-2 py-1 rounded-full border border-gray-200 bg-white" onClick={toggleDropdown} role="button" aria-haspopup="menu" aria-expanded={isOpen}>
+            <div className="navbar-profile-container flex items-center gap-1 px-2 py-1 rounded-full" onClick={toggleDropdown} role="button" aria-haspopup="menu" aria-expanded={isOpen}>
               <FaRegUserCircle className="profile-avatar" />
               <FaChevronDown size={10} className={`navbar-dropdown-icon ${isOpen ? 'rotate-180' : ''}`} />
             </div>

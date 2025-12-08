@@ -195,17 +195,20 @@ const LearnerTypeWidget = () => {
   );
 
   return (
-    <Card className="p-5 shadow-soft rounded-xl border border-gray-200 min-h-[400px] max-h-[420px] relative overflow-hidden">
+    <Card className="p-5 shadow-soft rounded-xl border border-border min-h-[400px] max-h-[420px] relative overflow-hidden">
       <InnerContent />
 
       {/* Fade overlay at bottom to hint overflow */}
-      <div className="pointer-events-none absolute bottom-0 left-0 right-0 h-10 bg-linear-to-t from-white to-transparent"></div>
+      <div
+        className="pointer-events-none absolute bottom-0 left-0 right-0 h-10"
+        style={{ backgroundImage: 'linear-gradient(to top, var(--background), rgba(0,0,0,0))' }}
+      ></div>
 
       {/* View All button */}
       <button
         type="button"
         onClick={() => setOpen(true)}
-        className="absolute bottom-3 right-3 text-[11px] px-2.5 py-1 rounded-md border border-gray-200 bg-white/90 hover:bg-white text-gray-700 shadow-sm"
+        className="absolute bottom-3 right-3 text-[11px] px-2.5 py-1 rounded-md border border-border bg-secondary hover:bg-muted text-foreground shadow-sm"
       >
         View All
       </button>
@@ -213,13 +216,13 @@ const LearnerTypeWidget = () => {
       {/* Modal */}
       {open && (
         <div className="fixed inset-0 z-50 flex items-center justify-center">
-          <div className="absolute inset-0 bg-black/30" onClick={() => setOpen(false)}></div>
-          <div className="relative bg-white rounded-xl shadow-2xl border border-gray-200 w-[90vw] max-w-3xl max-h-[80vh] overflow-auto p-5 z-10">
+          <div className="absolute inset-0 bg-black/60" onClick={() => setOpen(false)}></div>
+          <div className="relative bg-card text-card-foreground rounded-xl shadow-2xl border border-border w-[90vw] max-w-3xl max-h-[80vh] overflow-auto p-5 z-10">
             <div className="flex items-center justify-between mb-3">
-              <div className="text-sm font-semibold text-gray-800">Learning Profile</div>
+              <div className="text-sm font-semibold">Learning Profile</div>
               <button
                 onClick={() => setOpen(false)}
-                className="text-[12px] px-2 py-1 rounded-md border border-gray-200 hover:bg-gray-50"
+                className="text-[12px] px-2 py-1 rounded-md border border-border hover:bg-muted"
               >
                 Close
               </button>

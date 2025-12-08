@@ -6,9 +6,9 @@
 	align-items: center;
 	justify-content: space-between;
 	width: 100%;
-	background-color: #ffffff;
-	border-bottom: 1px solid #E5E7EB; /* gray-200 */
-	padding: 10px 16px; /* compact */
+	background-color: var(--card);
+	border-bottom: 1px solid var(--border);
+	padding: 10px 16px;
 	z-index: 50;
 }
 
@@ -32,14 +32,14 @@
 }
 
 .navbar-seeker-text {
-	display: none; /* hidden by default to keep minimal header */
+	display: none;
 }
 
 @media (min-width: 640px) {
 	.navbar-seeker-text {
 		display: inline-block;
 		font-size: 12px;
-		color: #6B7280; /* gray-500 */
+		color: var(--muted-foreground);
 	}
 }
 
@@ -48,20 +48,20 @@
 	align-items: center;
 	gap: 6px;
 	padding: 6px 8px;
-	border: 1px solid #E5E7EB;
+	border: 1px solid var(--border);
 	border-radius: 9999px;
-	background-color: #ffffff;
+	background-color: var(--card);
 	cursor: pointer;
 }
 
 .profile-avatar {
 	width: 22px;
 	height: 22px;
-	color: #374151; /* gray-700 */
+	color: var(--foreground);
 }
 
 .navbar-dropdown-icon {
-	color: #6B7280; /* gray-500 */
+	color: var(--muted-foreground);
 	transition: transform 0.2s ease;
 }
 
@@ -75,10 +75,10 @@
 	right: 0;
 	top: calc(100% + 8px);
 	min-width: 200px;
-	background-color: #ffffff;
-	border: 1px solid #E5E7EB;
+	background-color: var(--card);
+	border: 1px solid var(--border);
 	border-radius: 12px;
-	box-shadow: 0 8px 24px rgba(0,0,0,0.08);
+	box-shadow: 0 8px 24px rgba(0,0,0,0.12);
 	padding: 8px;
 	z-index: 60;
 }
@@ -90,20 +90,20 @@
 	padding: 8px 10px;
 	border-radius: 8px;
 	font-size: 13px;
-	color: #374151; /* gray-700 */
+	color: var(--foreground);
 }
 
 .dropdown-item:hover {
-	background-color: #F3F4F6; /* gray-100 */
+	background-color: var(--muted);
 }
 
 .dropdown-divider {
 	height: 1px;
-	background-color: #E5E7EB;
+	background-color: var(--border);
 	margin: 6px 4px;
 }
 
-.dropdown-icon-trophy { color: #F59E0B; } /* amber-500 */
-.dropdown-icon-medal { color: #10B981; } /* emerald-500 */
-.dropdown-icon-generic { color: #6B7280; } /* gray-500 */
+.dropdown-icon-trophy { color: var(--accent); }
+.dropdown-icon-medal { color: var(--primary); }
+.dropdown-icon-generic { color: var(--muted-foreground); }
 

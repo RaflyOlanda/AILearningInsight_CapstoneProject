@@ -1,0 +1,152 @@
+/* Three distinct themes only: default, glass, contrast */
+
+/* Default White — relies on :root variables from index.css */
+html[data-theme="default"] {
+  --radius: 0.75rem;
+}
+
+/* Particles — dark tokens to complement particle background */
+html[data-theme="particles"] {
+  --background: oklch(0.10 0 0); /* pure black for uniform backdrop */
+  --foreground: oklch(0.98 0 0);
+
+  --card: oklch(0.16 0 0 / 0.92);
+  --card-foreground: var(--foreground);
+
+  --popover: oklch(0.14 0 0 / 0.92);
+  --popover-foreground: var(--foreground);
+
+  --border: oklch(1 0 0 / 16%);
+  --input: var(--border);
+  --muted: oklch(0.18 0 0 / 0.9);
+  --muted-foreground: oklch(0.86 0 0);
+
+  --accent: oklch(0.72 0.16 200);
+  --accent-foreground: oklch(0.12 0 0);
+
+  --primary: oklch(0.76 0.12 210);
+  --primary-foreground: oklch(0.12 0 0);
+
+  --secondary: oklch(0.18 0 0 / 0.92);
+  --secondary-foreground: var(--foreground);
+
+  --ring: oklch(0.76 0.12 210);
+  --radius: 0.75rem;
+}
+
+html[data-theme="particles"] .navbar-container {
+  backdrop-filter: saturate(120%) blur(8px);
+  background-color: color-mix(in oklab, black 70%, transparent);
+  border-color: oklch(1 0 0 / 16%);
+}
+
+html[data-theme="particles"] .card-shadow {
+  box-shadow: 0 6px 20px rgba(0,0,0,0.25);
+  border-color: oklch(1 0 0 / 16%);
+}
+
+/* Force common Tailwind light classes to dark equivalents for particles theme */
+html[data-theme="particles"] .bg-white,
+html[data-theme="particles"] .bg-gray-50,
+html[data-theme="particles"] .bg-gray-100 {
+  background-color: oklch(0.10 0 0) !important; /* pure black-ish */
+  color: var(--foreground) !important;
+  border-color: var(--border) !important;
+}
+
+html[data-theme="particles"] .text-gray-800,
+html[data-theme="particles"] .text-gray-700,
+html[data-theme="particles"] .text-gray-600,
+html[data-theme="particles"] .text-gray-500,
+html[data-theme="particles"] .text-gray-400 {
+  color: var(--foreground) !important;
+}
+
+html[data-theme="particles"] .hover\:bg-gray-50:hover,
+html[data-theme="particles"] .hover\:bg-gray-100:hover {
+  background-color: oklch(0.14 0 0) !important; /* slightly lighter black */
+}
+
+html[data-theme="particles"] .border-gray-200 { border-color: var(--border) !important; }
+html[data-theme="particles"] .text-gray-700 { color: var(--foreground) !important; }
+html[data-theme="particles"] .text-gray-500 { color: oklch(0.86 0 0) !important; }
+
+/* High Contrast — dark, bold accents, stronger borders, minimal shadow */
+html[data-theme="contrast"] {
+  --background: oklch(0.13 0 0);
+  --foreground: oklch(0.95 0 0);
+
+  --card: oklch(0.18 0 0);
+  --card-foreground: var(--foreground);
+
+  --popover: oklch(0.16 0 0);
+  --popover-foreground: var(--foreground);
+
+  --border: oklch(0.3 0 0);
+  --input: var(--border);
+  --muted: oklch(0.22 0 0);
+  --muted-foreground: oklch(0.72 0 0);
+
+  --accent: oklch(0.22 0 0);
+  --accent-foreground: var(--foreground);
+
+  --primary: oklch(0.68 0.18 165);
+  --primary-foreground: oklch(0.12 0 0);
+
+  --secondary: oklch(0.22 0 0);
+  --secondary-foreground: var(--foreground);
+
+  --ring: oklch(0.68 0.18 165);
+  --radius: 0.5rem;
+}
+
+html[data-theme="contrast"] .navbar-container {
+  background-color: oklch(0.15 0 0) !important;
+  border-color: oklch(0.3 0 0) !important;
+}
+
+html[data-theme="contrast"] .card-shadow {
+  box-shadow: none;
+  border-width: 2px;
+  border-color: oklch(0.3 0 0);
+}
+
+/* PixelBlast — ivory background with readable dark text */
+html[data-theme="pixelblast"] {
+  --background: #FFFFF0; /* ivory */
+  --foreground: oklch(0.18 0 0); /* very dark for contrast */
+
+  --card: oklch(0.98 0 0); /* near-white card */
+  --card-foreground: var(--foreground);
+
+  --popover: oklch(0.98 0 0);
+  --popover-foreground: var(--foreground);
+
+  --border: oklch(0.85 0 0);
+  --input: var(--border);
+  --muted: oklch(0.96 0 0);
+  --muted-foreground: oklch(0.42 0 0);
+
+  --accent: #B19EEF; /* requested accent */
+  --accent-foreground: var(--foreground);
+
+  --primary: #6D5BD0;
+  --primary-foreground: #ffffff;
+
+  --secondary: oklch(0.96 0 0);
+  --secondary-foreground: var(--foreground);
+
+  --ring: var(--primary);
+  --radius: 0.75rem;
+}
+
+html[data-theme="pixelblast"] .navbar-container {
+  background-color: rgba(255, 255, 240, 0.85); /* ivory with slight translucency */
+  backdrop-filter: saturate(120%) blur(6px);
+  border-color: var(--border);
+}
+
+html[data-theme="pixelblast"] .card-shadow {
+  box-shadow: 0 8px 24px rgba(0,0,0,0.08);
+  border-color: var(--border);
+}

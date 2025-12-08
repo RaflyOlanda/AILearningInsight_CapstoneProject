@@ -7,15 +7,18 @@ import OverviewRecommendation from '../../modules/learning-profile/overviewrecom
 import LeaderboardCard from '../../modules/leaderboard/leaderboardcard'; 
 import WeeklyPerformanceChart from '../../modules/performance-graph/weeklyperformancechart'; 
 import CourseList from '../../modules/courses/courselist';
+import ThemeSwitcher from '../../components/ui/themeswitcher';
 // RecommendationCard removed from bottom section as requested
 
 const DashboardPage = () => {
   return (
     <DashboardLayout>
       {/* Page Title & Breadcrumb */}
-      <div className="mb-6">
+      <div className="mb-6 relative">
         <p className="text-xs text-gray-500 mb-2">Page &gt; <span className="text-gray-700 font-medium">Dashboard</span> &gt;</p>
         <h1 className="text-2xl md:text-3xl font-bold text-gray-800">Dashboard</h1>
+        {/* Floating theme switcher in the top-right area */}
+        <ThemeSwitcher position="absolute" top="top-10" right="right-0" />
       </div>
 
       {/* Main Grid: 12-column layout for precise control */}
