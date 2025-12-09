@@ -30,7 +30,7 @@ const BadgeSelectorModal = ({ isOpen, onClose, currentBadge, onSelect, unlockedT
 
   return ReactDOM.createPortal(
     // Overlay 
-    <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-1000 p-4" role="dialog" aria-modal="true">
+    <div className="fixed inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center z-1000 p-4" role="dialog" aria-modal="true">
       
       {/* Modal Content */}
       <div className="bg-card text-card-foreground border border-border rounded-xl shadow-2xl w-full max-w-lg max-h-[80vh] overflow-auto relative">

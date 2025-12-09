@@ -26,36 +26,30 @@ const DashboardLayout = ({ children }) => {
         </div>
       )}
       {theme === 'pixelblast' && (
-        <div className="fixed inset-0 z-0 pointer-events-none">
+        <div className="fixed inset-0 z-0 pointer-events-none overflow-hidden">
           <PixelBlast
             variant="circle"
-            pixelSize={3} /* smaller pixels -> more dots */
+            pixelSize={3}
             color="#000000"
-            patternScale={4} /* slightly more cells */
-            patternDensity={1.6} /* denser fill */
+            patternScale={4}
+            patternDensity={1.6}
             pixelSizeJitter={0.4}
-            enableRipples
-            rippleSpeed={0.4}
-            rippleThickness={0.12}
-            rippleIntensityScale={1.5}
-            liquid
-            liquidStrength={0.12}
-            liquidRadius={1.2}
-            liquidWobbleSpeed={5}
-            speed={0.6}
+            enableRipples={false}
+            liquid={false}
+            speed={0.3}
             edgeFade={0}
             transparent
-            className="w-full h-full"
+            className="w-full h-full pointer-events-auto"
           />
         </div>
       )}
       {/* Header dengan Navbar */}
-      <header className="sticky top-0 z-10 shadow-sm bg-card border-b border-border">
+      <header className="sticky top-0 z-20 shadow-sm bg-card border-b border-border relative">
         <Navbar />
       </header>
 
       {/* Konten Utama */}
-      <main className="grow px-4 py-6 md:px-8 md:py-8 max-w-7xl mx-auto w-full">
+      <main className="grow px-4 py-6 md:px-8 md:py-8 max-w-7xl mx-auto w-full relative z-10">
         {children}
       </main>
 
