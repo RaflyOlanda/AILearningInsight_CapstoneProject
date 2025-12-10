@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 
-// Prefer env-configured base URL; fallback to /api (Vite proxy)
+
 const API_BASE_URL = (import.meta?.env?.VITE_API_BASE_URL || '').trim();
 const API_PREFIX = '/api';
 

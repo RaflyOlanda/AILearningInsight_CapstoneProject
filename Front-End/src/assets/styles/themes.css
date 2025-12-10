@@ -1,13 +1,13 @@
-/* Three distinct themes only: default, glass, contrast */
 
-/* Default White — relies on :root variables from index.css */
+
+
 html[data-theme="default"] {
   --radius: 0.75rem;
 }
 
-/* Particles — dark tokens to complement particle background */
+
 html[data-theme="particles"] {
-  --background: oklch(0.10 0 0); /* pure black for uniform backdrop */
+  --background: oklch(0.10 0 0); 
   --foreground: oklch(0.98 0 0);
 
   --card: oklch(0.16 0 0 / 0.92);
@@ -45,11 +45,11 @@ html[data-theme="particles"] .card-shadow {
   border-color: oklch(1 0 0 / 16%);
 }
 
-/* Force common Tailwind light classes to dark equivalents for particles theme */
+
 html[data-theme="particles"] .bg-white,
 html[data-theme="particles"] .bg-gray-50,
 html[data-theme="particles"] .bg-gray-100 {
-  background-color: oklch(0.10 0 0) !important; /* pure black-ish */
+  background-color: oklch(0.10 0 0) !important; 
   color: var(--foreground) !important;
   border-color: var(--border) !important;
 }
@@ -64,14 +64,14 @@ html[data-theme="particles"] .text-gray-400 {
 
 html[data-theme="particles"] .hover\:bg-gray-50:hover,
 html[data-theme="particles"] .hover\:bg-gray-100:hover {
-  background-color: oklch(0.14 0 0) !important; /* slightly lighter black */
+  background-color: oklch(0.14 0 0) !important; 
 }
 
 html[data-theme="particles"] .border-gray-200 { border-color: var(--border) !important; }
 html[data-theme="particles"] .text-gray-700 { color: var(--foreground) !important; }
 html[data-theme="particles"] .text-gray-500 { color: oklch(0.86 0 0) !important; }
 
-/* High Contrast — dark, bold accents, stronger borders, minimal shadow */
+
 html[data-theme="contrast"] {
   --background: oklch(0.13 0 0);
   --foreground: oklch(0.95 0 0);
@@ -111,12 +111,12 @@ html[data-theme="contrast"] .card-shadow {
   border-color: oklch(0.3 0 0);
 }
 
-/* PixelBlast — ivory background with readable dark text */
-html[data-theme="pixelblast"] {
-  --background: #FFFFF0; /* ivory */
-  --foreground: oklch(0.18 0 0); /* very dark for contrast */
 
-  --card: oklch(0.98 0 0); /* near-white card */
+html[data-theme="pixelblast"] {
+  --background: #FFFFF0; 
+  --foreground: oklch(0.18 0 0); 
+
+  --card: oklch(0.98 0 0); 
   --card-foreground: var(--foreground);
 
   --popover: oklch(0.98 0 0);
@@ -127,7 +127,7 @@ html[data-theme="pixelblast"] {
   --muted: oklch(0.96 0 0);
   --muted-foreground: oklch(0.42 0 0);
 
-  --accent: #B19EEF; /* requested accent */
+  --accent: #B19EEF; 
   --accent-foreground: var(--foreground);
 
   --primary: #6D5BD0;
@@ -141,7 +141,7 @@ html[data-theme="pixelblast"] {
 }
 
 html[data-theme="pixelblast"] .navbar-container {
-  background-color: rgba(255, 255, 240, 0.85); /* ivory with slight translucency */
+  background-color: rgba(255, 255, 240, 0.85); 
   backdrop-filter: saturate(120%) blur(6px);
   border-color: var(--border);
 }

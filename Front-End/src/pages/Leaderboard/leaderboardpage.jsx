@@ -40,7 +40,7 @@ const LeaderboardPage = () => {
   const topFive = list.slice(0, 5);
   const topTen = list.slice(0, 10);
   const you = list.find(u => String(u.user_id) === String(userId));
-  // Fallback: fetch current user's global rank if not present in top list
+  
   const { data: youData } = useFetch(you || !userId ? '' : `/dashboard/leaderboard/me/${userId}`);
   const youDisplay = you || youData || null;
 
@@ -57,9 +57,7 @@ const LeaderboardPage = () => {
       </div>
 
       <div className="grid gap-6">
-        {/* Podium */}
         <Card className="p-6 bg-gradient-to-b from-sky-200/70 to-white">
-          {/* Five-column podium: order 4,2,1,3,5 */}
           <div className="flex items-end justify-center gap-6 sm:gap-10">
             {([3,1,0,2,4].map(i => topFive[i]).filter(Boolean)).map((p, idx) => {
               const heights = [110, 150, 200, 150, 110];
@@ -68,13 +66,10 @@ const LeaderboardPage = () => {
               const ringCls = rank===1 ? 'ring-amber-300/80' : rank===2 ? 'ring-slate-300/80' : rank===3 ? 'ring-orange-300/80' : 'ring-gray-300/70';
               return (
                 <div key={rank} className="flex flex-col items-center">
-                  {/* rank number */}
                   <div className={`text-sm font-semibold ${rank===1? 'text-amber-500':'text-white/90'}`}>{rank}</div>
-                  {/* avatar on top */}
                   <div className={`relative -mb-4 mt-1 p-1 rounded-full ring-2 ${ringCls} bg-white`}>
                     <Avatar name={p.name} src={p.avatar} size={rank===1?60:48} />
                   </div>
-                  {/* column with clipped top */}
                   <div
                     className="w-16 sm:w-20 bg-gradient-to-t from-rose-300 to-pink-300"
                     style={{
@@ -83,7 +78,6 @@ const LeaderboardPage = () => {
                       borderRadius: '0 0 12px 12px'
                     }}
                   />
-                  {/* name */}
                   <div className="mt-2 text-[13px] font-semibold text-gray-800 max-w-[84px] text-center truncate">
                     {p.name}
                   </div>
@@ -92,14 +86,11 @@ const LeaderboardPage = () => {
             })}
           </div>
         </Card>
-
-        {/* Full list */}
         <Card className="p-4">
           {loading && <div className="text-sm text-gray-500">Loading leaderboard…</div>}
           {error && <div className="text-sm text-red-600">{String(error)}</div>}
           {!loading && !error && (
             <>
-              {/* Top 10 */}
               <ul className="space-y-3">
                 {topTen.map((u) => (
                   <li key={u.rank}>
@@ -116,8 +107,6 @@ const LeaderboardPage = () => {
                   </li>
                 ))}
               </ul>
-
-              {/* Current user section (always shown when available) */}
               {youDisplay && (
                 <div className="mt-6">
                   <div className="text-xs text-gray-500 mb-2">Posisi kamu saat ini</div>

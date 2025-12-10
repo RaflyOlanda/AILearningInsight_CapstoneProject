@@ -28,7 +28,6 @@ const CoursesPage = () => {
       </div>
 
       <Card className="p-0 overflow-hidden">
-        {/* List */}
         <div>
           {loading && (
             <div className="text-sm text-gray-500 px-5 py-6">Loading your courses…</div>

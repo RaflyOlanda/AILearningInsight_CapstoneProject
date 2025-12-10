@@ -1,10 +1,10 @@
-// src/components/layouts/DashboardLayout.jsx
+
 
 import React from 'react';
 import { useTheme } from '../../context/themecontext';
 import Particles from '../ui/Particles';
 import PixelBlast from '../ui/PixelBlast';
-import Navbar from './navbar'; // Mengimpor Navbar
+import Navbar from './navbar'; 
 
 const DashboardLayout = ({ children }) => {
   const { theme } = useTheme();
@@ -43,12 +43,9 @@ const DashboardLayout = ({ children }) => {
           />
         </div>
       )}
-      {/* Header dengan Navbar */}
       <header className="sticky top-0 z-20 shadow-sm bg-card border-b border-border relative">
         <Navbar />
       </header>
-
-      {/* Konten Utama */}
       <main className="grow px-4 py-6 md:px-8 md:py-8 max-w-7xl mx-auto w-full relative z-10">
         {children}
       </main>

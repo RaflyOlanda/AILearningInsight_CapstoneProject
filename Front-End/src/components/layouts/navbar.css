@@ -1,4 +1,4 @@
-/* Basic Navbar layout matching earlier look */
+
 .navbar-container {
 	position: sticky;
 	top: 0;
@@ -69,7 +69,7 @@
 	transform: rotate(180deg);
 }
 
-/* Dropdown */
+
 .dropdown-menu {
 	position: absolute;
 	right: 0;

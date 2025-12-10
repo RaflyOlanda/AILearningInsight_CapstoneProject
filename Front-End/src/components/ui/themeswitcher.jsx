@@ -43,15 +43,12 @@ export default function ThemeSwitcher({ position = 'static', top = '', right = '
             className="bg-card text-card-foreground rounded-xl shadow-2xl w-full max-w-md overflow-hidden relative border border-border"
             onClick={(e) => e.stopPropagation()}
           >
-            {/* Header */}
             <div className="p-4 border-b border-border flex justify-between items-center">
               <h3 className="text-lg font-bold">Pilih Tema</h3>
               <button onClick={() => setOpen(false)} className="text-muted-foreground hover:text-foreground transition">
                 <FaTimes size={18} />
               </button>
             </div>
-
-            {/* Options (dive-in cards like badge modal) */}
             <div className="p-4 grid grid-cols-1 sm:grid-cols-2 gap-3">
               {THEME_OPTIONS.map((opt) => (
                 <div
@@ -66,7 +63,6 @@ export default function ThemeSwitcher({ position = 'static', top = '', right = '
                     <span className="font-semibold">{opt.label}</span>
                     <span className="text-xs text-muted-foreground">{opt.desc}</span>
                   </div>
-                  {/* Preview swatches */}
                   <div className="flex items-center gap-1">
                     {opt.swatch?.map((c, i) => (
                       <span key={i} className="inline-block w-3 h-3 rounded-sm" style={{ background: c }} />
@@ -75,8 +71,6 @@ export default function ThemeSwitcher({ position = 'static', top = '', right = '
                 </div>
               ))}
             </div>
-
-            {/* Footer */}
             <div className="p-4 border-t border-border text-right">
               <button 
                 onClick={() => setOpen(false)}

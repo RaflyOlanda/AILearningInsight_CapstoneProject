@@ -8,22 +8,22 @@ import {
 } from '../lib/preferences';
 
 const ThemeContext = createContext({
-  theme: 'default', // 'default' | 'glass' | 'contrast'
+  theme: 'default',
   resolvedTheme: 'default',
   toggleTheme: () => {},
   setTheme: () => {},
 });
 
-// Normalize legacy theme values to new ones
+
 const normalizeTheme = (t) => {
   if (!t) return 'default';
   if (t === 'light') return 'default';
   if (t === 'dark' || t === 'high-contrast') return 'contrast';
   if (t === 'system') return 'default';
-  return t; // default | glass | contrast | others (ignored)
+  return t; 
 };
 
-// Map to determine whether to apply `.dark` class
+
 const THEME_DARKNESS = {
   default: false,
   particles: true,

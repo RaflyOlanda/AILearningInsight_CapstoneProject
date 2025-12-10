@@ -17,26 +17,20 @@ import {
   PREFERENCE_EVENT,
 } from '../../lib/preferences';
 
-// --- KOMPONEN MODAL BADGE BARU ---
+
 const BadgeSelectorModal = ({ isOpen, onClose, currentBadge, onSelect, unlockedTier = 1, levelInfo }) => {
   if (!isOpen) return null;
 
   return ReactDOM.createPortal(
-    // Overlay 
+    
     <div className="fixed inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center z-1000 p-4" role="dialog" aria-modal="true">
-      
-      {/* Modal Content */}
       <div className="bg-card text-card-foreground border border-border rounded-xl shadow-2xl w-full max-w-lg max-h-[80vh] overflow-auto relative">
-        
-        {/* Header Modal */}
         <div className="p-4 border-b border-border flex justify-between items-center">
           <h3 className="text-lg font-bold">Pilih Badge Anda</h3>
           <button onClick={onClose} className="text-muted-foreground hover:text-foreground transition" aria-label="Tutup">
             <FaTimes size={18} />
           </button>
         </div>
-
-        {/* Daftar Badge */}
         <div className="p-4 space-y-3 max-h-80 overflow-y-auto">
           {BADGE_DATA.map((badge) => {
             const locked = Number(badge.tier) > Number(unlockedTier);
@@ -60,7 +54,7 @@ const BadgeSelectorModal = ({ isOpen, onClose, currentBadge, onSelect, unlockedT
                   }`}
                   title={locked ? `Terkunci — butuh Level ${requiredLevel} (${requiredXp.toLocaleString('id-ID')} XP)` : ''}
                 >
-                {/* Top row */}
+                
                 <div className="flex items-center">
                   <img src={badge.image} alt={badge.name} className={`w-10 h-10 mr-4 object-contain ${locked ? 'grayscale' : ''}`} />
                   <div className="flex flex-col grow min-w-0">
@@ -78,7 +72,7 @@ const BadgeSelectorModal = ({ isOpen, onClose, currentBadge, onSelect, unlockedT
                   )}
                 </div>
 
-                {/* Bottom progress for locked */}
+                
                 {locked && (
                   <div className="mt-2">
                     <div className="w-full h-1.5 bg-muted rounded-full overflow-hidden">
@@ -91,8 +85,6 @@ const BadgeSelectorModal = ({ isOpen, onClose, currentBadge, onSelect, unlockedT
             );
           })}
         </div>
-        
-        {/* Footer Modal */}
         <div className="p-4 border-t border-border text-right">
           <button 
             onClick={onClose}
@@ -109,13 +101,13 @@ const BadgeSelectorModal = ({ isOpen, onClose, currentBadge, onSelect, unlockedT
 };
 
 
-// --- KOMPONEN NAVBAR UTAMA ---
+
 const Navbar = () => {
-  const [isOpen, setIsOpen] = useState(false); // dropdown profile
-  const [loginOpen, setLoginOpen] = useState(false); // modal login
-  const [badgeOpen, setBadgeOpen] = useState(false); // modal pilih badge
+  const [isOpen, setIsOpen] = useState(false); 
+  const [loginOpen, setLoginOpen] = useState(false); 
+  const [badgeOpen, setBadgeOpen] = useState(false); 
   const [currentBadge, setCurrentBadge] = useState(BADGE_DATA[0]);
-  const dropdownRef = useRef(null); // klik di luar dropdown
+  const dropdownRef = useRef(null); 
   const { userId, logout, token } = useUser();
   const { setTheme } = useTheme();
   const badgeOwnerKey = userId || token || null;
@@ -127,8 +119,8 @@ const Navbar = () => {
   const unlockedTier = getUnlockedTierFromXp(xp);
   const xpFormatted = xp.toLocaleString('id-ID');
 
-  // Fungsi untuk menutup dropdown ketika klik di luar
-  // Persist selected badge
+  
+  
   useEffect(() => {
     setBadgesHydrated(false);
     if (profileLoading) return;
@@ -232,7 +224,7 @@ const Navbar = () => {
     return () => controller.abort();
   }, [badgesHydrated, token, badgeOwnerKey, currentBadge]);
 
-  // Close dropdown on outside click
+  
   useEffect(() => {
     function handleClickOutside(event) {
       if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
@@ -243,10 +235,10 @@ const Navbar = () => {
     return () => document.removeEventListener('mousedown', handleClickOutside);
   }, []);
 
-  // Fungsi untuk mengganti status buka/tutup
+  
   const toggleDropdown = () => setIsOpen(prev => !prev);
 
-  // Close with Escape key
+  
   useEffect(() => {
     function onKey(e) {
       if (e.key === 'Escape') setIsOpen(false);
@@ -288,7 +280,6 @@ const Navbar = () => {
           </button>
         ) : (
           <>
-            {/* Badge toggle only after login */}
             {(() => {
               const displayBadge = currentBadge && currentBadge.tier <= unlockedTier ? currentBadge : null;
               return (
@@ -312,13 +303,10 @@ const Navbar = () => {
                 </StarBorder>
               );
             })()}
-            {/* Profile Container: Diklik untuk toggle dropdown */}
             <div className="navbar-profile-container flex items-center gap-1 px-2 py-1 rounded-full" onClick={toggleDropdown} role="button" aria-haspopup="menu" aria-expanded={isOpen}>
               <FaRegUserCircle className="profile-avatar" />
               <FaChevronDown size={10} className={`navbar-dropdown-icon ${isOpen ? 'rotate-180' : ''}`} />
             </div>
-
-            {/* --- Dropdown Menu (Popup) --- */}
             {isOpen && (
               <div className="dropdown-menu" role="menu">
                 <div className="dropdown-item">
@@ -343,7 +331,7 @@ const Navbar = () => {
                 <div className="dropdown-item" role="menuitem" onClick={() => { setIsOpen(false); window.location.href = '/dashboard'; }}>
                   <FaTachometerAlt className="dropdown-icon-generic" /> Dashboard
                 </div>
-                <div className="dropdown-item" role="menuitem" onClick={() => { setIsOpen(false); /* open settings placeholder */ }}>
+                <div className="dropdown-item" role="menuitem" onClick={() => setIsOpen(false)}>
                   <FaCog className="dropdown-icon-generic" /> Settings
                 </div>
                 <div className="dropdown-divider"></div>
@@ -358,13 +346,9 @@ const Navbar = () => {
           </>
         )}
       </div>
-
-      {/* Login Modal when logged out */}
       {!isAuthenticated && (
         <LoginModal open={loginOpen} onClose={() => setLoginOpen(false)} />
       )}
-
-      {/* Badge selector modal */}
       <BadgeSelectorModal
         isOpen={badgeOpen}
         onClose={() => setBadgeOpen(false)}

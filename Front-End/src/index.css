@@ -4,7 +4,7 @@
 
 @custom-variant dark (&:is(.dark *));
 
-/* Inline fallback for StarBorder animation (replaces missing tw-animate-css) */
+
 @keyframes star-movement-bottom {
     0% { transform: translateX(0); }
     100% { transform: translateX(250%); }
@@ -29,30 +29,27 @@
 body {
     margin: 0;
     font-family: 'Quicksand', sans-serif !important;
-    background-color: #f3f4f6; /* Light gray background like mockup */
+    background-color: #f3f4f6; 
 }
 
-/* Generic helpers for cards and separators when needed */
+
 .card-shadow { box-shadow: 0 1px 2px rgba(0,0,0,0.04), 0 4px 10px rgba(0,0,0,0.04); }
 .divider { height: 1px; background-color: #E5E7EB; }
 
-/* Debug overrides: normalize unexpected dark/black borders and focus outlines
-     These rules are intentionally specific and use !important so they help
-     surface subtle mismatches between compiled CSS and browser styles. Remove
-     after debugging or refine to target only offending selectors. */
+
 * {
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
 }
-/* Force light border color for all elements to avoid dark outlines */
-/* Remove aggressive universal border override; use tailored focus styles instead */
-/* Accessible, consistent focus styles */
+
+
+
 button:focus-visible, a:focus-visible, input:focus-visible, textarea:focus-visible {
-    outline: 2px solid #3b82f6; /* Tailwind blue-500 */
+    outline: 2px solid #3b82f6; 
     outline-offset: 2px;
     box-shadow: none;
 }
-/* Ensure card components keep a subtle visible border */
+
 .bg-white { border-color: #E5E7EB !important; }
 
 @theme inline {
@@ -171,7 +168,7 @@ html.dark:not([data-theme]) {
     }
 }
 
-/* Line clamp utilities (no plugin needed) */
+
 .line-clamp-3 { display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden; }
 .line-clamp-4 { display: -webkit-box; -webkit-line-clamp: 4; -webkit-box-orient: vertical; overflow: hidden; }
 .line-clamp-5 { display: -webkit-box; -webkit-line-clamp: 5; -webkit-box-orient: vertical; overflow: hidden; }

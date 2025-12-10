@@ -17,7 +17,7 @@ const ProgressSummary = () => {
   );
   const dailyCheckpoint = dailyCheckpointResp?.data || dailyCheckpointResp || [];
 
-  // Streak: count green bars (days with actual study)
+  
   const streakCount = (dailyCheckpoint || []).filter(d => d.color === 'green').length;
 
   const checkpointDays = (dailyCheckpoint || []).slice(0, 7).map((d) => {
@@ -26,11 +26,10 @@ const ProgressSummary = () => {
     return { color: colorClass, status: label };
   });
 
-  // Remove date display per request
+  
 
   return (
     <div className="space-y-4">
-      {/* 1. KARTU: Last Course Enrolled */}
       <Card className="p-4 rounded-xl min-h-24">
         <h3 className="text-gray-600 text-xs font-semibold mb-2 uppercase tracking-wide">Last Course Enrolled</h3>
         {courseLoading ? (
@@ -52,8 +51,6 @@ const ProgressSummary = () => {
           <div className="w-full bg-gray-100 text-gray-700 text-xs font-semibold py-2 rounded-lg">No course enrolled</div>
         )}
       </Card>
-
-      {/* 2. KARTU: Study Duration */}
       <Card className="p-4 rounded-xl min-h-24">
         <h3 className="text-gray-600 text-xs font-semibold mb-3 uppercase tracking-wide">Study Duration</h3>
         {studyLoading ? (
@@ -62,17 +59,13 @@ const ProgressSummary = () => {
           <>
             <div className="flex justify-between items-center mb-2">
               <span className="text-lg font-semibold text-gray-800">Total: {studyData.total_hours || 0}h</span>
-            </div>
-            {/* Removed horizontal progress bar; focusing on mini bars */}
-            {/* Mini trend 7 hari (bar sederhana) */}
-            {/* 10 kelas terkini: bar besar, tooltip detail */}
-            {Array.isArray(studyData.last_10_classes) && studyData.last_10_classes.length > 0 && (
+            </div>{Array.isArray(studyData.last_10_classes) && studyData.last_10_classes.length > 0 && (
               <div className="mt-3">
                 <div className="flex items-end gap-2 w-full">
                   {studyData.last_10_classes.map((d, idx, arr) => {
                     const max = Math.max(...arr.map(x => Number(x.hours) || 0));
                     const val = Number(d.hours) || 0;
-                    const height = max > 0 ? Math.max(20, Math.round((val / max) * 64)) : 20; // 20-64px lebih besar
+                    const height = max > 0 ? Math.max(20, Math.round((val / max) * 64)) : 20; 
                     const dateLabel = d.last_enrolled_date ? new Date(d.last_enrolled_date).toLocaleDateString('id-ID', { day: 'numeric', month: 'long', year: 'numeric' }) : '-';
                     return (
                       <div key={idx} className="relative group flex-1 flex justify-center">
@@ -91,8 +84,6 @@ const ProgressSummary = () => {
           <div className="text-xs text-gray-500">No data available</div>
         )}
       </Card>
-
-      {/* 3. KARTU: Daily Checkpoint (7-day weekly) */}
       <Card className="p-4 rounded-xl min-h-24">
         <h3 className="text-gray-600 text-xs font-semibold mb-3 uppercase tracking-wide">Daily Checkpoint</h3>
         {checkpointLoading ? (

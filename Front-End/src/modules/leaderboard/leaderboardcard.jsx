@@ -41,7 +41,6 @@ const LeaderboardCard = () => {
                 <span className="text-[11px] font-semibold text-gray-500">{u.xp} XP</span>
               </li>
             ))}
-            {/* No extra user entry on dashboard to keep top-5 only */}
           </>
         ) : (
           <li className="px-4 py-3 text-center text-xs text-gray-500">No data</li>

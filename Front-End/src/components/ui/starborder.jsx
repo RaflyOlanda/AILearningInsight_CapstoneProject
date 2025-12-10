@@ -18,7 +18,6 @@ const StarBorder = ({
       }}
       {...rest}
     >
-      {/* Floating glow layers (below content pill, subtly visible through translucency) */}
       <div
         className="pointer-events-none absolute w-[240%] h-[85%] opacity-65 bottom-[-22px] left-[-120%] rounded-full animate-star-movement-bottom z-10 mix-blend-screen blur-[8px]"
         style={{
@@ -33,8 +32,6 @@ const StarBorder = ({
           animationDuration: speed,
         }}
       />
-
-      {/* Content pill with translucent gradient so the glow is visible */}
       <div
         className="relative z-30 rounded-[20px] border text-white text-center text-[14px] py-[8px] px-[14px] flex items-center gap-2 overflow-hidden"
         style={{
@@ -45,7 +42,6 @@ const StarBorder = ({
             '0 0 0 1px rgba(255,255,255,0.04) inset, 0 10px 30px rgba(80,114,255,0.08)',
         }}
       >
-        {/* Internal sweep shine so it always shows above the background and below text */}
         <div className="pointer-events-none absolute inset-0 z-0 overflow-hidden">
           <div
             className="absolute top-0 left-0 h-full w-[60%] animate-star-shine"
