@@ -22,6 +22,7 @@ class AuthHandler {
     }
 
     const token = generateToken({ id: user.user_id });
+    const preferences = await this._service.getPreferencesByUserId(user.user_id);
 
     return {
       status: 'success',
@@ -33,6 +34,8 @@ class AuthHandler {
           user_id: user.user_id,
           name: user.name,
           email: user.email,
+          theme_preference: preferences.theme,
+          badge_preference: preferences.badge,
         }
       }
     };

@@ -8,8 +8,8 @@ import LandingPage from '../pages/Landing/landingpage';
 import { useUser } from '../context/usercontext';
 
 function ProtectedRoute({ children }) {
-	const { userId } = useUser();
-	const token = typeof window !== 'undefined' ? localStorage.getItem('token') : null;
+	const { userId, token, loading } = useUser();
+	if (loading) return null;
 	if (!userId && !token) return <Navigate to="/" replace />;
 	return children;
 }

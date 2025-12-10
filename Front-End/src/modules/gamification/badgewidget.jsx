@@ -1,15 +1,52 @@
 import React, { useEffect, useState } from 'react';
 import Card from '../../components/ui/card';
+import { useUser } from '../../context/usercontext';
+import { findBadgeById } from '../../lib/badges';
+import { readBadgeForUser, PREFERENCE_EVENT } from '../../lib/preferences';
 
 export default function BadgeWidget() {
   const [badge, setBadge] = useState(null);
+  const { userId, token } = useUser();
 
   useEffect(() => {
-    try {
-      const raw = localStorage.getItem('selectedBadge');
-      if (raw) setBadge(JSON.parse(raw));
-    } catch {}
-  }, []);
+    const ownerKey = userId || token || null;
+    const keysToCheck = [];
+    if (ownerKey) keysToCheck.push(ownerKey);
+    if (token && ownerKey && token !== ownerKey) keysToCheck.push(token);
+
+    const loadBadge = () => {
+      if (!keysToCheck.length) {
+        setBadge(null);
+        return;
+      }
+
+      let savedId = null;
+      for (const key of keysToCheck) {
+        const candidate = readBadgeForUser(key);
+        if (candidate) {
+          savedId = candidate;
+          break;
+        }
+      }
+
+      const found = savedId ? findBadgeById(savedId) : null;
+      setBadge(found || null);
+    };
+
+    loadBadge();
+
+    if (!keysToCheck.length) return undefined;
+
+    const handler = (event) => {
+      const detail = event?.detail || {};
+      const targetId = detail.userId ?? null;
+      if (targetId && !keysToCheck.includes(targetId)) return;
+      loadBadge();
+    };
+
+    window.addEventListener(PREFERENCE_EVENT, handler);
+    return () => window.removeEventListener(PREFERENCE_EVENT, handler);
+  }, [userId, token]);
 
   if (!badge) return null; // no badge selected yet
 

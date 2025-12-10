@@ -4,25 +4,18 @@ import { FaRegUserCircle, FaChevronDown, FaTrophy, FaMedal, FaStar, FaTimes, FaT
 import './navbar.css';
 import StarBorder from '../ui/starborder';
 import DicodingLogo from '../../assets/images/dicoding.png';
-import KnowledgeSeekerBadge from '../../assets/images/Knowledge Seeker (tier 1).png';
-import SkillExplorerBadge from '../../assets/images/Skill Explorer (tier 2).png';
-import CreativePractitionerBadge from '../../assets/images/Creative Practitioner (tier 3).png';
-import InsightSpecialistBadge from '../../assets/images/Insight Specialist (tier 4).png';
-import MasterofLearningBadge from '../../assets/images/Master of Learning (tier 5).png';
 import { useUser } from '../../context/usercontext';
+import { useTheme } from '../../context/themecontext';
 import { useFetch } from '../../hooks/usefetch';
 import { getLevelInfo, getUnlockedTierFromXp, XP_PER_TIER } from '../../lib/levels';
 import LoginModal from '../ui/loginmodal';
-
-
-const BADGE_DATA = [
-  { id: 'seeker', name: 'Knowledge Seeker', tier: 1, image: KnowledgeSeekerBadge, color: '#f59e0b' }, 
-  { id: 'explorer', name: 'Skill Explorer', tier: 2, image: SkillExplorerBadge, color: '#94a3b8' }, 
-  { id: 'creative', name: 'Creative Practitioner', tier: 3, image: CreativePractitionerBadge, color: '#fbbf24' },
-  { id: 'insight', name: 'Insight Specialist', tier: 4, image: InsightSpecialistBadge, color: '#10b981' }, 
-  { id: 'master', name: 'Master of Learning', tier: 5, image: MasterofLearningBadge, color: '#8b5cf6' }, 
-];
-
+import BADGE_DATA, { findBadgeById } from '../../lib/badges';
+import {
+  readBadgeForUser,
+  writeBadgeForUser,
+  emitPreferencesEvent,
+  PREFERENCE_EVENT,
+} from '../../lib/preferences';
 
 // --- KOMPONEN MODAL BADGE BARU ---
 const BadgeSelectorModal = ({ isOpen, onClose, currentBadge, onSelect, unlockedTier = 1, levelInfo }) => {
@@ -53,20 +46,20 @@ const BadgeSelectorModal = ({ isOpen, onClose, currentBadge, onSelect, unlockedT
             const pct = Math.min(100, Math.floor((userXp / requiredXp) * 100));
             const xpNeeded = Math.max(0, requiredXp - userXp);
             return (
-              <div
-                key={badge.id}
-                onClick={() => {
-                  if (!locked) onSelect(badge);
-                }}
-                className={`group p-3 rounded-lg transition duration-150 border ${
-                  locked
-                    ? 'bg-muted border-border cursor-not-allowed'
-                    : currentBadge.id === badge.id
-                      ? 'bg-accent border-primary cursor-pointer'
-                      : 'bg-card hover:bg-muted border-border cursor-pointer'
-                }`}
-                title={locked ? `Terkunci — butuh Level ${requiredLevel} (${requiredXp.toLocaleString('id-ID')} XP)` : ''}
-              >
+                <div
+                  key={badge.id}
+                  onClick={() => {
+                    if (!locked) onSelect(badge);
+                  }}
+                  className={`group p-3 rounded-lg transition duration-150 border ${
+                    locked
+                      ? 'bg-muted border-border cursor-not-allowed'
+                      : currentBadge?.id === badge.id
+                        ? 'bg-accent border-primary cursor-pointer'
+                        : 'bg-card hover:bg-muted border-border cursor-pointer'
+                  }`}
+                  title={locked ? `Terkunci — butuh Level ${requiredLevel} (${requiredXp.toLocaleString('id-ID')} XP)` : ''}
+                >
                 {/* Top row */}
                 <div className="flex items-center">
                   <img src={badge.image} alt={badge.name} className={`w-10 h-10 mr-4 object-contain ${locked ? 'grayscale' : ''}`} />
@@ -74,7 +67,7 @@ const BadgeSelectorModal = ({ isOpen, onClose, currentBadge, onSelect, unlockedT
                     <span className={`font-semibold truncate ${locked ? 'text-muted-foreground' : ''}`}>{badge.name}</span>
                     <span className="text-xs text-muted-foreground">Tier {badge.tier}</span>
                   </div>
-                  {!locked && currentBadge.id === badge.id && (
+                  {!locked && currentBadge?.id === badge.id && (
                     <FaStar className="text-indigo-500" />
                   )}
                   {locked && (
@@ -123,9 +116,12 @@ const Navbar = () => {
   const [badgeOpen, setBadgeOpen] = useState(false); // modal pilih badge
   const [currentBadge, setCurrentBadge] = useState(BADGE_DATA[0]);
   const dropdownRef = useRef(null); // klik di luar dropdown
-  const { userId, logout } = useUser();
-  const token = typeof window !== 'undefined' ? localStorage.getItem('token') : null;
-  const { data: profile } = useFetch(userId ? `/dashboard/learning-profile/${userId}` : null);
+  const { userId, logout, token } = useUser();
+  const { setTheme } = useTheme();
+  const badgeOwnerKey = userId || token || null;
+  const [badgesHydrated, setBadgesHydrated] = useState(false);
+  const lastSyncedBadgeRef = useRef(null);
+  const { data: profile, loading: profileLoading } = useFetch(userId ? `/dashboard/learning-profile/${userId}` : null);
   const xp = Number(profile?.xp) || 0;
   const levelInfo = getLevelInfo(xp);
   const unlockedTier = getUnlockedTierFromXp(xp);
@@ -134,21 +130,107 @@ const Navbar = () => {
   // Fungsi untuk menutup dropdown ketika klik di luar
   // Persist selected badge
   useEffect(() => {
-    try {
-      const raw = localStorage.getItem('selectedBadge');
-      if (raw) {
-        const parsed = JSON.parse(raw);
-        const found = BADGE_DATA.find(b => b.id === parsed.id) || BADGE_DATA[0];
-        setCurrentBadge(found);
+    setBadgesHydrated(false);
+    if (profileLoading) return;
+
+    if (!badgeOwnerKey) {
+      setCurrentBadge(BADGE_DATA[0]);
+      lastSyncedBadgeRef.current = BADGE_DATA[0].id;
+      setBadgesHydrated(true);
+      return;
+    }
+
+    const keysToCheck = [badgeOwnerKey];
+    if (token && badgeOwnerKey !== token) {
+      keysToCheck.push(token);
+    }
+
+    let savedId = null;
+    for (const key of keysToCheck) {
+      const candidate = readBadgeForUser(key);
+      if (candidate) {
+        savedId = candidate;
+        break;
       }
-    } catch {}
-  }, []);
+    }
+
+    const found = findBadgeById(savedId) || BADGE_DATA[0];
+    const usable = Number(found.tier) <= Number(unlockedTier);
+    const nextBadge = usable ? found : BADGE_DATA[0];
+    setCurrentBadge(nextBadge);
+    lastSyncedBadgeRef.current = nextBadge?.id || null;
+    setBadgesHydrated(true);
+  }, [badgeOwnerKey, token, unlockedTier, profileLoading]);
 
   useEffect(() => {
-    try {
-      if (currentBadge) localStorage.setItem('selectedBadge', JSON.stringify(currentBadge));
-    } catch {}
-  }, [currentBadge]);
+    if (!badgesHydrated || !badgeOwnerKey || !currentBadge) return;
+    writeBadgeForUser(badgeOwnerKey, currentBadge.id);
+    if (token && badgeOwnerKey !== token) {
+      writeBadgeForUser(token, currentBadge.id);
+    }
+  }, [badgesHydrated, badgeOwnerKey, token, currentBadge]);
+
+  useEffect(() => {
+    if (!badgesHydrated || !badgeOwnerKey) return;
+    const handler = (event) => {
+      const detail = event?.detail || {};
+      const targetId = detail.userId ?? null;
+      const keysToCheck = [badgeOwnerKey];
+      if (token && badgeOwnerKey !== token) {
+        keysToCheck.push(token);
+      }
+      if (targetId && !keysToCheck.includes(targetId)) return;
+
+      const incomingId = typeof detail.badge === 'string' ? detail.badge : null;
+      let savedId = incomingId;
+      if (!savedId) {
+        for (const key of keysToCheck) {
+          const candidate = readBadgeForUser(key);
+          if (candidate) {
+            savedId = candidate;
+            break;
+          }
+        }
+      }
+
+      const foundBadge = findBadgeById(savedId) || BADGE_DATA[0];
+      const usable = Number(foundBadge.tier) <= Number(unlockedTier);
+      const nextBadge = usable ? foundBadge : BADGE_DATA[0];
+      lastSyncedBadgeRef.current = nextBadge?.id || null;
+      setCurrentBadge(nextBadge);
+    };
+
+    window.addEventListener(PREFERENCE_EVENT, handler);
+    return () => window.removeEventListener(PREFERENCE_EVENT, handler);
+  }, [badgesHydrated, badgeOwnerKey, token, unlockedTier]);
+
+  useEffect(() => {
+    if (!badgesHydrated || !token || !badgeOwnerKey || !currentBadge) return;
+    const badgeId = currentBadge.id;
+    if (lastSyncedBadgeRef.current === badgeId) return;
+
+    const controller = new AbortController();
+    const persist = async () => {
+      try {
+        await fetch('/api/users/preferences', {
+          method: 'PATCH',
+          headers: {
+            'Content-Type': 'application/json',
+            Authorization: `Bearer ${token}`,
+          },
+          body: JSON.stringify({ badge: badgeId }),
+          signal: controller.signal,
+        });
+        lastSyncedBadgeRef.current = badgeId;
+        emitPreferencesEvent({ userId: badgeOwnerKey, badge: badgeId });
+      } catch (err) {
+        console.warn('Failed to persist badge preference:', err);
+      }
+    };
+
+    persist();
+    return () => controller.abort();
+  }, [badgesHydrated, token, badgeOwnerKey, currentBadge]);
 
   // Close dropdown on outside click
   useEffect(() => {
@@ -174,6 +256,16 @@ const Navbar = () => {
   }, []);
 
   const isAuthenticated = Boolean(userId || token);
+
+  const handleLogout = () => {
+    setIsOpen(false);
+    setTheme('default');
+    try {
+      localStorage.setItem('theme', 'default');
+    } catch {}
+    logout();
+    window.location.href = '/';
+  };
 
   return (
     <nav className="navbar-container flex items-center justify-between w-full px-4 py-2 sticky top-0 z-50">
@@ -257,11 +349,7 @@ const Navbar = () => {
                 <div className="dropdown-divider"></div>
                 <div
                   className="dropdown-item"
-                  onClick={() => {
-                    setIsOpen(false);
-                    logout();
-                    window.location.href = '/';
-                  }}
+                  onClick={handleLogout}
                 >
                   <FaSignOutAlt className="dropdown-icon-generic" /> Logout
                 </div>

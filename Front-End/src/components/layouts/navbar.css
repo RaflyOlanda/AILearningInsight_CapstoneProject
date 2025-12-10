@@ -103,7 +103,7 @@
 	margin: 6px 4px;
 }
 
-.dropdown-icon-trophy { color: var(--accent); }
+.dropdown-icon-trophy { color: var(--primary); }
 .dropdown-icon-medal { color: var(--primary); }
 .dropdown-icon-generic { color: var(--muted-foreground); }
 

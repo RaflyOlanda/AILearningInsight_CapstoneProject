@@ -31,7 +31,11 @@ export default function LoginModal({ open, onClose }) {
 
       // Prefer parsed data; if empty raw, create minimal struct
       if (!data) data = { data: {} };
-      login(data.data.user, data.data.token);
+      const userPayload = data.data.user || {};
+      login(userPayload, data.data.token, {
+        theme: userPayload.theme_preference,
+        badge: userPayload.badge_preference,
+      });
       window.location.href = '/dashboard';
     } catch (err) {
       setError(err.message);

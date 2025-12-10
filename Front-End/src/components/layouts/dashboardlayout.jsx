@@ -53,6 +53,12 @@ const DashboardLayout = ({ children }) => {
         {children}
       </main>
 
+      <footer className="w-full border-t border-border bg-card relative z-10">
+        <div className="max-w-7xl mx-auto px-4 py-4 md:py-6 text-xs md:text-sm text-muted-foreground text-center">
+          © 2025 Dicoding | Dicoding adalah merek milik PT Presentologics, perusahaan induk dari PT Dicoding Akademi Indonesia.
+        </div>
+      </footer>
+
     </div>
   );
 };
