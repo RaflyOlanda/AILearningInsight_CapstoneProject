@@ -27,7 +27,7 @@ export default function ThemeSwitcher({ position = 'static', top = '', right = '
     <div className={`${position} ${top} ${right}`}>
       <button
         onClick={() => setOpen(true)}
-        className="flex items-center gap-2 px-3 py-2 rounded-xl shadow-soft border border-border bg-card text-foreground hover:bg-muted"
+        className="flex items-center gap-2 px-3 py-2 rounded-xl shadow-soft border border-border bg-card text-foreground hover:bg-muted cursor-pointer"
         title="Theme"
       >
         <FaPalette />
@@ -36,7 +36,7 @@ export default function ThemeSwitcher({ position = 'static', top = '', right = '
 
       {open && (
         <div
-          className="fixed inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center z-50 p-4"
+          className="fixed inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center z-[1000] p-4"
           onClick={() => setOpen(false)}
         >
           <div

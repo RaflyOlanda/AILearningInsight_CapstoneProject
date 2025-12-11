@@ -15,7 +15,7 @@ const OverviewRecommendation = () => {
 
   return (
     <Card className="p-5 shadow-soft rounded-xl border border-gray-200 min-h-[128px]">
-      <h3 className="font-semibold text-sm text-gray-700 mb-2">Rekomendasi Belajar</h3>
+      <h3 className="text-sm font-semibold text-gray-800 mb-2">Rekomendasi Belajar</h3>
       {loading ? (
         <div className="h-16 bg-gray-100 rounded animate-pulse"></div>
       ) : (

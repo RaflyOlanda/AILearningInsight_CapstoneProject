@@ -32,7 +32,7 @@ const ProgressSummary = () => {
     <div className="space-y-4">
       {/* 1. KARTU: Last Course Enrolled */}
       <Card className="p-4 rounded-xl min-h-24">
-        <h3 className="text-gray-600 text-xs font-semibold mb-2 uppercase tracking-wide">Last Course Enrolled</h3>
+        <h3 className="text-sm font-semibold text-gray-800 mb-2">Last Course Enrolled</h3>
         {courseLoading ? (
           <div className="w-full bg-gray-100 text-gray-700 text-xs font-semibold py-2 rounded-lg">Loading...</div>
         ) : lastCourse ? (
@@ -42,7 +42,7 @@ const ProgressSummary = () => {
             </button>
             <div className="flex justify-between items-center text-[11px]">
               <span className="inline-block bg-blue-100 text-blue-700 px-2.5 py-1 rounded-full font-semibold">100% Complete</span>
-              <button className="text-blue-600 hover:text-blue-800 flex items-center gap-1 font-medium">
+              <button className="text-gray-500 hover:text-gray-700 flex items-center gap-1 font-medium cursor-pointer">
                 <span>Continue</span>
                 <FaPlayCircle size={12} />
               </button>
@@ -55,13 +55,13 @@ const ProgressSummary = () => {
 
       {/* 2. KARTU: Study Duration */}
       <Card className="p-4 rounded-xl min-h-24">
-        <h3 className="text-gray-600 text-xs font-semibold mb-3 uppercase tracking-wide">Study Duration</h3>
+        <h3 className="text-sm font-semibold text-gray-800 mb-3">Study Duration</h3>
         {studyLoading ? (
           <div className="h-8 bg-gray-100 rounded animate-pulse"></div>
         ) : studyData ? (
           <>
             <div className="flex justify-between items-center mb-2">
-              <span className="text-lg font-semibold text-gray-800">Total: {studyData.total_hours || 0}h</span>
+              <span className="text-base font-semibold text-gray-800">Total: {studyData.total_hours || 0}h</span>
             </div>
             {/* Removed horizontal progress bar; focusing on mini bars */}
             {/* Mini trend 7 hari (bar sederhana) */}
@@ -72,13 +72,16 @@ const ProgressSummary = () => {
                   {studyData.last_10_classes.map((d, idx, arr) => {
                     const max = Math.max(...arr.map(x => Number(x.hours) || 0));
                     const val = Number(d.hours) || 0;
-                    const height = max > 0 ? Math.max(20, Math.round((val / max) * 64)) : 20; // 20-64px lebih besar
+                    const height = max > 0 ? Math.max(24, Math.round((val / max) * 72)) : 24;
                     const dateLabel = d.last_enrolled_date ? new Date(d.last_enrolled_date).toLocaleDateString('id-ID', { day: 'numeric', month: 'long', year: 'numeric' }) : '-';
+                    const journeyName = d.journey_name || 'Kelas';
                     return (
-                      <div key={idx} className="relative group flex-1 flex justify-center">
+                      <div key={idx} className="relative group flex-1 flex flex-col items-center justify-end">
                         <div className="bg-green-500 w-3 rounded-md" style={{ height: `${height}px` }}></div>
-                        <div className="pointer-events-none absolute -top-10 left-1/2 -translate-x-1/2 whitespace-nowrap rounded-md bg-gray-800 text-white text-[11px] px-2 py-1 opacity-0 group-hover:opacity-100 transition-opacity shadow-md">
-                          {`${d.journey_name || 'Kelas'} | ${dateLabel} | ${val}h`}
+                        <div className="pointer-events-none absolute -top-16 left-1/2 -translate-x-1/2 whitespace-normal rounded-md bg-gray-900 text-white text-[11px] px-2 py-1 opacity-0 group-hover:opacity-100 transition-opacity shadow-lg text-center min-w-[150px] max-w-[220px] z-20 group-hover:z-30">
+                          <div className="font-semibold leading-tight break-words">{journeyName}</div>
+                          <div className="text-[10px] text-gray-200 leading-tight break-words">{dateLabel}</div>
+                          <div className="text-[10px] text-gray-200 leading-tight">Durasi: {val}h</div>
                         </div>
                       </div>
                     );
@@ -94,7 +97,7 @@ const ProgressSummary = () => {
 
       {/* 3. KARTU: Daily Checkpoint (7-day weekly) */}
       <Card className="p-4 rounded-xl min-h-24">
-        <h3 className="text-gray-600 text-xs font-semibold mb-3 uppercase tracking-wide">Daily Checkpoint</h3>
+        <h3 className="text-sm font-semibold text-gray-800 mb-3">Daily Checkpoint</h3>
         {checkpointLoading ? (
           <div className="h-6 bg-gray-100 rounded animate-pulse"></div>
         ) : (
