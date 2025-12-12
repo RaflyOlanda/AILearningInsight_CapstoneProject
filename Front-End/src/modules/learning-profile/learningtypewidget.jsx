@@ -1,4 +1,5 @@
 import React from 'react';
+import ReactDOM from 'react-dom';
 import Card from '../../components/ui/card';
 import { PieChart, Pie, Cell, ResponsiveContainer, Tooltip } from 'recharts';
 import { useUser } from '../../context/usercontext';
@@ -205,22 +206,25 @@ const LearnerTypeWidget = () => {
       >
         View All
       </button>
-      {open && (
-        <div className="fixed inset-0 z-[1000] flex items-center justify-center">
+      {open && ReactDOM.createPortal(
+        <div className="fixed inset-0 flex items-center justify-center" style={{ zIndex: 9999 }}>
           <div className="absolute inset-0 bg-black/60 backdrop-blur-sm" onClick={() => setOpen(false)}></div>
-          <div className="relative bg-card text-card-foreground rounded-xl shadow-2xl border border-border w-[90vw] max-w-3xl max-h-[80vh] overflow-auto p-5 z-10">
-            <div className="flex items-center justify-between mb-3">
+          <div className="relative bg-card text-card-foreground rounded-xl shadow-2xl border border-border w-[90vw] max-w-3xl flex flex-col" style={{ maxHeight: '80vh', zIndex: 10000 }}>
+            <div className="flex items-center justify-between p-5 pb-3 shrink-0">
               <div className="text-sm font-semibold">Learning Profile</div>
               <button
                 onClick={() => setOpen(false)}
-                className="text-[12px] px-2 py-1 rounded-md border border-border hover:bg-muted"
+                className="text-sm px-3 py-1.5 rounded-md border border-border hover:bg-muted transition-colors"
               >
                 Close
               </button>
             </div>
-            <InnerContent />
+            <div className="overflow-y-auto px-5 pb-5">
+              <InnerContent />
+            </div>
           </div>
-        </div>
+        </div>,
+        document.body
       )}
     </Card>
   );
