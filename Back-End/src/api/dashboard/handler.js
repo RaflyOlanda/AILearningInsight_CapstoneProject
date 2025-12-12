@@ -71,7 +71,6 @@ module.exports = {
         }).code(404);
       }
 
-      // Last 7 days simple trend of study hours grouped by date
       const trendQuery = `
         SELECT DATE(djc.enrollments_at) AS date,
                ROUND(SUM(djc.study_duration)::numeric, 2) AS hours
@@ -83,9 +82,8 @@ module.exports = {
       `;
       const trendRes = await pool.query(trendQuery, [userId]);
       const data = result.rows[0];
-      data.last_7_days = (trendRes.rows || []).reverse(); // oldest to newest for left-to-right
+      data.last_7_days = (trendRes.rows || []).reverse(); 
 
-      // Last 10 recent classes: sum hours per journey ordered by last_enrolled_at
       const last10Query = `
         SELECT djc.journey_id,
                dj.journey_name,
@@ -172,13 +170,12 @@ module.exports = {
         }
       };
 
-      // Prefer direct learner_type if present; else map legacy model names
       let profile;
       if (user.learner_type) {
-        // If learner_type already a human-readable type, use it directly
+
         profile = Object.values(learnerTypes).find(p => p.type === user.learner_type);
         if (!profile) {
-          // Fallback: if learner_type stores model keys (e.g., 'Fast', 'Sonic')
+
           profile = learnerTypes[user.learner_type] || learnerTypes['Stable'];
         }
       } else {
@@ -259,7 +256,7 @@ module.exports = {
       const latestDescription = result.rows[0].keterangan || 'Tidak ada keterangan.';
 
       const chartData = {
-        labels: labels.reverse(), // reverse agar yang paling lama di kiri
+        labels: labels.reverse(), 
         series: [
           { name: 'Hours', data: hoursData.reverse() },
           { name: 'Study Duration', data: durationData.reverse() }
@@ -338,7 +335,6 @@ module.exports = {
     }
   },
 
-  // Get current user's global rank on the leaderboard
   getCurrentUserRank: async (request, h) => {
     try {
       const { userId } = request.params;
@@ -376,7 +372,7 @@ module.exports = {
   getDailyCheckpoint: async (request, h) => {
     try {
       const { userId } = request.params;
-      // Get the latest enrollment date
+
       const latestQuery = `
         SELECT DATE(MAX(enrollments_at)) AS last_enrolled_date
         FROM developer_journey_completion
@@ -386,7 +382,7 @@ module.exports = {
       const lastDateStr = latestRes.rows[0]?.last_enrolled_date;
 
       if (!lastDateStr) {
-        // No enrollments: future-only 7 days (gray)
+
         const today = new Date();
         const days = Array.from({ length: 7 }, (_, i) => {
           const d = new Date(today);
@@ -397,9 +393,9 @@ module.exports = {
       }
 
       const lastDate = new Date(lastDateStr);
-      // 7-day period: 3 days before, the day itself, 3 days after
+
       const days = Array.from({ length: 7 }, (_, idx) => {
-        const offset = idx - 3; // -3..3
+        const offset = idx - 3; 
         const d = new Date(lastDate);
         d.setDate(lastDate.getDate() + offset);
         let status = 'future';

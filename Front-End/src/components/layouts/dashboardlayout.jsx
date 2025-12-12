@@ -1,4 +1,4 @@
-// src/components/layouts/DashboardLayout.jsx
+
 
 import React from 'react';
 import { useTheme } from '../../context/themecontext';
@@ -6,6 +6,7 @@ import Particles from '../ui/Particles';
 import PixelBlast from '../ui/PixelBlast';
 import RetroGrid from '../ui/retro-grid';
 import Navbar from './navbar'; // Mengimpor Navbar
+import './dashboardlayout.css';
 
 const DashboardLayout = ({ children }) => {
   const { theme } = useTheme();
@@ -60,13 +61,11 @@ const DashboardLayout = ({ children }) => {
       <header className="sticky top-0 z-20 shadow-sm bg-card border-b border-border">
         <Navbar />
       </header>
-
-      {/* Konten Utama */}
       <main className="grow px-4 py-6 md:px-8 md:py-8 max-w-7xl mx-auto w-full relative z-10">
         {children}
       </main>
 
-      <footer className="w-full border-t border-border bg-card relative z-10">
+      <footer className="app-footer w-full border-t border-border relative z-10">
         <div className="max-w-7xl mx-auto px-4 py-4 md:py-6 text-xs md:text-sm text-muted-foreground text-center">
           © 2025 Dicoding | Dicoding adalah merek milik PT Presentologics, perusahaan induk dari PT Dicoding Akademi Indonesia.
         </div>

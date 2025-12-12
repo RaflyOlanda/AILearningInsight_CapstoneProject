@@ -6,9 +6,6 @@ const Path = require('path');
 const Fs = require('fs');
 
 const auth = require('./api/auth');
-const users = require('./api/users');
-const journeys = require('./api/journeys');
-const insights = require('./api/insights');
 const dashboard = require('./api/dashboard');
 
 const init = async () => {
@@ -40,9 +37,6 @@ const init = async () => {
 
   await server.register([
     auth,
-    users,
-    journeys,
-    insights,
     dashboard,
   ]);
 

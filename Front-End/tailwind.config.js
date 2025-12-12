@@ -1,4 +1,4 @@
-// tailwind.config.js
+
 export default {
   darkMode: 'class',
   content: [
@@ -7,7 +7,7 @@ export default {
   ],
   theme: {
     extend: {
-      // --- PENAMBAHAN ANIMASI STARBORDER DIMULAI DI SINI ---
+      
       animation: {
         'star-movement-bottom': 'star-movement-bottom linear infinite alternate',
         'star-movement-top': 'star-movement-top linear infinite alternate',
@@ -22,7 +22,7 @@ export default {
           '100%': { transform: 'translate(100%, 0%)', opacity: '0.4' },
         },
       },
-      // --- PENAMBAHAN ANIMASI STARBORDER BERAKHIR DI SINI ---
+      
       
       colors: {
         primary: '#5B9BD5',

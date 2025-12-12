@@ -29,7 +29,7 @@ export default function LoginModal({ open, onClose }) {
         throw new Error(msg);
       }
 
-      // Prefer parsed data; if empty raw, create minimal struct
+      
       if (!data) data = { data: {} };
       const userPayload = data.data.user || {};
       login(userPayload, data.data.token, {

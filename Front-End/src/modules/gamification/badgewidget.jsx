@@ -48,7 +48,7 @@ export default function BadgeWidget() {
     return () => window.removeEventListener(PREFERENCE_EVENT, handler);
   }, [userId, token]);
 
-  if (!badge) return null; // no badge selected yet
+  if (!badge) return null; 
 
   return (
     <Card className="p-4 shadow-soft rounded-xl border border-gray-200 flex items-center gap-3 min-h-[72px]">

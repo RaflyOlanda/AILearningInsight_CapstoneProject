@@ -15,7 +15,6 @@ class AuthHandler {
       return h.response({ status: 'fail', message: 'Email tidak ditemukan' }).code(404);
     }
 
-    // Plaintext compare per current DB policy
     const isValid = String(password) === String(user.password);
     if (!isValid) {
       return h.response({ status: 'fail', message: 'Password salah' }).code(401);

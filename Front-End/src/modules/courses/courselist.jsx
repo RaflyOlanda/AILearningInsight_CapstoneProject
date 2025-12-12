@@ -6,7 +6,7 @@ import { useUser } from '../../context/usercontext';
 import { useNavigate } from 'react-router-dom';
 
 const CourseList = () => {
-    const navigate = useNavigate();
+	const navigate = useNavigate();
 	const { userId } = useUser();
 	const { data: courses, loading } = useFetch(
 		userId ? `/dashboard/learning-history/${userId}` : null
@@ -23,7 +23,9 @@ const CourseList = () => {
 		<Card className="card-shadow rounded-xl overflow-hidden min-h-[270px] max-h-[270px]">
 			<div className="px-4 py-3 border-b border-gray-200 flex items-center justify-between bg-gray-50">
 				<div className="font-semibold text-sm text-gray-800">Courses</div>
-				<button onClick={() => navigate('/courses')} className="text-[11px] text-blue-600 hover:text-blue-800 font-medium">View All &gt;</button>
+				<button onClick={() => navigate('/courses')} className="text-[11px] text-blue-600 hover:text-blue-700 font-medium cursor-pointer">
+					View All &gt;
+				</button>
 			</div>
 			<div className="p-0 space-y-0 divide-y divide-gray-100 overflow-y-auto" style={{ maxHeight: '212px' }}>
 				{loading ? (

@@ -7,16 +7,16 @@ import { useFetch } from '../../hooks/usefetch';
 const COLORS = ['#22C55E', '#3B82F6', '#F59E0B'];
 const CATEGORIES = ['fast', 'normal', 'slow'];
 
-// Fungsi untuk me-render label di luar Pie Chart dengan garis penghubung
+
 const renderCustomizedLabel = ({ cx, cy, midAngle, innerRadius, outerRadius, index, data }) => {
   const RADIAN = Math.PI / 180;
   
-  // Titik awal garis (di luar donat)
+  
   const outerRadiusLine = outerRadius * 1.05; 
   const lineToX = cx + outerRadiusLine * Math.cos(-midAngle * RADIAN);
   const lineToY = cy + outerRadiusLine * Math.sin(-midAngle * RADIAN);
   
-  // Titik akhir garis (dikurangi agar label tidak terpotong)
+  
   const labelRadius = outerRadius * 1.2; 
   const finalX = cx + labelRadius * Math.cos(-midAngle * RADIAN);
   const finalY = cy + labelRadius * Math.sin(-midAngle * RADIAN);
@@ -27,10 +27,7 @@ const renderCustomizedLabel = ({ cx, cy, midAngle, innerRadius, outerRadius, ind
 
   return (
     <g>
-      {/* Garis konektor lurus */}
       <line x1={lineToX} y1={lineToY} x2={finalX} y2={finalY} stroke="#333" strokeWidth={1} />
-      
-      {/* Teks Label */}
       <text 
         x={textX} 
         y={textY} 
@@ -56,8 +53,8 @@ const LearnerTypeWidget = () => {
     ? profile.strengths.slice(0, 3)
     : ['Strength 1', 'Strength 2', 'Strength 3'];
 
-  // Pastikan selalu 3 slice agar tampilan konsisten dengan mock
-  // Ambil distribusi dari API bila tersedia; fallback ke 34/33/33
+  
+  
   const dist = profile?.distribution;
   const baseValues = [34, 33, 33];
   const values = dist
@@ -67,7 +64,7 @@ const LearnerTypeWidget = () => {
   const normalized = sum > 0 ? values.map((v) => Math.max(0, Math.round((v / sum) * 100))) : baseValues;
   const pieData = CATEGORIES.map((name, idx) => ({ name, value: normalized[idx] || 0 }));
 
-  // Map untuk menjelaskan arti tiap kategori dan tips singkat
+  
   const insight = {
     fast: {
       title: 'Fast',
@@ -95,7 +92,7 @@ const LearnerTypeWidget = () => {
     },
   };
 
-  // Tooltip kustom yang menampilkan penjelasan + tips
+  
   const CustomTooltip = ({ active, payload }) => {
     if (!active || !payload || !payload.length) return null;
     const p = payload[0];
@@ -127,7 +124,7 @@ const LearnerTypeWidget = () => {
 
   const InnerContent = () => (
     <div className="flex flex-col gap-4 h-full">
-      {/* Top: Pie chart centered */}
+      
       <div className="w-full flex flex-col items-center">
         <div className="w-full h-48 md:h-52">
           <ResponsiveContainer width="100%" height="100%">
@@ -149,7 +146,7 @@ const LearnerTypeWidget = () => {
             </PieChart>
           </ResponsiveContainer>
         </div>
-        {/* Legend kategori agar pengguna paham arti setiap warna */}
+        
         <div className="mt-1.5 flex items-center justify-center gap-4 text-[12px] text-gray-600">
           {CATEGORIES.map((label, idx) => (
             <div key={label} className="flex items-center gap-1.5">
@@ -160,7 +157,7 @@ const LearnerTypeWidget = () => {
         </div>
       </div>
 
-      {/* Bottom: Title, description and lists */}
+      
       <div>
         <h2 className="text-[18px] font-semibold text-gray-800 mb-1.5">
           {loading
@@ -197,26 +194,20 @@ const LearnerTypeWidget = () => {
   return (
     <Card className="p-5 shadow-soft rounded-xl border border-border min-h-[400px] max-h-[420px] relative overflow-hidden">
       <InnerContent />
-
-      {/* Fade overlay at bottom to hint overflow */}
       <div
         className="pointer-events-none absolute bottom-0 left-0 right-0 h-10"
         style={{ backgroundImage: 'linear-gradient(to top, var(--background), rgba(0,0,0,0))' }}
       ></div>
-
-      {/* View All button */}
       <button
         type="button"
         onClick={() => setOpen(true)}
-        className="absolute bottom-3 right-3 text-[11px] px-2.5 py-1 rounded-md border border-border bg-secondary hover:bg-muted text-foreground shadow-sm"
+        className="absolute bottom-3 right-3 text-[11px] px-2.5 py-1 rounded-md border border-border bg-secondary hover:bg-muted text-foreground shadow-sm cursor-pointer"
       >
         View All
       </button>
-
-      {/* Modal */}
       {open && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center">
-          <div className="absolute inset-0 bg-black/60" onClick={() => setOpen(false)}></div>
+        <div className="fixed inset-0 z-[1000] flex items-center justify-center">
+          <div className="absolute inset-0 bg-black/60 backdrop-blur-sm" onClick={() => setOpen(false)}></div>
           <div className="relative bg-card text-card-foreground rounded-xl shadow-2xl border border-border w-[90vw] max-w-3xl max-h-[80vh] overflow-auto p-5 z-10">
             <div className="flex items-center justify-between mb-3">
               <div className="text-sm font-semibold">Learning Profile</div>

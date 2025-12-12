@@ -21,15 +21,11 @@ const OverviewCards = () => {
     userId ? `/dashboard/learning-history/${userId}` : null
   );
 
-  // Simple completion percent: rows with last_enrolled_at present over total rows
+  
   const historyItems = Array.isArray(historyData) ? historyData : [];
   const totalRows = historyItems.length;
-  // Be flexible with field names from backend
-  const completedRows = historyItems.filter(r => Boolean(r?.last_enrolled_at || r?.last_enrolled_date || r?.enrollments_at)).length;
-  let completionPercentRaw = totalRows > 0 ? (completedRows / totalRows) * 100 : 0;
-  // If rows exist but none detected due to field mismatch, default to 100% per spec
-  if (totalRows > 0 && completedRows === 0) completionPercentRaw = 100;
-  const completionPercent = Math.round(Math.max(0, Math.min(100, completionPercentRaw)));
+  const completedRows = totalRows;
+  const completionPercent = totalRows > 0 ? 100 : 0;
   const donutData = [
     { name: 'Completed', value: completionPercent },
     { name: 'Remaining', value: 100 - completionPercent },
@@ -44,13 +40,30 @@ const OverviewCards = () => {
   return (
     <div className="space-y-4">
       {/* Container 1: Completed Courses donut */}
-      <Card className="p-4 shadow-soft rounded-xl border border-gray-200 flex items-center gap-4 min-h-24">
+      <Card
+        className="p-4 shadow-soft rounded-xl border border-gray-200 flex items-center gap-4 min-h-24 relative group"
+        title={`${completedRows} dari ${totalRows} kursus selesai`}
+      >
         {studyLoading || courseLoading || historyLoading ? (
           <div className="w-full h-full flex items-center justify-center">
             <span className="text-xs text-gray-500">Loading...</span>
           </div>
         ) : (
           <>
+            <div className="pointer-events-none absolute top-3 right-3 opacity-0 group-hover:opacity-100 transition-opacity duration-150">
+              <div className="rounded-md bg-gray-900/90 text-white text-[11px] px-3 py-1 shadow-lg">
+                {totalRows > 0 ? (
+                  <>
+                    <span className="font-semibold">{completedRows}</span>
+                    <span className="mx-1">/</span>
+                    <span>{totalRows}</span>
+                    <span className="ml-1">kursus selesai</span>
+                  </>
+                ) : (
+                  <span>Belum ada data kursus</span>
+                )}
+              </div>
+            </div>
             <div className="w-20 h-20" style={{ minWidth: '80px', minHeight: '80px' }}>
               <PieChart width={80} height={80}>
                 <Pie data={donutData} innerRadius={24} outerRadius={38} paddingAngle={2} dataKey="value">
@@ -62,12 +75,17 @@ const OverviewCards = () => {
             </div>
             <div className="text-sm">
               <div className="font-semibold">{completionPercent}% Completed Courses</div>
+              <button
+                type="button"
+                onClick={() => navigate('/courses')}
+                className="mt-1.5 text-[11px] text-blue-600 hover:text-blue-700 font-medium cursor-pointer"
+              >
+                View All &gt;
+              </button>
             </div>
           </>
         )}
       </Card>
-
-      {/* Container 2: Average Submission Rating with stars */}
       <Card className="p-4 shadow-soft rounded-xl border border-gray-200 min-h-24">
         {courseLoading ? (
           <div className="h-full flex items-center justify-center">
@@ -103,7 +121,7 @@ const OverviewCards = () => {
               <button
                 type="button"
                 onClick={() => navigate('/submissions')}
-                className="mt-1.5 text-[11px] text-blue-600 hover:text-blue-800 font-medium"
+                className="mt-1.5 text-[11px] text-blue-600 hover:text-blue-700 font-medium cursor-pointer"
                 title="Tap to detail"
               >
                 Tap to detail

@@ -1,0 +1,24 @@
+/* Shared footer styling so theme overrides can match the navbar treatment. */
+.app-footer {
+  position: relative;
+  background-color: var(--card);
+  border-top: 1px solid var(--border);
+  backdrop-filter: none;
+}
+
+html[data-theme="particles"] .app-footer {
+  backdrop-filter: saturate(120%) blur(8px);
+  background-color: color-mix(in oklab, black 70%, transparent);
+  border-color: oklch(1 0 0 / 16%);
+}
+
+html[data-theme="contrast"] .app-footer {
+  background-color: oklch(0.15 0 0);
+  border-color: oklch(0.3 0 0);
+}
+
+html[data-theme="pixelblast"] .app-footer {
+  backdrop-filter: saturate(120%) blur(6px);
+  background-color: rgba(255, 255, 240, 0.85);
+  border-color: var(--border);
+}

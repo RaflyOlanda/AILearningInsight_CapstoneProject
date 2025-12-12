@@ -43,7 +43,7 @@ export const UserProvider = ({ children }) => {
     }
   }, []);
 
-  // Initialize from localStorage on mount
+  
   useEffect(() => {
     try {
       const storedUser = localStorage.getItem('user');
