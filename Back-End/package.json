@@ -7,7 +7,7 @@
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "node src/server.js",
     "dev": "nodemon src/server.js",
-    "db:import": "pwsh -ExecutionPolicy Bypass ./scripts/import-db.ps1",
+    "db:import": "powershell -NoProfile -ExecutionPolicy Bypass -File ./scripts/import-db.ps1",
     "db:import-users-csv": "node ./scripts/import-users-csv.js",
     "db:merge-csv": "node ./scripts/merge-csv-to-users.js"
   },
