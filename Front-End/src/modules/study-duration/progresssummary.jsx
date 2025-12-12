@@ -41,7 +41,7 @@ const ProgressSummary = () => {
             </button>
             <div className="flex justify-between items-center text-[11px]">
               <span className="inline-block bg-blue-100 text-blue-700 px-2.5 py-1 rounded-full font-semibold">100% Complete</span>
-              <button className="text-gray-500 hover:text-gray-700 flex items-center gap-1 font-medium cursor-pointer">
+              <button className="text-blue-600 hover:text-blue-700 flex items-center gap-1 font-medium cursor-pointer">
                 <span>Continue</span>
                 <FaPlayCircle size={12} />
               </button>

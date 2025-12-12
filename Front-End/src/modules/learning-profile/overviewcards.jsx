@@ -75,6 +75,13 @@ const OverviewCards = () => {
             </div>
             <div className="text-sm">
               <div className="font-semibold">{completionPercent}% Completed Courses</div>
+              <button
+                type="button"
+                onClick={() => navigate('/courses')}
+                className="mt-1.5 text-[11px] text-blue-600 hover:text-blue-700 font-medium cursor-pointer"
+              >
+                View All &gt;
+              </button>
             </div>
           </>
         )}
@@ -114,7 +121,7 @@ const OverviewCards = () => {
               <button
                 type="button"
                 onClick={() => navigate('/submissions')}
-                className="mt-1.5 text-[11px] text-gray-500 hover:text-gray-700 font-medium cursor-pointer"
+                className="mt-1.5 text-[11px] text-blue-600 hover:text-blue-700 font-medium cursor-pointer"
                 title="Tap to detail"
               >
                 Tap to detail

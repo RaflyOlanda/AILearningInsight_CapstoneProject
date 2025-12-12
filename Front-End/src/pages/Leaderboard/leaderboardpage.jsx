@@ -3,8 +3,8 @@ import DashboardLayout from '../../components/layouts/dashboardlayout';
 import Card from '../../components/ui/card';
 import { useFetch } from '../../hooks/usefetch';
 import { useUser } from '../../context/usercontext';
-import { FaCrown } from 'react-icons/fa';
 import { useNavigate } from 'react-router-dom';
+import { GiCrown } from 'react-icons/gi';
 
 const Avatar = ({ name, src, size = 40 }) => {
   if (src) {
@@ -36,7 +36,13 @@ const LeaderboardPage = () => {
   const { data, loading, error } = useFetch('/dashboard/leaderboard');
   const list = Array.isArray(data) ? data : [];
 
-  const topThree = list.slice(0, 3);
+  // Crown color classes for rankings
+  const getCrownClass = (rank) => {
+    if (rank === 1) return 'text-[#FFD700]';    // Emas (Gold)
+    if (rank === 2) return 'text-[#708090]';    // Silver (Slate Gray - lebih gelap)
+    if (rank === 3) return 'text-[#CD7F32]';    // Perunggu (Bronze)
+    return 'text-gray-500';
+  };
   const topFive = list.slice(0, 5);
   const topTen = list.slice(0, 10);
   const you = list.find(u => String(u.user_id) === String(userId));
@@ -57,28 +63,36 @@ const LeaderboardPage = () => {
       </div>
 
       <div className="grid gap-6">
-        <Card className="p-6 bg-gradient-to-b from-sky-200/70 to-white">
+        {/* Podium */}
+        <Card className="p-6 bg-gradient-to-b from-slate-50 to-card">
           <div className="flex items-end justify-center gap-6 sm:gap-10">
-            {([3,1,0,2,4].map(i => topFive[i]).filter(Boolean)).map((p, idx) => {
-              const heights = [110, 150, 200, 150, 110];
+            {([3, 1, 0, 2, 4].map(i => topFive[i] ? { ...topFive[i], actualRank: i + 1 } : null).filter(Boolean)).map((p, idx) => {
+              const heights = [100, 160, 200, 140, 80];
               const h = heights[idx];
-              const rank = p.rank ?? (idx+1);
-              const ringCls = rank===1 ? 'ring-amber-300/80' : rank===2 ? 'ring-slate-300/80' : rank===3 ? 'ring-orange-300/80' : 'ring-gray-300/70';
+              const rank = p.actualRank;
+              const ringTone = rank === 1 ? 'ring-yellow-400' : rank === 2 ? 'ring-slate-400' : rank === 3 ? 'ring-orange-400' : 'ring-slate-300';
+              const columnTone = rank === 1
+                ? 'bg-gradient-to-t from-yellow-500 to-yellow-400 text-white'
+                : rank === 2
+                  ? 'bg-gradient-to-t from-slate-400 to-slate-300 text-white'
+                  : rank === 3
+                    ? 'bg-gradient-to-t from-orange-500 to-orange-400 text-white'
+                    : 'bg-gradient-to-t from-slate-200 to-slate-100 text-slate-700';
               return (
                 <div key={rank} className="flex flex-col items-center">
-                  <div className={`text-sm font-semibold ${rank===1? 'text-amber-500':'text-white/90'}`}>{rank}</div>
-                  <div className={`relative -mb-4 mt-1 p-1 rounded-full ring-2 ${ringCls} bg-white`}>
-                    <Avatar name={p.name} src={p.avatar} size={rank===1?60:48} />
+                  {rank <= 3 && (
+                    <div className={`mb-2 text-4xl ${getCrownClass(rank)}`}>
+                      <GiCrown />
+                    </div>
+                  )}
+                  <div className={`relative -mb-3 mt-1 p-1.5 rounded-full ring-2 ${ringTone} bg-white shadow-md`}>
+                    <Avatar name={p.name} src={p.avatar} size={rank === 1 ? 60 : 50} />
                   </div>
                   <div
-                    className="w-16 sm:w-20 bg-gradient-to-t from-rose-300 to-pink-300"
-                    style={{
-                      height: h,
-                      clipPath: 'polygon(50% 0%, 100% 20%, 100% 100%, 0 100%, 0 20%)',
-                      borderRadius: '0 0 12px 12px'
-                    }}
+                    className={`w-14 sm:w-16 rounded-t-xl shadow-md ${columnTone}`}
+                    style={{ height: h, borderBottomLeftRadius: 14, borderBottomRightRadius: 14 }}
                   />
-                  <div className="mt-2 text-[13px] font-semibold text-gray-800 max-w-[84px] text-center truncate">
+                  <div className="mt-3 text-[13px] font-semibold text-slate-800 max-w-[88px] text-center truncate">
                     {p.name}
                   </div>
                 </div>
@@ -92,20 +106,42 @@ const LeaderboardPage = () => {
           {!loading && !error && (
             <>
               <ul className="space-y-3">
-                {topTen.map((u) => (
-                  <li key={u.rank}>
-                    <div className={`flex items-center justify-between rounded-full px-4 py-3 shadow-sm ${u.rank <= 3 ? 'bg-gradient-to-r ' + (u.rank === 1 ? 'from-yellow-400 to-amber-300' : u.rank === 2 ? 'from-slate-100 to-white' : 'from-orange-400 to-amber-400') : 'bg-white'}`}>
-                      <div className="flex items-center gap-3 min-w-0">
-                        <div className="w-6 h-6 rounded-full bg-black/10 text-xs flex items-center justify-center font-semibold">{u.rank}</div>
-                        <Avatar name={u.name} src={u.avatar} size={u.rank <= 3 ? 28 : 40} />
-                        <span className={`truncate text-sm ${String(u.user_id) === String(userId) ? 'font-semibold text-indigo-700' : 'text-gray-800'}`}>
-                          {String(u.user_id) === String(userId) ? 'You' : u.name}
-                        </span>
+                {topTen.map((u, index) => {
+                  const rank = index + 1;
+                  const isCurrentUser = String(u.user_id) === String(userId);
+                  const baseRow = 'flex items-center justify-between rounded-xl px-4 py-3 border shadow-sm transition-all hover:shadow-md';
+                  const highlight = rank === 1
+                    ? 'bg-yellow-50 border-yellow-300 shadow-yellow-100'
+                    : rank === 2
+                      ? 'bg-gray-100 border-gray-400 shadow-gray-20'
+                      : rank === 3
+                        ? 'bg-orange-50 border-orange-300 shadow-orange-100'
+                        : 'bg-card border-border';
+                  return (
+                    <li key={index}>
+                      <div className={`${baseRow} ${highlight}`}>
+                        <div className="flex items-center gap-3 min-w-0">
+                          {rank <= 3 ? (
+                            <div className={`text-xl drop-shadow-md ${getCrownClass(rank)}`}>
+                              <GiCrown />
+                            </div>
+                          ) : (
+                            <div className={`w-6 h-6 rounded-full text-xs flex items-center justify-center font-bold text-white bg-slate-400`}>{rank}</div>
+                          )}
+                          <Avatar name={u.name} src={u.avatar} size={rank <= 3 ? 34 : 38} />
+                          <span className={`truncate text-sm font-medium ${
+                            rank === 1 ? 'text-yellow-700' : rank === 2 ? 'text-slate-700' : rank === 3 ? 'text-orange-700' : isCurrentUser ? 'text-primary font-semibold' : 'text-foreground'
+                          }`}>
+                            {isCurrentUser ? 'You' : u.name}
+                          </span>
+                        </div>
+                        <div className={`text-sm font-bold ${
+                          rank === 1 ? 'text-yellow-600' : rank === 2 ? 'text-slate-600' : rank === 3 ? 'text-orange-600' : 'text-foreground/70'
+                        }`}>{u.xp} pts</div>
                       </div>
-                      <div className="text-sm font-semibold text-gray-700">{u.xp} pts</div>
-                    </div>
-                  </li>
-                ))}
+                    </li>
+                  );
+                })}
               </ul>
               {youDisplay && (
                 <div className="mt-6">
