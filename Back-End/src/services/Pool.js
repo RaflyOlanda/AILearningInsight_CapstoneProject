@@ -1,11 +1,17 @@
 const { Pool } = require('pg');
 
-const pool = new Pool({
-  host: process.env.PGHOST,
-  database: process.env.PGDATABASE,
-  user: process.env.PGUSER,
-  password: process.env.PGPASSWORD,
-  port: 5432
-});
+function createPoolConfig() {
+  if (process.env.DATABASE_URL) {
+    return {
+      connectionString: process.env.DATABASE_URL,
+      ssl: process.env.PGSSLMODE === 'disable'
+        ? false
+        : { rejectUnauthorized: false },  // Railway butuh ini
+    };
+  }
+}
+
+const pool = new Pool(createPoolConfig());
 
 module.exports = pool;
+
