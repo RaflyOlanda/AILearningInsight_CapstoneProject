@@ -21,7 +21,7 @@ const OverviewCards = () => {
     userId ? `/dashboard/learning-history/${userId}` : null
   );
 
-  
+  // Simple completion percent: rows with last_enrolled_at present over total rows
   const historyItems = Array.isArray(historyData) ? historyData : [];
   const totalRows = historyItems.length;
   const completedRows = totalRows;
@@ -86,6 +86,8 @@ const OverviewCards = () => {
           </>
         )}
       </Card>
+
+      {/* Container 2: Average Submission Rating with stars */}
       <Card className="p-4 shadow-soft rounded-xl border border-gray-200 min-h-24">
         {courseLoading ? (
           <div className="h-full flex items-center justify-center">

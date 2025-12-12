@@ -47,13 +47,15 @@ const DashboardLayout = ({ children }) => {
       )}
       {theme === 'retro' && (
         <div className="fixed inset-0 z-0 pointer-events-none">
+          {/* Grid starts below header/cards, adjust startY as needed (e.g. 320–350px) */}
           <RetroGrid
-            angle={68}
+            angle={40} // less perspective, less z-depth
             cellSize={42}
             opacity={0.7}
             lightLineColor="#ffffff"
             darkLineColor="#ffffff"
-            className="w-full h-full"
+            className="w-full"
+            startY={340} // adjust this value to align with Daily Checkpoint
           />
         </div>
       )}

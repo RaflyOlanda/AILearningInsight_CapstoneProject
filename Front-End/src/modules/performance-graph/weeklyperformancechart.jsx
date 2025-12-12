@@ -52,12 +52,12 @@ const WeeklyPerformanceChart = () => {
   };
 
   return (
-    <Card className="p-4 shadow-soft rounded-xl border border-gray-200 min-h-[260px] overflow-hidden">
-      <div className="text-sm font-semibold mb-0">Performance Graph</div>
+    <Card className="p-4 shadow-soft rounded-xl border border-gray-200 h-[290px] overflow-hidden">
+      <div className="text-sm font-semibold mb-3">Performance Graph</div>
       {description && (
-        <div className="text-[11px] text-gray-500 mb-1 line-clamp-2" title={description}>{description}</div>
+        <div className="text-[11px] text-gray-500 mb-3 line-clamp-2" title={description}>{description}</div>
       )}
-      <div className="w-full h-[200px] pr-2">
+      <div className="w-full h-[210px] pr-2 mt-2">
         {loading ? (
           <div className="w-full h-full flex items-center justify-center bg-gray-50 rounded">
             <span className="text-gray-500">Loading...</span>

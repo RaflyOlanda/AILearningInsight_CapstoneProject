@@ -20,7 +20,7 @@ const LeaderboardCard = () => {
   };
 
   return (
-    <Card className="p-0 shadow-soft rounded-xl border border-gray-200 overflow-hidden h-full w-full flex flex-col">
+    <Card className="p-0 shadow-soft rounded-xl border border-gray-200 overflow-hidden h-[275px] w-full flex flex-col">
       <div className="px-4 py-3 border-b border-gray-200 flex items-center justify-between shrink-0">
         <div className="font-semibold text-sm">Leaderboard</div>
         <button onClick={() => navigate('/leaderboard')} className="text-[11px] text-blue-600 hover:text-blue-700 cursor-pointer">View All &gt;</button>
