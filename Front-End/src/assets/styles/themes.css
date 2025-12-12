@@ -150,3 +150,150 @@ html[data-theme="pixelblast"] .card-shadow {
   box-shadow: 0 8px 24px rgba(0,0,0,0.08);
   border-color: var(--border);
 }
+
+/* Retro Grid — warm ivory-orange background with white grid lines */
+html[data-theme="retro"] {
+  /* Neon gradient background similar to reference */
+  --background: transparent; /* use gradient on element */
+  --foreground: oklch(0.98 0 0);
+
+  --card: rgba(30, 58, 138, 0.45); /* match navbar translucent navy */
+  --card-foreground: #ffffff;
+
+  --popover: rgba(30, 58, 138, 0.45);
+  --popover-foreground: #ffffff;
+
+  --border: oklch(0.85 0 0);
+  --input: var(--border);
+  --muted: oklch(0.96 0 0);
+  --muted-foreground: oklch(0.42 0 0);
+
+  --accent: #ffffff;
+  --accent-foreground: oklch(0.2 0 0);
+
+  --primary: #ffffff; /* white grid/lines */
+  --primary-foreground: #000000;
+
+  --secondary: oklch(0.96 0 0);
+  --secondary-foreground: oklch(0.2 0 0);
+
+  --ring: var(--primary);
+  --radius: 0.75rem;
+}
+
+/* Ensure the neon gradient applies to the page background */
+html[data-theme="retro"],
+html[data-theme="retro"] body,
+html[data-theme="retro"] .bg-background {
+  background-image: linear-gradient(to bottom, #431b93, #1e3a8a 40%, #1f2a6b) !important;
+  background-attachment: fixed !important;
+  background-size: 100% 100% !important;
+  background-color: transparent !important;
+}
+
+html[data-theme="retro"] .navbar-container {
+  background-color: #505e9f;
+  backdrop-filter: saturate(140%) blur(8px);
+  border-color: oklch(1 0 0 / 15%);
+  color: #ffffff !important;
+}
+
+html[data-theme="retro"] .card-shadow {
+  background-color: #505e9f !important;
+  backdrop-filter: saturate(140%) blur(8px) !important;
+  box-shadow: 0 8px 24px rgba(0,0,0,0.08);
+  border-color: oklch(1 0 0 / 15%) !important;
+  color: #ffffff !important;
+}
+
+/* Force all bg-card elements to use #505e9f in retro theme */
+html[data-theme="retro"] .bg-card {
+  background-color: #505e9f !important;
+  color: #ffffff !important;
+}
+
+/* Force common light container backgrounds to #505e9f in retro theme */
+html[data-theme="retro"] .bg-white,
+html[data-theme="retro"] .bg-gray-50,
+html[data-theme="retro"] .bg-gray-100 {
+  background-color: #505e9f !important;
+  color: #ffffff !important;
+  border-color: oklch(1 0 0 / 15%) !important;
+}
+
+html[data-theme="retro"] .text-gray-800,
+html[data-theme="retro"] .text-gray-700,
+html[data-theme="retro"] .text-gray-600 {
+  color: #ffffff !important;
+}
+
+/* Footer styling over neon gradient */
+html[data-theme="retro"] footer {
+  background-color: #505e9f !important;
+  color: #ffffff !important;
+  backdrop-filter: saturate(140%) blur(8px) !important;
+  border-top-color: oklch(1 0 0 / 15%) !important;
+}
+
+html[data-theme="retro"] footer * {
+  color: #ffffff !important;
+}
+
+/* In case footer uses a container class instead of semantic tag */
+html[data-theme="retro"] .footer-container {
+  background-color: #505e9f !important;
+  color: #ffffff !important;
+  backdrop-filter: saturate(140%) blur(8px) !important;
+  border-top: 1px solid oklch(1 0 0 / 15%) !important;
+}
+
+html[data-theme="retro"] .footer-container * {
+  color: #ffffff !important;
+}
+
+/* Retro theme component-specific fixes */
+/* Popups and modals: learning type modal, navbar profile dropdown */
+html[data-theme="retro"] .modal,
+html[data-theme="retro"] .popover,
+html[data-theme="retro"] .dropdown-menu,
+html[data-theme="retro"] .navbar-profile-container .dropdown {
+  background-color: #505e9f !important;
+  color: #ffffff !important;
+  border-color: oklch(1 0 0 / 15%) !important;
+  backdrop-filter: saturate(140%) blur(8px) !important;
+}
+html[data-theme="retro"] .modal *,
+html[data-theme="retro"] .popover *,
+html[data-theme="retro"] .dropdown-menu * {
+  color: #ffffff !important;
+}
+
+/* Courses card: ensure "View All" link and text are readable */
+html[data-theme="retro"] .courses-card a,
+html[data-theme="retro"] .courses-card .view-all,
+html[data-theme="retro"] .courses-card .text-muted {
+  color: #ffffff !important;
+}
+
+/* Leaderboard: XP points and "View All" link */
+html[data-theme="retro"] .leaderboard-card .xp,
+html[data-theme="retro"] .leaderboard-card .view-all,
+html[data-theme="retro"] .leaderboard-card .text-muted {
+  color: #ffffff !important;
+}
+
+/* Average Submission: score number and "Tap to detail" link */
+html[data-theme="retro"] .submission-card .score,
+html[data-theme="retro"] .submission-card .tap-to-detail,
+html[data-theme="retro"] .submission-card .text-muted {
+  color: #ffffff !important;
+}
+
+/* Generic fix: force common gray utility text to white for readability */
+html[data-theme="retro"] .text-gray-400,
+html[data-theme="retro"] .text-gray-500,
+html[data-theme="retro"] .text-gray-600,
+html[data-theme="retro"] .text-gray-700,
+html[data-theme="retro"] .text-gray-800 {
+  color: #ffffff !important;
+}

@@ -29,6 +29,7 @@ const THEME_DARKNESS = {
   particles: true,
   contrast: true,
   pixelblast: false,
+  retro: false,
 };
 
 const DEFAULT_THEME = 'default';
@@ -142,6 +143,7 @@ export const ThemeProvider = ({ children }) => {
       t === 'default' ? 'contrast' :
       t === 'contrast' ? 'particles' :
       t === 'particles' ? 'pixelblast' :
+      t === 'pixelblast' ? 'retro' :
       'default'
     )),
   }), [theme, resolvedTheme, setTheme]);

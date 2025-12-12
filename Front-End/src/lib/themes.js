@@ -23,4 +23,10 @@ export const THEMES = [
     description: 'Ivory background with dynamic pixel patterns.',
     swatch: ['#FFFFF0', '#B19EEF', '#000000'],
   },
+  {
+    id: 'retro',
+    label: 'Retro Grid',
+    description: 'Ivory-orange background with neon white grid.',
+    swatch: ['#fc913a', '#FFFFF0', '#ffffff'],
+  },
 ];

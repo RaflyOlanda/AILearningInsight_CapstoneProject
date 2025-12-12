@@ -4,6 +4,7 @@ import React from 'react';
 import { useTheme } from '../../context/themecontext';
 import Particles from '../ui/Particles';
 import PixelBlast from '../ui/PixelBlast';
+import RetroGrid from '../ui/retro-grid';
 import Navbar from './navbar'; // Mengimpor Navbar
 
 const DashboardLayout = ({ children }) => {
@@ -43,8 +44,20 @@ const DashboardLayout = ({ children }) => {
           />
         </div>
       )}
+      {theme === 'retro' && (
+        <div className="fixed inset-0 z-0 pointer-events-none">
+          <RetroGrid
+            angle={68}
+            cellSize={42}
+            opacity={0.7}
+            lightLineColor="#ffffff"
+            darkLineColor="#ffffff"
+            className="w-full h-full"
+          />
+        </div>
+      )}
       {/* Header dengan Navbar */}
-      <header className="sticky top-0 z-20 shadow-sm bg-card border-b border-border relative">
+      <header className="sticky top-0 z-20 shadow-sm bg-card border-b border-border">
         <Navbar />
       </header>
 
