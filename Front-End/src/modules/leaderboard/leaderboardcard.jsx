@@ -23,7 +23,7 @@ const LeaderboardCard = () => {
     <Card className="p-0 shadow-soft rounded-xl border border-gray-200 overflow-hidden h-full w-full flex flex-col">
       <div className="px-4 py-3 border-b border-gray-200 flex items-center justify-between shrink-0">
         <div className="font-semibold text-sm">Leaderboard</div>
-        <button onClick={() => navigate('/leaderboard')} className="text-[11px] text-gray-500 hover:text-gray-700 cursor-pointer">View All &gt;</button>
+        <button onClick={() => navigate('/leaderboard')} className="text-[11px] text-blue-600 hover:text-blue-700 cursor-pointer">View All &gt;</button>
       </div>
       <ul className="divide-y divide-gray-100 overflow-y-auto flex-1 min-h-0 max-h-[260px]">
         {loading ? (
