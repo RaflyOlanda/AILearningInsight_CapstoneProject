@@ -1,4 +1,5 @@
 import React from 'react';
+import { useTheme } from '../../context/themecontext';
 import Card from '../../components/ui/card';
 import { PieChart, Pie, Cell } from 'recharts';
 import { FaStar } from 'react-icons/fa';
@@ -36,7 +37,6 @@ const OverviewCards = () => {
     : 3.5;
   const fullStars = Math.floor(avgRating);
   const hasHalfStar = avgRating % 1 >= 0.5;
-
   return (
     <div className="space-y-4">
       {/* Container 1: Completed Courses donut */}
@@ -78,7 +78,7 @@ const OverviewCards = () => {
               <button
                 type="button"
                 onClick={() => navigate('/courses')}
-                className="mt-1.5 text-[11px] text-blue-600 hover:text-blue-700 font-medium cursor-pointer"
+                className={`mt-1.5 text-[11px] font-medium cursor-pointer ${useTheme().theme === 'particles' ? 'particles-viewall' : useTheme().theme === 'retro' ? 'retro-viewall' : 'text-blue-600 hover:text-blue-700'}`}
               >
                 View All &gt;
               </button>
@@ -123,7 +123,7 @@ const OverviewCards = () => {
               <button
                 type="button"
                 onClick={() => navigate('/submissions')}
-                className="mt-1.5 text-[11px] text-blue-600 hover:text-blue-700 font-medium cursor-pointer"
+                className={`mt-1.5 text-[11px] font-medium cursor-pointer ${useTheme().theme === 'particles' ? 'particles-viewall' : useTheme().theme === 'retro' ? 'retro-viewall' : 'text-blue-600 hover:text-blue-700'}`}
                 title="Tap to detail"
               >
                 Tap to detail
@@ -134,6 +134,6 @@ const OverviewCards = () => {
       </Card>
     </div>
   );
-};
+}
 
 export default OverviewCards;

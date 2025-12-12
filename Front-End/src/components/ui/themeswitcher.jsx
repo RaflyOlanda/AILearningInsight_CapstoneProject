@@ -37,6 +37,7 @@ export default function ThemeSwitcher({ position = 'static', top = '', right = '
       {open && (
         <div
           className="fixed inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center z-[1000] p-4"
+          style={{backdropFilter: 'blur(6px)'}} // efek blur lebih nyata seperti badge
           onClick={() => setOpen(false)}
         >
           <div
@@ -49,7 +50,7 @@ export default function ThemeSwitcher({ position = 'static', top = '', right = '
                 <FaTimes size={18} />
               </button>
             </div>
-            <div className="p-4 grid grid-cols-1 sm:grid-cols-2 gap-3">
+            <div className="p-4 flex flex-col gap-3">
               {THEME_OPTIONS.map((opt) => (
                 <div
                   key={opt.key}

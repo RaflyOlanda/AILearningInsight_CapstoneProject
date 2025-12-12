@@ -202,7 +202,7 @@ const LearnerTypeWidget = () => {
       <button
         type="button"
         onClick={() => setOpen(true)}
-        className="absolute bottom-3 right-3 text-[11px] px-2.5 py-1 rounded-md border border-border bg-secondary hover:bg-muted text-foreground shadow-sm cursor-pointer"
+        className={`absolute bottom-3 right-3 text-[11px] px-2.5 py-1 rounded-md border border-border shadow-sm cursor-pointer ${typeof useTheme === 'function' && useTheme().theme === 'particles' ? 'particles-viewall' : typeof useTheme === 'function' && useTheme().theme === 'retro' ? 'retro-viewall retro-viewall-bg' : ''}`}
       >
         View All
       </button>

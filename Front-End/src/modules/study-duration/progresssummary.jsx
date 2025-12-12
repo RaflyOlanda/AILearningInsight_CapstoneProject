@@ -1,4 +1,5 @@
 import React from 'react';
+import { useTheme } from '../../context/themecontext';
 import Card from '../../components/ui/card'; 
 import { FaPlayCircle, FaCheckSquare } from 'react-icons/fa'; 
 import { useFetch } from '../../hooks/usefetch';
@@ -41,7 +42,9 @@ const ProgressSummary = () => {
             </button>
             <div className="flex justify-between items-center text-[11px]">
               <span className="inline-block bg-blue-100 text-blue-700 px-2.5 py-1 rounded-full font-semibold">100% Complete</span>
-              <button className="text-blue-600 hover:text-blue-700 flex items-center gap-1 font-medium cursor-pointer">
+              <button
+                className={`flex items-center gap-1 font-medium cursor-pointer ${useTheme().theme === 'particles' ? 'particles-viewall' : useTheme().theme === 'retro' ? 'retro-viewall' : 'text-blue-600 hover:text-blue-700'}`}
+              >
                 <span>Continue</span>
                 <FaPlayCircle size={12} />
               </button>

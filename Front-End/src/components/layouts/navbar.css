@@ -7,7 +7,7 @@
 	justify-content: space-between;
 	width: 100%;
 	background-color: var(--card);
-	border-bottom: 1px solid var(--border);
+	/* border-bottom removed for all themes */
 	padding: 10px 16px;
 	z-index: 50;
 }

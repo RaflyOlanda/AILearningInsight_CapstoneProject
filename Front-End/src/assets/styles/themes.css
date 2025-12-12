@@ -1,3 +1,25 @@
+html[data-theme="retro"] .retro-viewall-bg {
+  background: rgba(0,0,0,0.18) !important;
+  border: 1.5px solid #fff !important;
+  box-shadow: 0 2px 8px 0 rgba(0,0,0,0.10);
+  transition: background 0.2s;
+}
+html[data-theme="retro"] .retro-viewall-bg:hover {
+  background: rgba(0,0,0,0.28) !important;
+}
+html[data-theme="retro"] .retro-viewall,
+html[data-theme="retro"] .retro-viewall:hover {
+  color: #fff !important;
+}
+html[data-theme="particles"] .particles-viewall,
+html[data-theme="particles"] .particles-viewall:hover {
+  color: #fff !important;
+}
+html[data-theme="pixelblast"] .text-blue-600,
+html[data-theme="pixelblast"] .hover\:text-blue-700:hover {
+  color: #fff !important;
+}
+
 
 
 
@@ -72,84 +94,6 @@ html[data-theme="particles"] .text-gray-700 { color: var(--foreground) !importan
 html[data-theme="particles"] .text-gray-500 { color: oklch(0.86 0 0) !important; }
 
 
-html[data-theme="contrast"] {
-  --background: oklch(0.13 0 0);
-  --foreground: oklch(0.95 0 0);
-
-  --card: oklch(0.18 0 0);
-  --card-foreground: var(--foreground);
-
-  --popover: oklch(0.16 0 0);
-  --popover-foreground: var(--foreground);
-
-  --border: oklch(0.3 0 0);
-  --input: var(--border);
-  --muted: oklch(0.22 0 0);
-  --muted-foreground: oklch(0.72 0 0);
-
-  --accent: oklch(0.22 0 0);
-  --accent-foreground: var(--foreground);
-
-  --primary: oklch(0.68 0.18 165);
-  --primary-foreground: oklch(0.12 0 0);
-
-  --secondary: oklch(0.22 0 0);
-  --secondary-foreground: var(--foreground);
-
-  --ring: oklch(0.68 0.18 165);
-  --radius: 0.5rem;
-}
-
-html[data-theme="contrast"] .navbar-container {
-  background-color: oklch(0.15 0 0) !important;
-  border-color: oklch(0.3 0 0) !important;
-}
-
-html[data-theme="contrast"] .card-shadow {
-  box-shadow: none;
-  border-width: 2px;
-  border-color: oklch(0.3 0 0);
-}
-
-
-html[data-theme="pixelblast"] {
-  --background: #FFFFF0; 
-  --foreground: oklch(0.18 0 0); 
-
-  --card: oklch(0.98 0 0); 
-  --card-foreground: var(--foreground);
-
-  --popover: oklch(0.98 0 0);
-  --popover-foreground: var(--foreground);
-
-  --border: oklch(0.85 0 0);
-  --input: var(--border);
-  --muted: oklch(0.96 0 0);
-  --muted-foreground: oklch(0.42 0 0);
-
-  --accent: #B19EEF; 
-  --accent-foreground: var(--foreground);
-
-  --primary: #6D5BD0;
-  --primary-foreground: #ffffff;
-
-  --secondary: oklch(0.96 0 0);
-  --secondary-foreground: var(--foreground);
-
-  --ring: var(--primary);
-  --radius: 0.75rem;
-}
-
-html[data-theme="pixelblast"] .navbar-container {
-  background-color: rgba(255, 255, 240, 0.85); 
-  backdrop-filter: saturate(120%) blur(6px);
-  border-color: var(--border);
-}
-
-html[data-theme="pixelblast"] .card-shadow {
-  box-shadow: 0 8px 24px rgba(0,0,0,0.08);
-  border-color: var(--border);
-}
 
 /* Retro Grid — warm ivory-orange background with white grid lines */
 html[data-theme="retro"] {
@@ -296,4 +240,9 @@ html[data-theme="retro"] .text-gray-600,
 html[data-theme="retro"] .text-gray-700,
 html[data-theme="retro"] .text-gray-800 {
   color: #ffffff !important;
+}
+
+/* Remove white border under navbar in retro grid theme */
+html[data-theme="retro"] .navbar-container {
+  border-bottom: none !important;
 }
