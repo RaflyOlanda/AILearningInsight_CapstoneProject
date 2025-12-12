@@ -285,7 +285,7 @@ const Navbar = () => {
               return (
                 <StarBorder
                   as="button"
-                  className="mr-3 hidden sm:inline-block align-middle"
+                  className="mr-3 hidden sm:inline-block align-middle cursor-pointer"
                   color="#6366F1"
                   speed="8s"
                   thickness={1}

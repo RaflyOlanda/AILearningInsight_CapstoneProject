@@ -201,13 +201,13 @@ const LearnerTypeWidget = () => {
       <button
         type="button"
         onClick={() => setOpen(true)}
-        className="absolute bottom-3 right-3 text-[11px] px-2.5 py-1 rounded-md border border-border bg-secondary hover:bg-muted text-foreground shadow-sm"
+        className="absolute bottom-3 right-3 text-[11px] px-2.5 py-1 rounded-md border border-border bg-secondary hover:bg-muted text-foreground shadow-sm cursor-pointer"
       >
         View All
       </button>
       {open && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center">
-          <div className="absolute inset-0 bg-black/60" onClick={() => setOpen(false)}></div>
+        <div className="fixed inset-0 z-[1000] flex items-center justify-center">
+          <div className="absolute inset-0 bg-black/60 backdrop-blur-sm" onClick={() => setOpen(false)}></div>
           <div className="relative bg-card text-card-foreground rounded-xl shadow-2xl border border-border w-[90vw] max-w-3xl max-h-[80vh] overflow-auto p-5 z-10">
             <div className="flex items-center justify-between mb-3">
               <div className="text-sm font-semibold">Learning Profile</div>
