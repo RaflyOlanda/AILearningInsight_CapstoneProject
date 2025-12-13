@@ -1,11 +1,9 @@
-
-
 import React from 'react';
 import { useTheme } from '../../context/themecontext';
 import Particles from '../ui/Particles';
 import RetroGrid from '../ui/retro-grid';
-import Navbar from './navbar'; // Mengimpor Navbar
-import './dashboardlayout.css';
+import Navbar from './navbar'; 
+import '../../styles/layouts.css';
 
 const DashboardLayout = ({ children, wide = false }) => {
   const { theme } = useTheme();
@@ -26,22 +24,22 @@ const DashboardLayout = ({ children, wide = false }) => {
           />
         </div>
       )}
-      {/* pixelblast theme removed */}
+      {}
       {theme === 'retro' && (
         <div className="fixed inset-0 z-0 pointer-events-none">
-          {/* Grid starts below header/cards, adjust startY as needed (e.g. 320–350px) */}
+          {}
           <RetroGrid
-            angle={40} // less perspective, less z-depth
+            angle={40} 
             cellSize={42}
             opacity={0.7}
             lightLineColor="#ffffff"
             darkLineColor="#ffffff"
             className="w-full"
-            startY={340} // adjust this value to align with Daily Checkpoint
+            startY={340} 
           />
         </div>
       )}
-      {/* Header dengan Navbar */}
+      {}
       <header className="sticky top-0 z-20 shadow-sm bg-card border-b border-border">
         <Navbar />
       </header>

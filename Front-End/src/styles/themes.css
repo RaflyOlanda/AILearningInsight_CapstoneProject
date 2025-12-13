@@ -1,3 +1,12 @@
+html[data-theme="retro"] .theme-item .text-muted-foreground {
+  color: #fff !important;
+}
+body.theme-modal-blur .navbar-container,
+body.theme-modal-blur .app-footer {
+  transition: filter 0.2s, backdrop-filter 0.2s;
+  filter: blur(8px) brightness(0.95);
+  z-index: 10 !important;
+}
 html[data-theme="retro"] .retro-viewall-bg {
   background: rgba(0,0,0,0.18) !important;
   border: 1.5px solid #fff !important;
@@ -15,8 +24,6 @@ html[data-theme="particles"] .particles-viewall,
 html[data-theme="particles"] .particles-viewall:hover {
   color: #fff !important;
 }
-/* pixelblast theme removed */
-
 
 
 

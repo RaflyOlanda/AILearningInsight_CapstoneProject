@@ -1,6 +1,5 @@
 import React from 'react';
 
-// CSS-based RetroGrid with perspective and animated background grid
 const RetroGrid = ({
   angle = 65,
   cellSize = 90,
@@ -10,9 +9,7 @@ const RetroGrid = ({
   className = '',
   startY = 0,
 }) => {
-  // Only apply top offset if startY > 0
-  // To prevent flicker at the top, offset grid so lines never snap at startY
-  // Use a negative offset for transformY in both grid layers and keyframes
+
   const gridPositionStyle = startY > 0
     ? { top: startY, height: `calc(100% - ${startY}px)` }
     : { top: 0, height: '100%' };
@@ -38,12 +35,12 @@ const RetroGrid = ({
           className="h-[300vh] w-[600vw] ml-[-200%]"
           style={{
             backgroundImage:
-              `linear-gradient(to right, ${lightLineColor}99 1.5px, transparent 0),` + // vertical lines, 60% alpha
-              `linear-gradient(to bottom, ${lightLineColor}cc 1px, transparent 0)`, // horizontal lines, 80% alpha
+              `linear-gradient(to right, ${lightLineColor}99 1.5px, transparent 0),` + 
+              `linear-gradient(to bottom, ${lightLineColor}cc 1px, transparent 0)`, 
             backgroundRepeat: 'repeat',
             backgroundSize: `${cellSize}px ${cellSize}px`,
             backgroundPositionY: `${cellSize / 2}px`,
-            animation: 'gridMoveTransform 4.5s linear infinite, gridBreath 6.5s ease-in-out infinite',
+            animation: 'gridMoveTransform 1s linear infinite, gridBreath 6.5s ease-in-out infinite',
             willChange: 'transform, opacity',
             backfaceVisibility: 'hidden',
             WebkitBackfaceVisibility: 'hidden',
@@ -54,7 +51,7 @@ const RetroGrid = ({
           }}
         />
       </div>
-      {/* Top fade overlay to hide/fade-in grid lines at the upper edge */}
+      {}
       {startY > 0 && (
         <div
           className="absolute left-0 w-full pointer-events-none"

@@ -49,7 +49,6 @@ export const ThemeProvider = ({ children }) => {
     return localStorage.getItem('userId');
   });
   const [theme, setThemeState] = useState(() => {
-    // Start from default; hydrate per-user after login
     return DEFAULT_THEME;
   });
   const [hydrated, setHydrated] = useState(false);

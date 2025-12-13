@@ -22,7 +22,6 @@ const OverviewCards = () => {
     userId ? `/dashboard/learning-history/${userId}` : null
   );
 
-  // Simple completion percent: rows with last_enrolled_at present over total rows
   const historyItems = Array.isArray(historyData) ? historyData : [];
   const totalRows = historyItems.length;
   const completedRows = totalRows;
@@ -39,7 +38,7 @@ const OverviewCards = () => {
   const hasHalfStar = avgRating % 1 >= 0.5;
   return (
     <div className="space-y-4">
-      {/* Container 1: Completed Courses donut */}
+      {}
       <Card
         className="p-4 shadow-soft rounded-xl border border-gray-200 flex items-center gap-4 min-h-24 relative group"
         title={`${completedRows} dari ${totalRows} kursus selesai`}
@@ -75,19 +74,13 @@ const OverviewCards = () => {
             </div>
             <div className="text-sm">
               <div className="font-semibold">{completionPercent}% Completed Courses</div>
-              <button
-                type="button"
-                onClick={() => navigate('/courses')}
-                className={`mt-1.5 text-[11px] font-medium cursor-pointer ${useTheme().theme === 'particles' ? 'particles-viewall' : useTheme().theme === 'retro' ? 'retro-viewall' : 'text-blue-600 hover:text-blue-700'}`}
-              >
-                View All &gt;
-              </button>
+              {}
             </div>
           </>
         )}
       </Card>
 
-      {/* Container 2: Average Submission Rating with stars */}
+      {}
       <Card className="p-4 shadow-soft rounded-xl border border-gray-200 min-h-24 flex flex-col justify-between">
         {courseLoading ? (
           <div className="h-full flex items-center justify-center">

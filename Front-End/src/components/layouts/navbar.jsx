@@ -1,7 +1,7 @@
 import React, { useState, useRef, useEffect } from 'react';
 import ReactDOM from 'react-dom';
 import { FaRegUserCircle, FaChevronDown, FaTrophy, FaMedal, FaStar, FaTimes, FaTachometerAlt, FaCog, FaSignOutAlt, FaLock } from 'react-icons/fa';
-import './navbar.css';
+import '../../styles/layouts.css';
 import StarBorder from '../ui/starborder';
 import DicodingLogo from '../../assets/images/dicoding.png';
 import { useUser } from '../../context/usercontext';
@@ -26,7 +26,7 @@ const BadgeSelectorModal = ({ isOpen, onClose, currentBadge, onSelect, unlockedT
     <div className="fixed inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center z-1000 p-4" role="dialog" aria-modal="true">
       <div className="bg-card text-card-foreground border border-border rounded-xl shadow-2xl w-full max-w-lg max-h-[80vh] overflow-auto relative">
         <div className="p-4 border-b border-border flex justify-between items-center">
-          <h3 className="text-lg font-bold">Pilih Badge Anda</h3>
+          <h3 className="text-lg font-bold">Pilih Badge</h3>
           <button onClick={onClose} className="text-muted-foreground hover:text-foreground transition" aria-label="Tutup">
             <FaTimes size={18} />
           </button>
@@ -338,9 +338,7 @@ const Navbar = () => {
                 <div className={`dropdown-item ${theme === 'retro' ? 'dropdown-item-no-hover' : ''}`} role="menuitem" onClick={() => { setIsOpen(false); window.location.href = '/dashboard'; }}>
                   <FaTachometerAlt className="dropdown-icon-generic" /> Dashboard
                 </div>
-                <div className={`dropdown-item ${theme === 'retro' ? 'dropdown-item-no-hover' : ''}`} role="menuitem" onClick={() => setIsOpen(false)}>
-                  <FaCog className="dropdown-icon-generic" /> Settings
-                </div>
+                {/* Settings option removed as requested */}
                 <div className="dropdown-divider"></div>
                 <div
                   className={`dropdown-item ${theme === 'retro' ? 'dropdown-item-no-hover' : ''}`}

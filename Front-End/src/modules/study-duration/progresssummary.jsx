@@ -63,9 +63,9 @@ const ProgressSummary = () => {
             <div className="flex justify-between items-center mb-2">
               <span className="text-base font-semibold text-gray-800">Total: {studyData.total_hours || 0}h</span>
             </div>
-            {/* Removed horizontal progress bar; focusing on mini bars */}
-            {/* Mini trend 7 hari (bar sederhana) */}
-            {/* 10 kelas terkini: bar besar, tooltip detail */}
+            {}
+            {}
+            {}
             {Array.isArray(studyData.last_10_classes) && studyData.last_10_classes.length > 0 && (
               <div className="mt-3">
                 <div className="flex items-end gap-2 w-full">

@@ -38,11 +38,10 @@ const LeaderboardPage = () => {
   const { data, loading, error } = useFetch('/dashboard/leaderboard');
   const list = Array.isArray(data) ? data : [];
 
-  // Crown color classes for rankings
   const getCrownClass = (rank) => {
-    if (rank === 1) return 'text-[#FFD700]';    // Emas (Gold)
-    if (rank === 2) return 'text-[#708090]';    // Silver (Slate Gray - lebih gelap)
-    if (rank === 3) return 'text-[#CD7F32]';    // Perunggu (Bronze)
+    if (rank === 1) return 'text-[#FFD700]';   
+    if (rank === 2) return 'text-[#708090]';    
+    if (rank === 3) return 'text-[#CD7F32]';    
     return 'text-gray-500';
   };
   const topFive = list.slice(0, 5);
@@ -73,7 +72,7 @@ const LeaderboardPage = () => {
       </div>
 
       <div className="grid gap-6">
-        {/* Podium */}
+        {}
         <Card className={`p-6 ${
           theme === 'particles' ? 'bg-gradient-to-b from-slate-700 to-card' : 
           theme === 'retro' ? 'bg-gradient-to-b from-blue-900/20 to-card' : 

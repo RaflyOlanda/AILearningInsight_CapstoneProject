@@ -1,6 +1,5 @@
 import React from 'react';
 
-// Card sederhana yang hanya menyediakan wrapper styling dan meneruskan atribut tambahan.
 const Card = ({ children, className = '', ...props }) => {
   return (
     <div
