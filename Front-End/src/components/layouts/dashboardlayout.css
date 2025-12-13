@@ -17,8 +17,4 @@ html[data-theme="contrast"] .app-footer {
   border-color: oklch(0.3 0 0);
 }
 
-html[data-theme="pixelblast"] .app-footer {
-  backdrop-filter: saturate(120%) blur(6px);
-  background-color: rgba(255, 255, 240, 0.85);
-  border-color: var(--border);
-}
+/* pixelblast theme removed */

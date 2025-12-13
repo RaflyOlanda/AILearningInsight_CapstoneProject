@@ -49,7 +49,7 @@ const BadgeSelectorModal = ({ isOpen, onClose, currentBadge, onSelect, unlockedT
                     locked
                       ? 'bg-muted border-border cursor-not-allowed'
                       : currentBadge?.id === badge.id
-                        ? 'bg-accent border-primary cursor-pointer'
+                        ? 'bg-card border-primary/50 cursor-pointer ring-1 ring-primary/30'
                         : 'bg-card hover:bg-muted border-border cursor-pointer'
                   }`}
                   title={locked ? `Terkunci — butuh Level ${requiredLevel} (${requiredXp.toLocaleString('id-ID')} XP)` : ''}
@@ -109,7 +109,7 @@ const Navbar = () => {
   const [currentBadge, setCurrentBadge] = useState(BADGE_DATA[0]);
   const dropdownRef = useRef(null); 
   const { userId, logout, token } = useUser();
-  const { setTheme } = useTheme();
+  const { theme, setTheme } = useTheme();
   const badgeOwnerKey = userId || token || null;
   const [badgesHydrated, setBadgesHydrated] = useState(false);
   const lastSyncedBadgeRef = useRef(null);
@@ -260,7 +260,10 @@ const Navbar = () => {
   };
 
   return (
-    <nav className="navbar-container flex items-center justify-between w-full px-4 py-2 sticky top-0 z-50">
+    <nav className={`navbar-container flex items-center justify-between w-full px-4 py-2 sticky top-0 z-50 ${
+      theme === 'retro' ? 'navbar-retro border-0' : ''
+    }`}
+    style={theme === 'retro' ? { borderBottom: 'none !important' } : {}}>
       <div className="navbar-left-section flex items-center gap-2">
         <img
           src={DicodingLogo}
@@ -305,14 +308,18 @@ const Navbar = () => {
             })()}
             <div className="navbar-profile-container flex items-center gap-1 px-2 py-1 rounded-full" onClick={toggleDropdown} role="button" aria-haspopup="menu" aria-expanded={isOpen}>
               <FaRegUserCircle className="profile-avatar" />
-              <FaChevronDown size={10} className={`navbar-dropdown-icon ${isOpen ? 'rotate-180' : ''}`} />
+              <FaChevronDown
+                size={10}
+                className={`navbar-dropdown-icon ${isOpen ? 'rotate-180' : ''}`}
+                style={theme === 'retro' ? { color: '#ffffff' } : undefined}
+              />
             </div>
             {isOpen && (
               <div className="dropdown-menu" role="menu">
-                <div className="dropdown-item">
+                <div className={`dropdown-item ${theme === 'retro' ? 'dropdown-item-no-hover' : ''}`}>
                   <FaTrophy className="dropdown-icon-trophy" /> Level {levelInfo.level} / 50
                 </div>
-                <div className="dropdown-item">
+                <div className={`dropdown-item ${theme === 'retro' ? 'dropdown-item-no-hover' : ''}`}>
                   <FaMedal className="dropdown-icon-medal" /> {xpFormatted} XP
                 </div>
                 <div className="px-4 py-2">
@@ -325,18 +332,18 @@ const Navbar = () => {
                   <div className="mt-1 text-[11px] text-gray-500">Progress level: {Math.round(levelInfo.levelProgress * 100)}%</div>
                 </div>
                 <div className="dropdown-divider"></div>
-                <div className="dropdown-item" role="menuitem" onClick={() => { setBadgeOpen(true); setIsOpen(false); }}>
+                <div className={`dropdown-item ${theme === 'retro' ? 'dropdown-item-no-hover' : ''}`} role="menuitem" onClick={() => { setBadgeOpen(true); setIsOpen(false); }}>
                   <FaStar className="dropdown-icon-generic" /> Pilih Badge
                 </div>
-                <div className="dropdown-item" role="menuitem" onClick={() => { setIsOpen(false); window.location.href = '/dashboard'; }}>
+                <div className={`dropdown-item ${theme === 'retro' ? 'dropdown-item-no-hover' : ''}`} role="menuitem" onClick={() => { setIsOpen(false); window.location.href = '/dashboard'; }}>
                   <FaTachometerAlt className="dropdown-icon-generic" /> Dashboard
                 </div>
-                <div className="dropdown-item" role="menuitem" onClick={() => setIsOpen(false)}>
+                <div className={`dropdown-item ${theme === 'retro' ? 'dropdown-item-no-hover' : ''}`} role="menuitem" onClick={() => setIsOpen(false)}>
                   <FaCog className="dropdown-icon-generic" /> Settings
                 </div>
                 <div className="dropdown-divider"></div>
                 <div
-                  className="dropdown-item"
+                  className={`dropdown-item ${theme === 'retro' ? 'dropdown-item-no-hover' : ''}`}
                   onClick={handleLogout}
                 >
                   <FaSignOutAlt className="dropdown-icon-generic" /> Logout

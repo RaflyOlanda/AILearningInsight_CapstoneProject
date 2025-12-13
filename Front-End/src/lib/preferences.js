@@ -35,9 +35,7 @@ export const readThemeForUser = (userId) => {
   if (typeof window === 'undefined') return null;
   const themes = readThemeMap();
   const stored = userId ? themes[userId] : null;
-  if (stored) return stored;
-  const fallback = window.localStorage.getItem('theme');
-  return fallback || null;
+  return stored || null; // no global fallback to avoid unintended theme carryover
 };
 
 export const writeThemeForUser = (userId, theme) => {
@@ -49,7 +47,7 @@ export const writeThemeForUser = (userId, theme) => {
       themes[userId] = value;
       writeMap(THEME_STORAGE_KEY, themes);
     }
-    window.localStorage.setItem('theme', value);
+    // avoid writing global theme to prevent affecting non-logged sessions
   } catch (err) {
     console.warn('Failed to write theme preference:', err);
   }

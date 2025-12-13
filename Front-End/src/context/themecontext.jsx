@@ -28,7 +28,6 @@ const THEME_DARKNESS = {
   default: false,
   particles: true,
   contrast: true,
-  pixelblast: false,
   retro: false,
 };
 
@@ -50,10 +49,8 @@ export const ThemeProvider = ({ children }) => {
     return localStorage.getItem('userId');
   });
   const [theme, setThemeState] = useState(() => {
-    if (typeof window === 'undefined') return DEFAULT_THEME;
-    const initialKey = localStorage.getItem('userId');
-    const stored = normalizeTheme(readThemeForUser(initialKey) || DEFAULT_THEME);
-    return stored || DEFAULT_THEME;
+    // Start from default; hydrate per-user after login
+    return DEFAULT_THEME;
   });
   const [hydrated, setHydrated] = useState(false);
   const lastSyncedThemeRef = useRef(theme);
@@ -142,8 +139,7 @@ export const ThemeProvider = ({ children }) => {
     toggleTheme: () => setTheme((t) => (
       t === 'default' ? 'contrast' :
       t === 'contrast' ? 'particles' :
-      t === 'particles' ? 'pixelblast' :
-      t === 'pixelblast' ? 'retro' :
+      t === 'particles' ? 'retro' :
       'default'
     )),
   }), [theme, resolvedTheme, setTheme]);

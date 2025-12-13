@@ -12,10 +12,10 @@ import ThemeSwitcher from '../../components/ui/themeswitcher';
 
 const DashboardPage = () => {
   return (
-    <DashboardLayout>
+    <DashboardLayout wide>
       <div className="mb-6 relative">
         <p className="text-xs text-gray-500 mb-2">Page &gt; <span className="text-gray-700 font-medium">Dashboard</span> &gt;</p>
-        <h1 className="text-2xl md:text-3xl font-bold text-gray-800">Dashboard</h1>
+        <h1 className="text-2xl md:text-3xl font-bold text-gray-800 dashboard-title">Dashboard</h1>
         <ThemeSwitcher position="absolute" top="top-10" right="right-0" />
       </div>
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 auto-rows-max items-start content-start">
@@ -32,7 +32,6 @@ const DashboardPage = () => {
           <OverviewRecommendation />
           <LeaderboardCard />
         </div>
-        
       </div>
     </DashboardLayout>
   );

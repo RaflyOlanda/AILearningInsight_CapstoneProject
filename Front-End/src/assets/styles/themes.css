@@ -15,10 +15,7 @@ html[data-theme="particles"] .particles-viewall,
 html[data-theme="particles"] .particles-viewall:hover {
   color: #fff !important;
 }
-html[data-theme="pixelblast"] .text-blue-600,
-html[data-theme="pixelblast"] .hover\:text-blue-700:hover {
-  color: #fff !important;
-}
+/* pixelblast theme removed */
 
 
 
@@ -142,6 +139,26 @@ html[data-theme="retro"] .navbar-container {
   color: #ffffff !important;
 }
 
+/* Retro-only Pixelify styling for Dashboard title */
+html[data-theme="retro"] .dashboard-title {
+  font-family: "Pixelify Sans", sans-serif;
+  font-optical-sizing: auto;
+  font-weight: 700;
+  font-style: normal;
+  color: #ffffff;
+  font-size: 1.875rem; /* reduced by 25% on mobile */
+  line-height: 1.1;
+  text-shadow:
+    2px 2px 0 #00d5d6,
+    -2px -2px 0 #ff4f7b;
+}
+
+@media (min-width: 768px) {
+  html[data-theme="retro"] .dashboard-title {
+    font-size: 2.4375rem; /* reduced by 25% on md+ */
+  }
+}
+
 html[data-theme="retro"] .card-shadow {
   background-color: #505e9f !important;
   backdrop-filter: saturate(140%) blur(8px) !important;
@@ -163,6 +180,18 @@ html[data-theme="retro"] .bg-gray-100 {
   background-color: #505e9f !important;
   color: #ffffff !important;
   border-color: oklch(1 0 0 / 15%) !important;
+}
+
+/* Retro: brighten common blue/green utility colors for readability */
+html[data-theme="retro"] .text-blue-600,
+html[data-theme="retro"] .hover\:text-blue-700:hover {
+  color: #00e5ff !important; /* bright cyan */
+  text-shadow: 0 0 6px rgba(0, 229, 255, 0.6);
+}
+html[data-theme="retro"] .text-green-600,
+html[data-theme="retro"] .hover\:text-green-700:hover {
+  color: #00ff88 !important; /* neon green */
+  text-shadow: 0 0 6px rgba(0, 255, 136, 0.5);
 }
 
 html[data-theme="retro"] .text-gray-800,
@@ -246,3 +275,51 @@ html[data-theme="retro"] .text-gray-800 {
 html[data-theme="retro"] .navbar-container {
   border-bottom: none !important;
 }
+
+/* Retro: neutralize white hover states on interactive items */
+html[data-theme="retro"] .hover\:bg-white:hover,
+html[data-theme="retro"] .hover\:bg-gray-50:hover,
+html[data-theme="retro"] .hover\:bg-gray-100:hover,
+html[data-theme="retro"] .hover\:bg-gray-200:hover,
+html[data-theme="retro"] .hover\:bg-blue-50:hover,
+html[data-theme="retro"] .hover\:bg-neutral-50:hover {
+  background-color: #505e9f !important; /* keep retro card bg */
+}
+
+/* Theme switcher item hover */
+html[data-theme="retro"] .theme-item:hover,
+html[data-theme="retro"] .theme-item:focus {
+  background-color: #505e9f !important;
+  box-shadow: 0 0 0 0 rgba(0,0,0,0) !important;
+}
+
+/* Retro: ensure theme-item doesn't switch to muted on hover */
+html[data-theme="retro"] .theme-item:hover {
+  border-color: oklch(1 0 0 / 15%) !important;
+}
+
+/* Modal content hover (learning profile pop up, submission detail) */
+html[data-theme="retro"] .modal .hover\:bg-white:hover,
+html[data-theme="retro"] .modal .hover\:bg-gray-50:hover,
+html[data-theme="retro"] .modal .hover\:bg-gray-100:hover,
+html[data-theme="retro"] .popover .hover\:bg-white:hover,
+html[data-theme="retro"] .popover .hover\:bg-gray-50:hover,
+html[data-theme="retro"] .popover .hover\:bg-gray-100:hover {
+  background-color: #505e9f !important;
+}
+
+/* Retro: learning profile modal Close button hover */
+html[data-theme="retro"] .modal button:hover,
+html[data-theme="retro"] .popover button:hover {
+  background-color: #505e9f !important;
+  opacity: 0.95;
+}
+
+/* Submission table rows hover */
+html[data-theme="retro"] .submissions-table .hover\:bg-white:hover,
+html[data-theme="retro"] .submissions-table .hover\:bg-gray-50:hover,
+html[data-theme="retro"] .submissions-table .hover\:bg-gray-100:hover {
+  background-color: #505e9f !important;
+}
+
+/* Removed scale approach to avoid footer overflow; using wider layout instead */

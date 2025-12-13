@@ -3,12 +3,11 @@
 import React from 'react';
 import { useTheme } from '../../context/themecontext';
 import Particles from '../ui/Particles';
-import PixelBlast from '../ui/PixelBlast';
 import RetroGrid from '../ui/retro-grid';
 import Navbar from './navbar'; // Mengimpor Navbar
 import './dashboardlayout.css';
 
-const DashboardLayout = ({ children }) => {
+const DashboardLayout = ({ children, wide = false }) => {
   const { theme } = useTheme();
   return (
     <div className="flex flex-col min-h-screen bg-background text-foreground relative">
@@ -27,24 +26,7 @@ const DashboardLayout = ({ children }) => {
           />
         </div>
       )}
-      {theme === 'pixelblast' && (
-        <div className="fixed inset-0 z-0 pointer-events-none overflow-hidden">
-          <PixelBlast
-            variant="circle"
-            pixelSize={3}
-            color="#000000"
-            patternScale={4}
-            patternDensity={1.6}
-            pixelSizeJitter={0.4}
-            enableRipples={false}
-            liquid={false}
-            speed={0.3}
-            edgeFade={0}
-            transparent
-            className="w-full h-full pointer-events-auto"
-          />
-        </div>
-      )}
+      {/* pixelblast theme removed */}
       {theme === 'retro' && (
         <div className="fixed inset-0 z-0 pointer-events-none">
           {/* Grid starts below header/cards, adjust startY as needed (e.g. 320–350px) */}
@@ -63,7 +45,7 @@ const DashboardLayout = ({ children }) => {
       <header className="sticky top-0 z-20 shadow-sm bg-card border-b border-border">
         <Navbar />
       </header>
-      <main className="grow px-4 py-6 md:px-8 md:py-8 max-w-7xl mx-auto w-full relative z-10">
+      <main className={"grow px-4 py-6 md:px-8 md:py-8 mx-auto w-full relative z-10 " + (wide ? "max-w-[1600px]" : "max-w-7xl") }>
         {children}
       </main>
 

@@ -97,6 +97,10 @@
 	background-color: var(--muted);
 }
 
+.dropdown-item-no-hover:hover {
+	background-color: transparent;
+}
+
 .dropdown-divider {
 	height: 1px;
 	background-color: var(--border);

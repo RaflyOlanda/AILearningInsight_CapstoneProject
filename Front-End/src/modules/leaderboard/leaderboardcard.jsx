@@ -21,7 +21,7 @@ const LeaderboardCard = () => {
   };
 
   return (
-    <Card className="p-0 shadow-soft rounded-xl border border-gray-200 overflow-hidden h-[275px] w-full flex flex-col">
+    <Card className="p-0 shadow-soft rounded-xl border border-gray-200 overflow-auto h-[292px] w-full flex flex-col">
       <div className="px-4 py-3 border-b border-gray-200 flex items-center justify-between shrink-0">
         <div className="font-semibold text-sm">Leaderboard</div>
         <button
@@ -31,7 +31,7 @@ const LeaderboardCard = () => {
           View All &gt;
         </button>
       </div>
-      <ul className="divide-y divide-gray-100 overflow-y-auto flex-1 min-h-0 max-h-[260px]">
+      <ul className="divide-y divide-gray-100 overflow-y-hidden flex-1 min-h-0">
         {loading ? (
           <li className="px-4 py-3 text-center text-xs text-gray-500">Loading leaderboard...</li>
         ) : topUsers.length > 0 ? (
@@ -39,12 +39,12 @@ const LeaderboardCard = () => {
             {topUsers.map((u) => (
               <li key={u.rank} className="px-4 py-2.5 flex items-center justify-between">
                 <div className="flex items-center gap-3 min-w-0">
-                  <span className={`inline-flex items-center justify-center w-6 h-6 text-[11px] font-semibold rounded-full ${getMedalColor(u.rank)}`}>
+                  <span className={`inline-flex items-center justify-center w-7 h-7 text-[12px] font-semibold rounded-full ${getMedalColor(u.rank)}`}>
                     {u.rank}
                   </span>
                   <span className="truncate text-[13px] text-gray-700">{u.name}</span>
                 </div>
-                <span className="text-[11px] font-semibold text-gray-500">{u.xp} XP</span>
+                <span className="text-[12px] font-semibold text-gray-500">{u.xp} XP</span>
               </li>
             ))}
           </>
