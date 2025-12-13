@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import ReactDOM from 'react-dom';
 import { useUser } from '../../context/usercontext';
 
 export default function LoginModal({ open, onClose }) {
@@ -44,9 +45,9 @@ export default function LoginModal({ open, onClose }) {
     }
   };
 
-  return (
-    <div className="fixed inset-0 z-50">
-      <div className="absolute inset-0 bg-black/30" onClick={onClose} />
+  return ReactDOM.createPortal(
+    <div className="fixed inset-0 z-[1000]">
+      <div className="absolute inset-0 bg-black/50 backdrop-blur-sm" onClick={onClose} />
       <div className="absolute inset-0 grid place-items-center p-4">
         <div className="w-full max-w-md bg-white rounded-2xl shadow-xl p-6">
           <div className="flex justify-between items-center mb-4">
@@ -69,6 +70,7 @@ export default function LoginModal({ open, onClose }) {
           </form>
         </div>
       </div>
-    </div>
+    </div>,
+    document.body
   );
 }

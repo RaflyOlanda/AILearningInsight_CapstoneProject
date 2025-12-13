@@ -88,14 +88,14 @@ const OverviewCards = () => {
       </Card>
 
       {/* Container 2: Average Submission Rating with stars */}
-      <Card className="p-4 shadow-soft rounded-xl border border-gray-200 min-h-24">
+      <Card className="p-4 shadow-soft rounded-xl border border-gray-200 min-h-24 flex flex-col justify-between">
         {courseLoading ? (
           <div className="h-full flex items-center justify-center">
             <span className="text-xs text-gray-500">Loading...</span>
           </div>
         ) : (
           <>
-            <div className="flex items-center mb-2">
+            <div className="flex items-center mb-2 shrink-0">
               {[1, 2, 3, 4, 5].map(i => {
                 if (i <= fullStars) {
                   return <FaStar key={i} className="text-yellow-500" />;
