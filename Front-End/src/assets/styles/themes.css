@@ -146,7 +146,7 @@ html[data-theme="retro"] .dashboard-title {
   font-weight: 700;
   font-style: normal;
   color: #ffffff;
-  font-size: 1.875rem; /* reduced by 25% on mobile */
+  font-size: 1.5rem; /* slightly smaller on mobile */
   line-height: 1.1;
   text-shadow:
     2px 2px 0 #00d5d6,
@@ -155,7 +155,7 @@ html[data-theme="retro"] .dashboard-title {
 
 @media (min-width: 768px) {
   html[data-theme="retro"] .dashboard-title {
-    font-size: 2.4375rem; /* reduced by 25% on md+ */
+    font-size: 1.9rem; /* slightly smaller on md+ */
   }
 }
 
