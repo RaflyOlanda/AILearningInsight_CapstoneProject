@@ -99,7 +99,27 @@ export const UserProvider = ({ children }) => {
     }
   };
 
-  const logout = () => {
+  const logout = async () => {
+    const uid = userId;
+    const authToken = token;
+    const theme = uid ? readThemeForUser(uid) : null;
+    const badge = uid ? readBadgeForUser(uid) : null;
+
+    if (uid && authToken) {
+      try {
+        await fetch('/api/auth/logout', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            Authorization: `Bearer ${authToken}`,
+          },
+          body: JSON.stringify({ theme, badge }),
+        });
+      } catch (err) {
+        console.warn('Failed to persist preferences on logout:', err);
+      }
+    }
+
     setUser(null);
     setUserId(null);
     setToken(null);

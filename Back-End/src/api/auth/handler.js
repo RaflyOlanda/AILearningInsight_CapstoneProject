@@ -5,6 +5,8 @@ class AuthHandler {
   constructor() {
     this._service = new UsersService();
     this.login = this.login.bind(this);
+    this.updatePreferences = this.updatePreferences.bind(this);
+    this.logout = this.logout.bind(this);
   }
 
   async login(request, h) {
@@ -38,6 +40,51 @@ class AuthHandler {
         }
       }
     };
+  }
+
+  async updatePreferences(request, h) {
+    const { theme, badge } = request.payload || {};
+    const userId = request.auth && request.auth.credentials && request.auth.credentials.id;
+    if (!userId) {
+      return h.response({ status: 'fail', message: 'Unauthorized' }).code(401);
+    }
+
+    try {
+      const updated = await this._service.updatePreferences(userId, { theme, badge });
+      return {
+        status: 'success',
+        message: 'Preferences updated',
+        data: {
+          preferences: {
+            theme: updated.theme,
+            badge: updated.badge,
+          }
+        }
+      };
+    } catch (err) {
+      console.error('Failed to update preferences:', err.message);
+      return h.response({ status: 'error', message: 'Gagal menyimpan preferensi' }).code(500);
+    }
+  }
+
+  async logout(request, h) {
+    // Allow client to send preferences on logout to be saved
+    const { theme, badge } = request.payload || {};
+    const userId = request.auth && request.auth.credentials && request.auth.credentials.id;
+    if (!userId) {
+      return h.response({ status: 'fail', message: 'Unauthorized' }).code(401);
+    }
+
+    try {
+      await this._service.updatePreferences(userId, { theme, badge });
+      return {
+        status: 'success',
+        message: 'Logout successful',
+      };
+    } catch (err) {
+      console.error('Failed to save preferences on logout:', err.message);
+      return h.response({ status: 'error', message: 'Gagal saat logout' }).code(500);
+    }
   }
 }
 
