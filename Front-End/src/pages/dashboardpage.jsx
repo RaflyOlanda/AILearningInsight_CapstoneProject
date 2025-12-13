@@ -1,14 +1,13 @@
 import React from 'react';
-import DashboardLayout from '../../components/layouts/dashboardlayout'; 
-import ProgressSummary from '../../modules/study-duration/progresssummary'; 
-import LearnerTypeWidget from '../../modules/learning-profile/learningtypewidget';
-import OverviewCards from '../../modules/learning-profile/overviewcards';
-import OverviewRecommendation from '../../modules/learning-profile/overviewrecommendation';
-import LeaderboardCard from '../../modules/leaderboard/leaderboardcard'; 
-import WeeklyPerformanceChart from '../../modules/performance-graph/weeklyperformancechart'; 
-import CourseList from '../../modules/courses/courselist';
-import ThemeSwitcher from '../../components/ui/themeswitcher';
-
+import DashboardLayout from '../components/layouts/dashboardlayout'; 
+import ProgressSummary from '../modules/study-duration/progresssummary'; 
+import LearnerTypeWidget from '../modules/learning-profile/learningtypewidget';
+import OverviewCards from '../modules/learning-profile/overviewcards';
+import OverviewRecommendation from '../modules/learning-profile/overviewrecommendation';
+import LeaderboardCard from '../modules/leaderboard/leaderboardcard'; 
+import WeeklyPerformanceChart from '../modules/performance-graph/weeklyperformancechart'; 
+import CourseList from '../modules/courses/courselist';
+import ThemeSwitcher from '../components/ui/themeswitcher';
 
 const DashboardPage = () => {
   return (
@@ -36,6 +35,5 @@ const DashboardPage = () => {
     </DashboardLayout>
   );
 };
-
 
 export default DashboardPage;

@@ -1,9 +1,9 @@
 import React from 'react';
-import DashboardLayout from '../../components/layouts/dashboardlayout';
-import Card from '../../components/ui/card';
-import { useFetch } from '../../hooks/usefetch';
-import { useUser } from '../../context/usercontext';
-import { useTheme } from '../../context/themecontext';
+import DashboardLayout from '../components/layouts/dashboardlayout';
+import Card from '../components/ui/card';
+import { useFetch } from '../hooks/usefetch';
+import { useUser } from '../context/usercontext';
+import { useTheme } from '../context/themecontext';
 import { useNavigate } from 'react-router-dom';
 import { GiCrown } from 'react-icons/gi';
 
@@ -37,7 +37,6 @@ const LeaderboardPage = () => {
   const { theme } = useTheme();
   const { data, loading, error } = useFetch('/dashboard/leaderboard');
   const list = Array.isArray(data) ? data : [];
-
   const getCrownClass = (rank) => {
     if (rank === 1) return 'text-[#FFD700]';   
     if (rank === 2) return 'text-[#708090]';    
@@ -47,7 +46,6 @@ const LeaderboardPage = () => {
   const topFive = list.slice(0, 5);
   const topTen = list.slice(0, 10);
   const you = list.find(u => String(u.user_id) === String(userId));
-  
   const { data: youData } = useFetch(you || !userId ? '' : `/dashboard/leaderboard/me/${userId}`);
   const youDisplay = you || youData || null;
 
@@ -70,9 +68,7 @@ const LeaderboardPage = () => {
           Back to Dashboard
         </button>
       </div>
-
       <div className="grid gap-6">
-        {}
         <Card className={`p-6 ${
           theme === 'particles' ? 'bg-gradient-to-b from-slate-700 to-card' : 
           theme === 'retro' ? 'bg-gradient-to-b from-blue-900/20 to-card' : 
@@ -126,9 +122,7 @@ const LeaderboardPage = () => {
                 {topTen.map((u, index) => {
                   const rank = index + 1;
                   const isCurrentUser = String(u.user_id) === String(userId);
-                  
                   let rowClass = 'flex items-center justify-between rounded-xl px-4 py-3 border shadow-sm transition-all hover:shadow-md';
-                  
                   if (theme === 'particles') {
                     if (rank === 1) rowClass += ' bg-yellow-700/40 border-yellow-600/70 text-white';
                     else if (rank === 2) rowClass += ' bg-slate-600/60 border-slate-500/70 text-white';

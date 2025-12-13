@@ -1,8 +1,8 @@
 import React from 'react';
-import DashboardLayout from '../../components/layouts/dashboardlayout';
-import Card from '../../components/ui/card';
-import { useUser } from '../../context/usercontext';
-import { useFetch } from '../../hooks/usefetch';
+import DashboardLayout from '../components/layouts/dashboardlayout';
+import Card from '../components/ui/card';
+import { useUser } from '../context/usercontext';
+import { useFetch } from '../hooks/usefetch';
 import { useNavigate } from 'react-router-dom';
 
 const SubmissionsPage = () => {
@@ -38,6 +38,7 @@ const SubmissionsPage = () => {
                   <th className="text-left px-4 py-2 font-semibold">Course</th>
                   <th className="text-left px-4 py-2 font-semibold">Score</th>
                   <th className="text-left px-4 py-2 font-semibold">Study Duration (h)</th>
+                  <th className="text-left px-4 py-2 font-semibold">Date</th>
                   <th className="text-left px-4 py-2 font-semibold">Enrolled</th>
                   <th className="text-left px-4 py-2 font-semibold">Times</th>
                 </tr>

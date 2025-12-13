@@ -124,11 +124,11 @@ const LearnerTypeWidget = () => {
   };
 
   const InnerContent = () => (
+
     <div className="flex flex-col gap-4 h-full">
-      
       <div className="w-full flex flex-col items-center">
-        <div className="w-full h-48 md:h-52">
-          <ResponsiveContainer width="100%" height="100%">
+        <div className="w-full h-48 md:h-52" style={{ minWidth: 200, minHeight: 200 }}>
+          <ResponsiveContainer width="100%" height={200}>
             <PieChart>
               <Pie
                 data={pieData}
@@ -147,7 +147,6 @@ const LearnerTypeWidget = () => {
             </PieChart>
           </ResponsiveContainer>
         </div>
-        
         <div className="mt-1.5 flex items-center justify-center gap-4 text-[12px] text-gray-600">
           {CATEGORIES.map((label, idx) => (
             <div key={label} className="flex items-center gap-1.5">

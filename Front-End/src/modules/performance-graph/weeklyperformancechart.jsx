@@ -57,13 +57,13 @@ const WeeklyPerformanceChart = () => {
       {description && (
         <div className="text-[11px] text-gray-500 mb-3 line-clamp-2" title={description}>{description}</div>
       )}
-      <div className="w-full h-[210px] pr-2 mt-2">
+      <div className="w-full h-[210px] pr-2 mt-2" style={{ minWidth: 200, minHeight: 200 }}>
         {loading ? (
           <div className="w-full h-full flex items-center justify-center bg-gray-50 rounded">
             <span className="text-gray-500">Loading...</span>
           </div>
         ) : (
-          <ResponsiveContainer width="100%" height="100%">
+          <ResponsiveContainer width="100%" height={200}>
             <LineChart data={data} margin={{ top: 8, right: 16, left: 0, bottom: 8 }}>
               <CartesianGrid strokeDasharray="3 3" stroke="#E5E7EB" />
               <XAxis dataKey="name" tick={false} tickLine={false} stroke="#9CA3AF" padding={{ left: 0, right: 14 }} />

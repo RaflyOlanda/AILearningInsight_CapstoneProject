@@ -11,6 +11,7 @@ const COLORS = ['#22C55E', '#E5E7EB'];
 
 const OverviewCards = () => {
   const navigate = useNavigate();
+  const { theme } = useTheme();
   const { userId } = useUser();
   const { data: studyData, loading: studyLoading } = useFetch(
     userId ? `/dashboard/study-duration/${userId}` : null
@@ -116,7 +117,7 @@ const OverviewCards = () => {
               <button
                 type="button"
                 onClick={() => navigate('/submissions')}
-                className={`mt-1.5 text-[11px] font-medium cursor-pointer ${useTheme().theme === 'particles' ? 'particles-viewall' : useTheme().theme === 'retro' ? 'retro-viewall' : 'text-blue-600 hover:text-blue-700'}`}
+                className={`mt-1.5 text-[11px] font-medium cursor-pointer ${theme === 'particles' ? 'particles-viewall' : theme === 'retro' ? 'retro-viewall' : 'text-blue-600 hover:text-blue-700'}`}
                 title="Tap to detail"
               >
                 Tap to detail

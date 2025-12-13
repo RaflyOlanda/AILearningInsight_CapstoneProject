@@ -7,6 +7,7 @@ import { useUser } from '../../context/usercontext';
 
 const ProgressSummary = () => {
   const { userId } = useUser();
+  const { theme } = useTheme();
   const { data: lastCourse, loading: courseLoading } = useFetch(
     userId ? `/dashboard/last-course/${userId}` : null
   );
@@ -43,7 +44,7 @@ const ProgressSummary = () => {
             <div className="flex justify-between items-center text-[11px]">
               <span className="inline-block bg-blue-100 text-blue-700 px-2.5 py-1 rounded-full font-semibold">100% Complete</span>
               <button
-                className={`flex items-center gap-1 font-medium cursor-pointer ${useTheme().theme === 'particles' ? 'particles-viewall' : useTheme().theme === 'retro' ? 'retro-viewall' : 'text-blue-600 hover:text-blue-700'}`}
+                className={`flex items-center gap-1 font-medium cursor-pointer ${theme === 'particles' ? 'particles-viewall' : theme === 'retro' ? 'retro-viewall' : 'text-blue-600 hover:text-blue-700'}`}
               >
                 <span>Continue</span>
                 <FaPlayCircle size={12} />

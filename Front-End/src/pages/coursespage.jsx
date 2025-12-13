@@ -1,9 +1,9 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
-import DashboardLayout from '../../components/layouts/dashboardlayout';
-import Card from '../../components/ui/card';
-import { useUser } from '../../context/usercontext';
-import { useFetch } from '../../hooks/usefetch';
+import DashboardLayout from '../components/layouts/dashboardlayout';
+import Card from '../components/ui/card';
+import { useUser } from '../context/usercontext';
+import { useFetch } from '../hooks/usefetch';
 import { FaCheckCircle } from 'react-icons/fa';
 
 const CoursesPage = () => {
@@ -37,19 +37,6 @@ const CoursesPage = () => {
           )}
           {!loading && !error && courses.length === 0 && (
             <div className="text-sm text-gray-500 px-5 py-6">No registered courses yet.</div>
-          )}
-
-          {!loading && !error && courses.length > 0 && (
-            <ul className="divide-y divide-gray-100">
-              {courses.map((c) => (
-                <li key={`${c.journey_id}-${c.course_title}`} className="px-5 py-5">
-                  <div className="flex items-center gap-3 text-gray-800">
-                    <FaCheckCircle className="text-green-500 flex-shrink-0" />
-                    <span className="text-[15px] leading-6">{c.course_title}</span>
-                  </div>
-                </li>
-              ))}
-            </ul>
           )}
         </div>
       </Card>

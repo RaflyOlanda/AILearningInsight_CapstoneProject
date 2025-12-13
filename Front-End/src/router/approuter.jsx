@@ -1,10 +1,10 @@
 import React from 'react';
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
-import DashboardPage from '../pages/Dashboard/dashboardpage';
-import CoursesPage from '../pages/Courses/coursespage';
-import LeaderboardPage from '../pages/Leaderboard/leaderboardpage';
-import SubmissionsPage from '../pages/Submissions/submissionspage';
-import LandingPage from '../pages/Landing/landingpage';
+import DashboardPage from '../pages/dashboardpage';
+import CoursesPage from '../pages/coursespage';
+import LeaderboardPage from '../pages/leaderboardpage';
+import SubmissionsPage from '../pages/submissionspage';
+import LandingPage from '../pages/landingpage';
 import { useUser } from '../context/usercontext';
 
 function ProtectedRoute({ children }) {
