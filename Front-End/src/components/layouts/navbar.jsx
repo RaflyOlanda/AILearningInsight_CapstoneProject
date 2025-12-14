@@ -108,9 +108,9 @@ const Navbar = () => {
   const [badgeOpen, setBadgeOpen] = useState(false); 
   const [currentBadge, setCurrentBadge] = useState(BADGE_DATA[0]);
   const dropdownRef = useRef(null); 
-  const { userId, logout, token } = useUser();
+  const { userId, logout, token, loading } = useUser();
   const { theme, setTheme } = useTheme();
-  const badgeOwnerKey = userId || token || null;
+  const badgeOwnerKey = userId || null;
   const [badgesHydrated, setBadgesHydrated] = useState(false);
   const lastSyncedBadgeRef = useRef(null);
   const { data: profile, loading: profileLoading } = useFetch(userId ? `/dashboard/learning-profile/${userId}` : null);
@@ -247,7 +247,8 @@ const Navbar = () => {
     return () => document.removeEventListener('keydown', onKey);
   }, []);
 
-  const isAuthenticated = Boolean(userId || token);
+  const isLanding = typeof window !== 'undefined' && window.location && window.location.pathname === '/';
+  const isAuthenticated = !isLanding && !loading && Boolean(userId);
 
   const handleLogout = () => {
     setIsOpen(false);

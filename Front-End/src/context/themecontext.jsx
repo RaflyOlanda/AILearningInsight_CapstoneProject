@@ -35,9 +35,12 @@ const DEFAULT_THEME = 'default';
 
 const applyThemeToDocument = (theme) => {
   if (typeof document === 'undefined') return;
+  const path = typeof window !== 'undefined' && window.location ? window.location.pathname : '';
+  const forceDefault = path === '/';
   const root = document.documentElement;
-  if (theme) root.setAttribute('data-theme', theme);
-  const isDark = THEME_DARKNESS[theme] === true;
+  const appliedTheme = forceDefault ? DEFAULT_THEME : theme;
+  if (appliedTheme) root.setAttribute('data-theme', appliedTheme);
+  const isDark = THEME_DARKNESS[appliedTheme] === true;
   if (isDark) root.classList.add('dark');
   else root.classList.remove('dark');
 };
