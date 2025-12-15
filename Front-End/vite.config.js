@@ -8,7 +8,7 @@ export default defineConfig({
     proxy: {
       
       '/api': {
-        target: 'https://ailearninginsightbackend-production.up.railway.app',
+        target: 'http://localhost:5000',
         changeOrigin: true,
         rewrite: (p) => p.replace(/^\/api/, ''),
       },
