@@ -69,7 +69,7 @@ Download the required model files from the link above and place them in the appr
    ```bash
    npm run dev
    ```
-4. Once the server is running, navigate to `http://localhost:3000/` in your web browser to view the front-end application.
+4. Once the server is running, navigate to `http://localhost:5173/` in your web browser to view the front-end application.
 
 ---
 
